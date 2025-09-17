@@ -1,25 +1,29 @@
-body {
-  font-family: Arial, sans-serif;
-  margin: 20px;
+let cart = [];
+
+function addToCart(name, price) {
+  cart.push({ name, price });
+  renderCart();
 }
 
-.product {
-  border: 1px solid #ddd;
-  padding: 10px;
-  margin: 10px;
-  display: inline-block;
-  width: 200px;
+function renderCart() {
+  const cartList = document.getElementById("cart");
+  cartList.innerHTML = "";
+  
+  cart.forEach((item, index) => {
+    let li = document.createElement("li");
+    li.textContent = `${item.name} - Rp${item.price}`;
+    
+    let removeBtn = document.createElement("button");
+    removeBtn.textContent = "🐲";
+    removeBtn.style.marginLeft = "10px";
+    removeBtn.onclick = () => removeFromCart(index);
+    
+    li.appendChild(removeBtn);
+    cartList.appendChild(li);
+  });
 }
 
-button {
-  background: green;
-  color: white;
-  border: none;
-  padding: 8px;
-  cursor: pointer;
+function removeFromCart(index) {
+  cart.splice(index, 1);
+  renderCart();
 }
-
-#cart {
-  margin-top: 20px;
-}
-
