@@ -1,54 +1,49 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>P1</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Willy Docder 🧸</title>
   <style>
-    body {
-      font-family: sans-serif;
-      background: linear-gradient(to right, #4f46e5, #9333ea);
-      color: white;
-      text-align: center;
-      padding: 50px;
-    }
-    .produk {
-      background: rgba(255, 255, 255, 0.1);
-      margin: 20px auto;
-      padding: 20px;
-      border-radius: 10px;
-      max-width: 300px;
-    }
-    .kontak {
-      margin-top: 30px;
-    }
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .product { border: 1px solid #ddd; padding: 10px; margin: 10px; display: inline-block; width: 200px; }
+    button { background: green; color: white; border: none; padding: 8px; cursor: pointer; }
+    #cart { margin-top: 20px; }
   </style>
 </head>
 <body>
-  <h1>WILZU PRODUK</h1>
-
-  <div class="produk">
-    <h2>SC-VS-CHRASER</h2>
+  <h1>🇩 🇪 🇻 🇪 🇱 🇴 🇵 🇪 🇷 </h1>
+  
+  <div class="𝐏𝐑𝐎𝐃𝐔𝐂-𝐖𝐈𝐋𝐙𝐔">
+    <h3>SELLER SC WILZU 🐲</h3>
+    <p>Rp50.000</p>
+    <button onclick="addToCart('Kaos Polos', 50000)">Tambah ke Keranjang</button>
   </div>
-  <div class="produk">
-    <h2>SC-FLOW-GENX</h2>
+  
+  <div class="𝐒𝐂𝐑𝐈𝐏𝐓 𝐖𝐈𝐋𝐙𝐔">
+    <h3>Sc Tempe Goreng 🍁</h3>
+    <p>Rp30.000</p>
+    <button onclick="addToCart('Topi Hitam', 30000)">Tambah ke Keranjang</button>
   </div>
-  <div class="produk">
-    <h2>PANEL 1GB-UNLI</h2>
-  </div>
-    <div class="produk">
-    <h2>NOKOS</h2>
-  </div>
-    <div class="produk">
-    <h2>SELLERSC 50K</h2>
-  </div>
-    <div class="produk">
-    <h2>OWNERSC 170K</h2>
-  </div>
-
-  <div class="kontak">
-    <p>Hubungi kami di WhatsApp:</p>
-    <strong>HUB:6285863131467</strong>
-  </div>
+  
+  <h2>TAMBAHIN KE CATALOG</h2>
+  <ul id="cart"></ul>
+  
+  <script>
+    let cart = [];
+    function addToCart(name, price) {
+      cart.push({ name, price });
+      renderCart();
+    }
+    function renderCart() {
+      const cartList = document.getElementById("cart");
+      cartList.innerHTML = "";
+      cart.forEach(item => {
+        let li = document.createElement("li");
+        li.textContent = item.name + " - Rp" + item.price;
+        cartList.appendChild(li);
+      });
+    }
+  </script>
 </body>
 </html>
