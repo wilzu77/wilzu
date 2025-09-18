@@ -8,7 +8,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>TheWilzu</title>
+  <title>Wilzu 🐲 Docder</title>
   <style>
     :root{
       --bg1: #0f172a;
@@ -133,18 +133,18 @@
   <main class="container" role="main">
     <aside class="summary" aria-label="Ringkasan pesanan">
       <div class="brand">
-        <div class="logo">PAY</div>
+        <div class="logo">Pembayaran wilzu</div>
         <div>
-          <h4>Willy 🐲</h4>
+          <h4>Willy Id 🐲</h4>
           <p>Checkout aman & terenkripsi</p>
         </div>
       </div>
 
       <div class="product">
-        <div class="thumb">https://files.catbox.moe/b8o73e.jpg</div>
+        <div class="thumb"><img src="https://files.catbox.moe/b8o73e.jpg" alt="Produk" style="width:100%;height:100%;object-fit:cover;border-radius:10px"></div>
         <div class="prod-info">
-          <h5>Join Patner</h5>
-          <p>Free Update Get func get bade dll</p>
+          <h5>Premium Plan — Langganan 1 Tahun</h5>
+          <p>Fitur penuh, update reguler, dukungan prioritas.</p>
           <div style="margin-top:10px;font-weight:700">Rp 50.000</div>
         </div>
       </div>
@@ -153,12 +153,12 @@
         <div class="cc" id="ccPreview">
           <div style="display:flex;justify-content:space-between;align-items:center">
             <div class="chip"></div>
-            <div class="small">visa</div>
+            <div class="small">VISA</div>
           </div>
           <div class="num" id="ccNum">•••• •••• •••• ••••</div>
           <div style="display:flex;justify-content:space-between;align-items:center">
             <div>
-              <div class="name" id="ccName">idr lu</div>
+              <div class="name" id="ccName">Nama Pemegang</div>
               <div class="small">Thru <span id="ccExp">MM/YY</span></div>
             </div>
             <div class="small">Rp 50.000</div>
@@ -183,7 +183,12 @@
         <label>Metode Pembayaran</label>
         <div class="methods" role="tablist">
           <div class="method active" data-method="card">Kartu</div>
-          <div class="method" data-method="dana">Dana</div>
+          <div class="method" data-method="gopay">GoPay</div>
+          <div class="method" data-method="dana">DANA</div>
+          <div class="method" data-method="ovo">OVO</div>
+          <div class="method" data-method="bank">Bank Transfer</div>
+        </div>
+          <div class="method" data-method="gopay">GoPay</div>
           <div class="method" data-method="bank">Bank Transfer</div>
         </div>
       </div>
@@ -212,8 +217,8 @@
 
         <div class="field">
           <label for="promo">Kode promo (opsional)</label>
-          <input id="promo" type="text" placeholder="GET KODE LU">
-          <div class="small-help">Gunakan kode untuk diskon—masukan.</div>
+          <input id="promo" type="text" placeholder="MASUKAN KODE">
+          <div class="small-help">Gunakan kode untuk diskon—masukan lalu tekan Apply.</div>
         </div>
 
         <div style="display:flex;gap:12px;margin-top:8px;align-items:center">
@@ -280,11 +285,26 @@
 
     function submitPayment(){
       const method = document.querySelector('.method.active').dataset.method;
+      // Update button label based on method
+      const labels = { card: 'Bayar Rp50.000', gopay: 'Bayar dengan GoPay', dana: 'Bayar dengan DANA', ovo: 'Bayar dengan OVO', bank: 'Bayar dengan Bank Transfer' };
+      payBtn.textContent = labels[method] || 'Bayar Rp 50.000';
+
       if (method !== 'card'){
-        // Simulate other flows
-        statusMsg.innerHTML = '<span class="success">Mengalihkan ke ' + (method==='gopay'?'GoPay':'Bank Transfer') + '...</span>';
+        // Simulate redirect flow for e-wallets and bank transfer
+        statusMsg.innerHTML = '<span class="success">Mengalihkan ke ' + (method==='gopay'?'GoPay':method==='dana'?'DANA':method==='ovo'?'OVO':'Bank Transfer') + ' — ikuti instruksi di aplikasi Anda.</span>';
         return;
       }
+      const err = validateCard();
+      if (err){ errors.textContent = err; return; }
+      errors.textContent = '';
+      payBtn.disabled = true; payBtn.textContent = 'Memproses...';
+
+      // Simulate request (in real use, call your backend/tokenization gateway)
+      setTimeout(()=>{
+        payBtn.disabled = false; payBtn.textContent = labels['card'];
+        statusMsg.innerHTML = '<span class="success">Pembayaran berhasil — tanda terima dikirim ke email Anda.</span>';
+      },1400);
+    }
       const err = validateCard();
       if (err){ errors.textContent = err; return; }
       errors.textContent = '';
