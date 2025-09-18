@@ -3,7 +3,86 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+  <!DOCTYPE html>
+<html lang="id">
+<head>
+    <title>PMENU BAYAR 🧸</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f2f5;
+        }
+        .payment-container {
+            text-align: center;
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .payment-container h1 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .payment-button {
+            display: flex; 
+            align-items: center; 
+            width: 250px;
+            padding: 15px;
+            margin: 15px auto;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .payment-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+        .payment-button img {
+            width: 40px; /* Ukuran gambar logo */
+            height: auto;
+            margin-right: 15px; 
+        }
+        .dana-button {
+            background-color: #108ee9;
+        }
+        .ovo-button {
+            background-color: #4b2a75;
+        }
+        .qris-button {
+            background-color: #006096;
+        }
+    </style>
+</head>
+<body>
+    <div class="payment-container">
+        <h1>Pilih Metode Pembayaran</h1>
+        
+        <button class="payment-button dana-button" onclick="alert('Anda memilih pembayaran dengan Dana')">
+            <img src="https://files.catbox.moe/ig3ktk.jpg" alt="Dana Logo">
+            Bayar dengan Dana
+        </button>
+
+        <button class="payment-button ovo-button" onclick="alert('Anda memilih pembayaran dengan OVO')">
+            <img src="https://files.catbox.moe/ig3ktk.jpg" alt="OVO Logo">
+            Bayar dengan OVO
+        </button>
+
+        <button class="payment-button qris-button" onclick="alert('Anda memilih pembayaran dengan QRIS')">
+            <img src="https://files.catbox.moe/lnmf91.jpg" alt="QRIS Logo">
+            Bayar dengan QRIS
+        </button>
+
+    </div>
+</body>
+</html>
 <!DOCTYPE html>
 <html lang="id">
 <head>
