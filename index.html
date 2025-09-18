@@ -240,3 +240,305 @@
   </script>
 </body>
 </html>
+<!doctype html>
+<!--
+  Payment Page — Single-file HTML + CSS
+  Responsive, modern UI with card preview and simple client-side validation.
+  Bahasa: Indonesian
+-->
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Checkout — Bayar Sekarang</title>
+  <style>
+    :root{
+      --bg1: #0f172a;
+      --bg2: #0b1220;
+      --card: rgba(255,255,255,0.06);
+      --glass: rgba(255,255,255,0.04);
+      --accent: linear-gradient(90deg,#7c3aed,#06b6d4);
+      --success: #10b981;
+      --danger: #ef4444;
+      --muted: rgba(255,255,255,0.65);
+      --glass-border: rgba(255,255,255,0.06);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      min-height:100vh;
+      background: radial-gradient(1200px 600px at 10% 10%, rgba(99,102,241,0.12), transparent), radial-gradient(1000px 500px at 90% 90%, rgba(6,182,212,0.06), transparent), linear-gradient(180deg,var(--bg1),var(--bg2));
+      color: #eef2ff;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      padding:48px 20px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:24px;
+    }
+
+    .container{
+      width:100%;
+      max-width:1100px;
+      display:grid;
+      grid-template-columns: 420px 1fr;
+      gap:28px;
+      align-items:start;
+    }
+
+    /* Left: summary / card preview */
+    .summary{
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+      border-radius:16px;
+      padding:22px;
+      border:1px solid var(--glass-border);
+      backdrop-filter: blur(8px) saturate(120%);
+      box-shadow: 0 10px 30px rgba(2,6,23,0.6);
+    }
+    .brand{
+      display:flex;align-items:center;gap:12px;margin-bottom:14px
+    }
+    .logo{
+      width:56px;height:56px;border-radius:12px;background:var(--accent);display:grid;place-items:center;font-weight:700;letter-spacing:0.6px;
+      box-shadow: 0 6px 18px rgba(99,102,241,0.14);
+    }
+    .brand h4{margin:0;font-size:16px}
+    .brand p{margin:0;color:var(--muted);font-size:13px}
+
+    .product{
+      display:flex;gap:12px;margin-top:10px;margin-bottom:18px
+    }
+    .thumb{width:84px;height:64px;border-radius:10px;background:linear-gradient(180deg,#111827,#0b1220);display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.03)}
+    .prod-info{flex:1}
+    .prod-info h5{margin:0 0 6px 0;font-size:15px}
+    .prod-info p{margin:0;color:var(--muted);font-size:13px}
+
+    .card-preview{
+      margin-top:18px;padding:16px;border-radius:12px;background:linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+      border:1px solid var(--glass-border);
+    }
+    .cc{
+      width:100%;height:140px;border-radius:10px;padding:14px;display:flex;flex-direction:column;justify-content:space-between;background:linear-gradient(135deg,#0f172a,#071028);
+      color:#fff;position:relative;overflow:hidden
+    }
+    .cc .chip{width:44px;height:34px;border-radius:6px;background:linear-gradient(90deg,#ffd479,#ff7373);opacity:0.95}
+    .cc .num{font-size:18px;letter-spacing:3px}
+    .cc .name{font-size:13px;color:rgba(255,255,255,0.9)}
+    .small{font-size:12px;color:var(--muted)}
+
+    /* Right: form */
+    .formcard{
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+      border-radius:16px;padding:22px;border:1px solid var(--glass-border);backdrop-filter: blur(8px);
+      box-shadow: 0 10px 30px rgba(2,6,23,0.6);
+    }
+    .formcard h3{margin:0 0 6px 0}
+    .formcard p{margin:0 0 18px 0;color:var(--muted)}
+
+    .row{display:flex;gap:12px}
+    .field{margin-bottom:12px}
+    label{display:block;font-size:13px;margin-bottom:6px}
+    input[type=text], input[type=number], input[type=email], select{
+      width:100%;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:inherit;font-size:14px
+    }
+    input::placeholder{color:rgba(255,255,255,0.35)}
+
+    .methods{display:flex;gap:10px;margin:10px 0 18px}
+    .method{flex:1;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);text-align:center;font-weight:600;cursor:pointer}
+    .method.active{outline:2px solid rgba(99,102,241,0.12);transform:translateY(-3px)}
+
+    .btn{
+      display:inline-block;padding:12px 18px;border-radius:12px;background:var(--accent);background-size:200% 100%;border:0;color:#fff;font-weight:700;cursor:pointer;box-shadow: 0 8px 24px rgba(7,12,25,0.5);
+    }
+    .muted-note{font-size:13px;color:var(--muted);margin-top:10px}
+
+    .inline-input{display:flex;gap:10px}
+    .inline-input input{flex:1}
+
+    .small-help{font-size:12px;color:rgba(255,255,255,0.5);margin-top:6px}
+
+    .error{color:var(--danger);font-size:13px;margin-top:8px}
+    .success{color:var(--success);font-size:13px;margin-top:8px}
+
+    footer{margin-top:14px;font-size:13px;color:var(--muted)}
+
+    @media(max-width:880px){
+      .container{grid-template-columns:1fr;max-width:720px}
+      .summary{order:2}
+    }
+  </style>
+</head>
+<body>
+  <main class="container" role="main">
+    <aside class="summary" aria-label="Ringkasan pesanan">
+      <div class="brand">
+        <div class="logo">PAY</div>
+        <div>
+          <h4>Willy Store</h4>
+          <p>Checkout aman & terenkripsi</p>
+        </div>
+      </div>
+
+      <div class="product">
+        <div class="thumb">IMG</div>
+        <div class="prod-info">
+          <h5>Premium Plan — Langganan 1 Tahun</h5>
+          <p>Fitur penuh, update reguler, dukungan prioritas.</p>
+          <div style="margin-top:10px;font-weight:700">Rp 199.000</div>
+        </div>
+      </div>
+
+      <div class="card-preview">
+        <div class="cc" id="ccPreview">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div class="chip"></div>
+            <div class="small">VISA</div>
+          </div>
+          <div class="num" id="ccNum">•••• •••• •••• ••••</div>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <div class="name" id="ccName">Nama Pemegang</div>
+              <div class="small">Thru <span id="ccExp">MM/YY</span></div>
+            </div>
+            <div class="small">Rp 199.000</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:12px;color:var(--muted);font-size:13px">Transaksi dilindungi oleh enkripsi end-to-end. Kami tidak menyimpan nomor kartu Anda.</div>
+      <footer>Butuh bantuan? hubungi <a href="mailto:support@example.com" style="color:inherit;text-decoration:underline">support@example.com</a></footer>
+    </aside>
+
+    <section class="formcard" aria-label="Form pembayaran">
+      <h3>Bayar Sekarang</h3>
+      <p>Masukkan detail kartu atau pilih metode lain untuk menyelesaikan pembayaran.</p>
+
+      <div class="field">
+        <label for="email">Email (untuk konfirmasi)</label>
+        <input id="email" type="email" placeholder="nama@contoh.com">
+      </div>
+
+      <div class="field">
+        <label>Metode Pembayaran</label>
+        <div class="methods" role="tablist">
+          <div class="method active" data-method="card">Kartu</div>
+          <div class="method" data-method="gopay">GoPay</div>
+          <div class="method" data-method="bank">Bank Transfer</div>
+        </div>
+      </div>
+
+      <form id="payForm" onsubmit="return false;">
+        <div class="field">
+          <label for="name">Nama pada kartu</label>
+          <input id="name" type="text" placeholder="NAMA SESUAI KARTU">
+        </div>
+
+        <div class="field">
+          <label for="number">Nomor kartu</label>
+          <input id="number" type="text" maxlength="19" placeholder="1234 5678 9012 3456" inputmode="numeric">
+        </div>
+
+        <div class="row">
+          <div class="field" style="flex:1">
+            <label for="exp">Berlaku hingga (MM/YY)</label>
+            <input id="exp" type="text" maxlength="5" placeholder="MM/YY">
+          </div>
+          <div class="field" style="width:120px">
+            <label for="cvc">CVC</label>
+            <input id="cvc" type="text" maxlength="4" placeholder="123" inputmode="numeric">
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="promo">Kode promo (opsional)</label>
+          <input id="promo" type="text" placeholder="MASUKAN KODE">
+          <div class="small-help">Gunakan kode untuk diskon—masukan lalu tekan Apply.</div>
+        </div>
+
+        <div style="display:flex;gap:12px;margin-top:8px;align-items:center">
+          <button class="btn" id="payBtn" onclick="submitPayment()">Bayar Rp 199.000</button>
+          <div id="statusMsg" style="min-width:180px"></div>
+        </div>
+
+        <div id="errors" class="error" aria-live="polite"></div>
+      </form>
+
+    </section>
+  </main>
+
+  <script>
+    // Simple UI niceties: preview update, formatting, basic validation
+    const ccNum = document.getElementById('ccNum');
+    const ccName = document.getElementById('ccName');
+    const ccExp = document.getElementById('ccExp');
+    const number = document.getElementById('number');
+    const name = document.getElementById('name');
+    const exp = document.getElementById('exp');
+    const cvc = document.getElementById('cvc');
+    const payBtn = document.getElementById('payBtn');
+    const statusMsg = document.getElementById('statusMsg');
+    const errors = document.getElementById('errors');
+
+    // Format card number with spaces
+    number.addEventListener('input', (e)=>{
+      let v = e.target.value.replace(/\D/g,'').slice(0,16);
+      const parts = [];
+      for (let i=0;i<v.length;i+=4) parts.push(v.slice(i,i+4));
+      e.target.value = parts.join(' ');
+      ccNum.textContent = parts.join(' ') || '•••• •••• •••• ••••';
+    });
+
+    name.addEventListener('input', ()=>{
+      ccName.textContent = name.value || 'Nama Pemegang';
+    });
+
+    exp.addEventListener('input', (e)=>{
+      let v = e.target.value.replace(/[^0-9]/g,'').slice(0,4);
+      if (v.length>2) v = v.slice(0,2) + '/' + v.slice(2);
+      e.target.value = v;
+      ccExp.textContent = v || 'MM/YY';
+    });
+
+    // Method toggle
+    document.querySelectorAll('.method').forEach(m=>{
+      m.addEventListener('click', ()=>{
+        document.querySelectorAll('.method').forEach(x=>x.classList.remove('active'));
+        m.classList.add('active');
+      });
+    });
+
+    function validateCard(){
+      errors.textContent = '';
+      const n = number.value.replace(/\s/g,'');
+      if (!n || n.length<13) return 'Nomor kartu tidak valid.';
+      if (!name.value) return 'Isi nama pada kartu.';
+      if (!exp.value.match(/^\d{2}\/\d{2}$/)) return 'Format tanggal berlaku harus MM/YY.';
+      if (!cvc.value || cvc.value.length<3) return 'CVC harus 3-4 digit.';
+      return null;
+    }
+
+    function submitPayment(){
+      const method = document.querySelector('.method.active').dataset.method;
+      if (method !== 'card'){
+        // Simulate other flows
+        statusMsg.innerHTML = '<span class="success">Mengalihkan ke ' + (method==='gopay'?'GoPay':'Bank Transfer') + '...</span>';
+        return;
+      }
+      const err = validateCard();
+      if (err){ errors.textContent = err; return; }
+      errors.textContent = '';
+      payBtn.disabled = true; payBtn.textContent = 'Memproses...';
+
+      // Simulate request (in real use, call your backend/tokenization gateway)
+      setTimeout(()=>{
+        payBtn.disabled = false; payBtn.textContent = 'Bayar Rp 199.000';
+        statusMsg.innerHTML = '<span class="success">Pembayaran berhasil — tanda terima dikirim ke email Anda.</span>';
+      },1400);
+    }
+  </script>
+</body>
+</html>
+    
