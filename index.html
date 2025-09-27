@@ -34,7 +34,7 @@
   .promo-item:hover { background:#333; transform: translateY(-2px); }
   .promo-item img { width:100px; height:100px; object-fit:cover; border-radius:10px; margin-bottom:10px; }
   .promo-item button { margin-top:5px; padding:8px 14px; border:none; border-radius:20px; background:#ff4c4c; color:white; cursor:pointer; font-weight:bold; transition:0.3s; }
-  .promo-item button:hover { background:#e04343; }
+  .promo-item button:hover { background-color:#e04343; }
 </style>
 </head>
 <body>
@@ -75,7 +75,7 @@
     <ul id="recommended"></ul>
   </div>
 
-  <audio id="audioPlayer" controls></audio>
+  <audio id="audioPlayer" controls autoplay></audio>
 </div>
 
 <script>
@@ -95,7 +95,6 @@
     e.preventDefault();
     const query = queryInput.value.trim();
 
-    // hide promo when searching
     if(query){
       promoSection.style.display = 'none';
     } else {
@@ -113,11 +112,16 @@
 
       resultsDiv.innerHTML = '';
 
-      items.forEach((item) => {
+      items.forEach((item, index) => {
         const title = item.title || item.name || 'Unknown';
         const artists = item.artists ? (Array.isArray(item.artists) ? item.artists.join(', ') : item.artists) : '';
-        const thumb = item.thumbnail || item.thumb || '';
-        const url = item.url || item.link || '';
+        const thumb = item.thumbnail || item.thumb || item.image || '';
+
+        const url = item.url 
+                  || item.link 
+                  || item.external_urls?.spotify 
+                  || (item.id ? `https://open.spotify.com/track/${item.id}` : '');
+        const preview = item.preview_url || '';
 
         const songDiv = document.createElement('div');
         songDiv.className = 'song';
@@ -136,21 +140,31 @@
 
         const playBtn = document.createElement('button');
         playBtn.textContent = 'Play';
-        playBtn.addEventListener('click', () => {
-          if(url){
-            const audioSrc = DOWNLOAD_API + encodeURIComponent(url);
+        
+        if(url || preview){
+          playBtn.addEventListener('click', () => {
+            const audioSrc = url ? DOWNLOAD_API + encodeURIComponent(url) : preview;
             audioPlayer.src = audioSrc;
             audioPlayer.play();
-          } else {
-            alert('No playable URL');
+          });
+
+          // 🚀 autoplay lagu pertama
+          if(index === 0){
+            const firstSrc = url ? DOWNLOAD_API + encodeURIComponent(url) : preview;
+            if(firstSrc){
+              audioPlayer.src = firstSrc;
+              audioPlayer.play();
+            }
           }
-        });
+        } else {
+          playBtn.disabled = true;
+        }
         actionsDiv.appendChild(playBtn);
 
         const addBtn = document.createElement('button');
         addBtn.textContent = 'Add to Playlist';
         addBtn.addEventListener('click', () => {
-          playlist.push({title, artists, url});
+          playlist.push({title, artists, url, preview});
           updatePlaylist();
         });
         actionsDiv.appendChild(addBtn);
@@ -175,13 +189,21 @@
       items.slice(0,5).forEach(item => {
         const li = document.createElement('li');
         li.textContent = `${item.title || item.name || 'Unknown'} - ${item.artists ? (Array.isArray(item.artists) ? item.artists.join(', ') : item.artists) : ''}`;
-        li.addEventListener('click', () => {
-          if(item.url){
-            const audioSrc = DOWNLOAD_API + encodeURIComponent(item.url);
+        
+        const url = item.url 
+                  || item.link 
+                  || item.external_urls?.spotify 
+                  || (item.id ? `https://open.spotify.com/track/${item.id}` : '');
+        const preview = item.preview_url || '';
+
+        if(url || preview){
+          li.addEventListener('click', () => {
+            const audioSrc = url ? DOWNLOAD_API + encodeURIComponent(url) : preview;
             audioPlayer.src = audioSrc;
             audioPlayer.play();
-          }
-        });
+          });
+        }
+
         recommendedUl.appendChild(li);
       });
 
@@ -197,8 +219,8 @@
       const li = document.createElement('li');
       li.textContent = `${track.title} - ${track.artists}`;
       li.addEventListener('click', () => {
-        if(track.url){
-          const audioSrc = DOWNLOAD_API + encodeURIComponent(track.url);
+        const audioSrc = track.url ? DOWNLOAD_API + encodeURIComponent(track.url) : track.preview;
+        if(audioSrc){
           audioPlayer.src = audioSrc;
           audioPlayer.play();
         }
