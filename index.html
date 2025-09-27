@@ -1,169 +1,218 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PAYMENT WILZU ( 🍁)</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-            text-align: center;
-            background-image: url('https://files.catbox.moe/b8o73e.jpg');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            color: #333;
-        }
-        .container {
-            background-color: rgba(255, 255, 255, 0.9);
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            max-width: 600px;
-            margin: 50px auto;
-        }
-        h1 {
-            color: #333333;
-        }
-        
-        /* Gaya baru untuk menu item */
-        .product-menu {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-            margin-bottom: 30px;
-            gap: 15px;
-        }
-        .product-item {
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 15px;
-            flex-basis: calc(33.333% - 20px); /* Tiga item per baris */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-        }
-        .product-item:hover {
-            transform: translateY(-5px);
-        }
-        .product-item img {
-            width: 100%;
-            height: auto;
-            border-radius: 4px;
-            margin-bottom: 10px;
-        }
-        .product-item h3 {
-            margin: 0 0 5px 0;
-            color: #555;
-        }
-        .product-item p {
-            margin: 0;
-            font-weight: bold;
-            color: #e67e22; /* Warna harga */
-        }
-
-        /* Gaya yang sudah ada */
-        .payment-option {
-            margin: 20px 0;
-            padding: 20px;
-            border: 1px solid #e1e1e1;
-            border-radius: 8px;
-            background-color: #fff;
-        }
-        .payment-option h2 {
-            margin-top: 0;
-            color: #555555;
-        }
-        .qr-code {
-            max-width: 250px;
-            height: auto;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            margin-top: 15px;
-        }
-        .instruction {
-            margin-top: 15px;
-            line-height: 1.6;
-            color: #666;
-        }
-        .highlight {
-            font-weight: bold;
-            color: #007bff;
-        }
-        .whatsapp-button {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #25D366;
-            color: white;
-            padding: 12px 25px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-size: 16px;
-            font-weight: bold;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            margin-top: 20px;
-        }
-        .whatsapp-button:hover {
-            background-color: #128C7E;
-        }
-        .whatsapp-button img {
-            width: 20px;
-            height: 20px;
-            margin-right: 10px;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Willy Music</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  body { font-family: 'Roboto', sans-serif; background: linear-gradient(135deg, #1e1e1e, #121212); color: #fff; margin:0; padding:0; }
+  .container { max-width: 900px; margin: auto; padding: 20px; }
+  header { display: flex; flex-direction: column; align-items: center; margin-bottom: 20px; }
+  header h1 { margin: 0; font-size: 32px; }
+  header img { width:120px; height:120px; object-fit:cover; border-radius:15px; margin-top:10px; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
+  form { display:flex; width:100%; max-width:600px; margin-top:15px; }
+  input[type=text] { flex:1; padding: 12px; border-radius: 30px 0 0 30px; border: none; outline:none; }
+  button { padding: 12px 20px; border:none; border-radius: 0 30px 30px 0; background-color:#ff4c4c; color:white; cursor:pointer; font-weight:bold; transition: 0.3s; }
+  button:hover { background-color:#e04343; }
+  .song { display: flex; flex-direction: column; align-items: center; margin-bottom: 20px; background:#222; padding:10px; border-radius:15px; box-shadow: 0 4px 10px rgba(0,0,0,0.4); transition:0.3s; }
+  .song:hover { background:#333; transform: translateY(-2px); }
+  .song img { width:150px; height:150px; object-fit:cover; border-radius:15px; margin-bottom:10px; }
+  .song-info { text-align: center; margin-bottom:10px; }
+  .song-info strong { font-size:18px; display:block; margin-bottom:5px; }
+  .song-actions { display:flex; gap:10px; flex-wrap: wrap; justify-content:center; margin-bottom:10px; }
+  .song-actions button, .song-actions a { padding:8px 14px; border-radius:20px; border:none; cursor:pointer; text-decoration:none; color:white; background-color:#ff4c4c; font-weight:bold; transition:0.3s; }
+  .song-actions button:hover, .song-actions a:hover { background-color:#e04343; }
+  .song-actions a { background-color:#555; }
+  .playlist, .recommended { margin-top:30px; border-top:1px solid #444; padding-top:15px; }
+  .playlist h2, .recommended h2 { margin-bottom:10px; color:#ff4c4c; }
+  #playlist li, .recommended li { padding:8px 12px; border-radius:15px; background:#222; margin-bottom:5px; cursor:pointer; transition:0.3s; }
+  #playlist li:hover, .recommended li:hover { background:#333; transform: translateX(3px); }
+  audio { width:100%; margin-top:25px; border-radius:15px; }
+  .promo { margin-top:20px; text-align:center; display:flex; gap:15px; flex-wrap:wrap; justify-content:center; transition:0.3s; }
+  .promo-item { background:#222; padding:10px; border-radius:15px; width:200px; text-align:center; transition:0.3s; box-shadow:0 4px 10px rgba(0,0,0,0.4); }
+  .promo-item:hover { background:#333; transform: translateY(-2px); }
+  .promo-item img { width:100px; height:100px; object-fit:cover; border-radius:10px; margin-bottom:10px; }
+  .promo-item button { margin-top:5px; padding:8px 14px; border:none; border-radius:20px; background:#ff4c4c; color:white; cursor:pointer; font-weight:bold; transition:0.3s; }
+  .promo-item button:hover { background:#e04343; }
+</style>
 </head>
 <body>
-
 <div class="container">
-    <h1>PEMBAYARAN LU</h1>
-    <p>tuntaskan pembayaran nya y</p>
+  <header>
+    <h1>WILLY 💮</h1>
+    <img src="https://files.catbox.moe/b8o73e.jpg" alt="Wily Music Logo">
+    <form id="searchForm">
+      <input type="text" id="searchQuery" placeholder="Search songs or artists...">
+      <button type="submit">Search</button>
+    </form>
+  </header>
 
-    <div class="product-menu">
-        <div class="product-item">
-            <img src="https://files.catbox.moe/b8cji7.jpg" alt="Thumbnail Script">
-            <h3>Script</h3>
-            <p>Rp 30.000</p>
-        </div>
-        <div class="product-item">
-            <img src="https://files.catbox.moe/b8cji7.jpg" alt="Thumbnail Seller">
-            <h3>Seller</h3>
-            <p>Rp 50.000</p>
-        </div>
-        <div class="product-item">
-            <img src="https://files.catbox.moe/b8cji7.jpg" alt="Thumbnail Patenr">
-            <h3>Patenr</h3>
-            <p>Rp 100.000</p>
-        </div>
+  <div class="promo" id="promoSection">
+    <div class="promo-item">
+      <img src="https://files.catbox.moe/b8cji7.jpg" alt="Bot WA">
+      <h3>Jasa Pembuatan Bot WA</h3>
+      <p>100k</p>
+      <button onclick="orderWA('Jasa Pembuatan Bot WA 100k')">Order Now</button>
     </div>
-    <hr>
-    <div class="payment-option">
-        <h2>PEMBAYARAN DANA( 💮 )</h2>
-        <p class="instruction">Scan QR code di bawah ini menggunakan aplikasi DANA.</p>
-        <img src="https://files.catbox.moe/lnmf91.jpg" alt="QR Code DANA" class="qr-code">
-        <p class="instruction">Nomor DANA: <span class="highlight">085863131467</span></p>
+    <div class="promo-item">
+      <img src="https://files.catbox.moe/e7o5y8.jpg" alt="Web Service">
+      <h3>Jasa Buat Website</h3>
+      <p>50k</p>
+      <button onclick="orderWA('Jasa Buat Website 50k')">Order Now</button>
     </div>
+  </div>
 
-    <hr>
+  <div id="results"></div>
 
-    <div class="payment-option">
-        <h2>PEMBAYARAN OVO ( 🍁 )</h2>
-        <p class="instruction">Scan QR code di bawah ini menggunakan aplikasi OVO.</p>
-        <img src="https://files.catbox.moe/lnmf91.jpg" alt="QR Code OVO" class="qr-code">
-        <p class="instruction">Nomor OVO: <span class="highlight">085863131467</span></p>
-    </div>
+  <div class="playlist">
+    <h2>Playlist</h2>
+    <ul id="playlist"></ul>
+  </div>
 
-    <a href="https://wa.me/6285864264688" class="whatsapp-button" target="_blank">
-        <img src="https://files.catbox.moe/b8o73e.jpg" alt="WhatsApp Icon">
-        BAYAR KIRIM BUKTI SS KE WA
-    </a>
+  <div class="recommended">
+    <h2>Recommended</h2>
+    <ul id="recommended"></ul>
+  </div>
+
+  <audio id="audioPlayer" controls></audio>
 </div>
 
+<script>
+  const SEARCH_API = 'https://api.siputzx.my.id/api/s/spotify?query=';
+  const DOWNLOAD_API = 'https://api.siputzx.my.id/api/d/spotifyv2?url=';
+
+  const form = document.getElementById('searchForm');
+  const queryInput = document.getElementById('searchQuery');
+  const resultsDiv = document.getElementById('results');
+  const playlistUl = document.getElementById('playlist');
+  const recommendedUl = document.getElementById('recommended');
+  const audioPlayer = document.getElementById('audioPlayer');
+  const promoSection = document.getElementById('promoSection');
+  let playlist = [];
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const query = queryInput.value.trim();
+
+    // hide promo when searching
+    if(query){
+      promoSection.style.display = 'none';
+    } else {
+      promoSection.style.display = 'flex';
+    }
+
+    if(!query) return;
+
+    resultsDiv.innerHTML = '<p>Loading...</p>';
+
+    try {
+      const res = await fetch(SEARCH_API + encodeURIComponent(query));
+      const data = await res.json();
+      let items = Array.isArray(data) ? data : data.results || data.data || [];
+
+      resultsDiv.innerHTML = '';
+
+      items.forEach((item) => {
+        const title = item.title || item.name || 'Unknown';
+        const artists = item.artists ? (Array.isArray(item.artists) ? item.artists.join(', ') : item.artists) : '';
+        const thumb = item.thumbnail || item.thumb || '';
+        const url = item.url || item.link || '';
+
+        const songDiv = document.createElement('div');
+        songDiv.className = 'song';
+
+        const img = document.createElement('img');
+        img.src = thumb || 'https://via.placeholder.com/150';
+        songDiv.appendChild(img);
+
+        const infoDiv = document.createElement('div');
+        infoDiv.className = 'song-info';
+        infoDiv.innerHTML = `<strong>${title}</strong>${artists ? '<br>'+artists : ''}`;
+        songDiv.appendChild(infoDiv);
+
+        const actionsDiv = document.createElement('div');
+        actionsDiv.className = 'song-actions';
+
+        const playBtn = document.createElement('button');
+        playBtn.textContent = 'Play';
+        playBtn.addEventListener('click', () => {
+          if(url){
+            const audioSrc = DOWNLOAD_API + encodeURIComponent(url);
+            audioPlayer.src = audioSrc;
+            audioPlayer.play();
+          } else {
+            alert('No playable URL');
+          }
+        });
+        actionsDiv.appendChild(playBtn);
+
+        const addBtn = document.createElement('button');
+        addBtn.textContent = 'Add to Playlist';
+        addBtn.addEventListener('click', () => {
+          playlist.push({title, artists, url});
+          updatePlaylist();
+        });
+        actionsDiv.appendChild(addBtn);
+
+        if(url){
+          const downloadLink = document.createElement('a');
+          downloadLink.href = DOWNLOAD_API + encodeURIComponent(url);
+          downloadLink.target = '_blank';
+          downloadLink.textContent = 'Download';
+          actionsDiv.appendChild(downloadLink);
+        }
+
+        songDiv.appendChild(actionsDiv);
+        resultsDiv.appendChild(songDiv);
+      });
+
+      if(items.length === 0){
+        resultsDiv.innerHTML = '<p>No results found.</p>';
+      }
+
+      recommendedUl.innerHTML = '';
+      items.slice(0,5).forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = `${item.title || item.name || 'Unknown'} - ${item.artists ? (Array.isArray(item.artists) ? item.artists.join(', ') : item.artists) : ''}`;
+        li.addEventListener('click', () => {
+          if(item.url){
+            const audioSrc = DOWNLOAD_API + encodeURIComponent(item.url);
+            audioPlayer.src = audioSrc;
+            audioPlayer.play();
+          }
+        });
+        recommendedUl.appendChild(li);
+      });
+
+    } catch(err){
+      resultsDiv.innerHTML = '<p>Error loading results.</p>';
+      console.error(err);
+    }
+  });
+
+  function updatePlaylist(){
+    playlistUl.innerHTML = '';
+    playlist.forEach(track => {
+      const li = document.createElement('li');
+      li.textContent = `${track.title} - ${track.artists}`;
+      li.addEventListener('click', () => {
+        if(track.url){
+          const audioSrc = DOWNLOAD_API + encodeURIComponent(track.url);
+          audioPlayer.src = audioSrc;
+          audioPlayer.play();
+        }
+      });
+      playlistUl.appendChild(li);
+    });
+  }
+
+  function orderWA(service){
+    const waNumber = '6285864264688';
+    const message = `Halo, saya ingin order: ${service}`;
+    const url = `https://wa.me/${waNumber}?text=${encodeURIComponent(message)}`;
+    window.open(url, '_blank');
+  }
+</script>
 </body>
 </html>
