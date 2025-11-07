@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Add Telegram Bot Token (HTML Only)</title>
+    <title>Update teletoken.json (HTML Only - DANGER!)</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -45,16 +45,23 @@
             margin-top: 20px;
             text-align: left;
         }
+        .warning {
+            color: red;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Add Telegram Bot Token (HTML Only)</h1>
+        <h1>Update teletoken.json (HTML Only - DANGER!)</h1>
+        <p class="warning">THIS IS INSECURE! DO NOT USE FOR REAL TOKENS!</p>
         <input type="text" id="tokenInput" placeholder="Enter bot token">
         <button onclick="addToken()">Add Token</button>
         
         <h2>Token List:</h2>
         <ul id="tokenList"></ul>
+
+        <p>Tokens are stored in your browser's local storage. Anyone can see them!</p>
     </div>
 
     <script>
