@@ -1,94 +1,103 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Integrasi GitHub & Telegram Bot</title>
+    <title>Add Telegram Bot Token (HTML Only)</title>
     <style>
         body {
-            font-family: sans-serif;
-            background-color: #121212;
-            color: #fff;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
+            min-height: 100vh;
         }
         .container {
-            background-color: #212121;
+            background-color: #fff;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 400px;
             text-align: center;
         }
-        input[type="text"], button {
+        input[type="text"] {
             width: 100%;
             padding: 10px;
             margin: 10px 0;
-            border: none;
+            border: 1px solid #ddd;
             border-radius: 4px;
-            background-color: #333;
-            color: #fff;
             box-sizing: border-box;
         }
         button {
-            background-color: #007bff;
+            background-color: #5cb85c;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            font-size: 16px;
         }
         button:hover {
-            background-color: #0056b3;
+            background-color: #4cae4c;
+        }
+        #tokenList {
+            margin-top: 20px;
+            text-align: left;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>Integrasi GitHub & Telegram Bot</h2>
-        <form id="tokenForm">
-            <input type="text" id="telegramToken" placeholder="Token Bot Telegram" required>
-            <button type="submit">Simpan & Hubungkan</button>
-        </form>
-        <p id="message"></p>
+        <h1>Add Telegram Bot Token (HTML Only)</h1>
+        <input type="text" id="tokenInput" placeholder="Enter bot token">
+        <button onclick="addToken()">Add Token</button>
+        
+        <h2>Token List:</h2>
+        <ul id="tokenList"></ul>
     </div>
 
     <script>
-        // Repo GitHub lo
-        const repoName = 'wilzuXyzChv/databaseasu';
+        function addToken() {
+            const tokenInput = document.getElementById('tokenInput');
+            const tokenList = document.getElementById('tokenList');
+            const token = tokenInput.value.trim();
 
-        // Token GitHub lo
-        const githubToken = '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';
+            if (token !== "") {
+                // Ambil token dari local storage
+                let tokens = localStorage.getItem('tokens');
+                tokens = tokens ? JSON.parse(tokens) : [];
 
-        document.getElementById('tokenForm').addEventListener('submit', function(event) {
-            event.preventDefault();
+                // Tambahin token baru
+                tokens.push(token);
 
-            const telegramToken = document.getElementById('telegramToken').value;
-            const message = document.getElementById('message');
+                // Simpan token ke local storage
+                localStorage.setItem('tokens', JSON.stringify(tokens));
 
-            // Kirim data ke server (ini contoh sederhana, JANGAN lakukan ini di produksi)
-            fetch('/api/connect', {  // Ganti '/api/connect' dengan URL endpoint server lo
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    github_token: githubToken,
-                    telegram_token: telegramToken,
-                    repo_name: repoName
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                message.textContent = data.message;
-                message.style.color = data.status === 'success' ? '#5cb85c' : '#d9534f'; // Hijau atau merah
-                // Kosongkan input setelah berhasil (atau gagal)
-                document.getElementById('telegramToken').value = '';
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                message.textContent = 'Terjadi kesalahan saat menghubungi server.';
-                message.style.color = '#d9534f';
+                // Update tampilan
+                displayTokens();
+
+                // Bersihin input
+                tokenInput.value = "";
+            }
+        }
+
+        function displayTokens() {
+            const tokenList = document.getElementById('tokenList');
+            tokenList.innerHTML = ""; // Bersihin list
+
+            let tokens = localStorage.getItem('tokens');
+            tokens = tokens ? JSON.parse(tokens) : [];
+
+            tokens.forEach(token => {
+                let li = document.createElement('li');
+                li.textContent = token;
+                tokenList.appendChild(li);
             });
-        });
+        }
+
+        // Tampilkan token pas halaman diload
+        displayTokens();
     </script>
 </body>
 </html>
