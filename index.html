@@ -1,200 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wilzu Bot - Topup & Buy Account</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        .container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 80%;
-            max-width: 600px;
-        }
-
-        h1 {
-            text-align: center;
-            color: #333;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 5px;
-            color: #555;
-        }
-
-        input[type="number"], select {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
-            margin-bottom: 10px;
-        }
-
-        button {
-            background-color: #4caf50;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        button:hover {
-            background-color: #45a049;
-        }
-
-        .account-list {
-            margin-top: 20px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            padding: 10px;
-        }
-
-        .account-item {
-            margin-bottom: 10px;
-            padding: 10px;
-            border: 1px solid #eee;
-            border-radius: 4px;
-        }
-
-        .account-details {
-            margin-top: 5px;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wilzu Bot Dashboard</title>
+<style>
+body{font-family:Arial;background:#f4f4f4;margin:0;padding:0;display:flex;justify-content:center;align-items:center;min-height:100vh;}
+.container{background:#fff;padding:20px;border-radius:8px;box-shadow:0 0 10px rgba(0,0,0,0.1);width:80%;max-width:600px;}
+h1,h2{text-align:center;}
+.form-group{margin-bottom:15px;}
+label{display:block;font-weight:bold;margin-bottom:5px;}
+input,select{width:100%;padding:8px;border:1px solid #ddd;border-radius:4px;}
+button{background:#4caf50;color:#fff;padding:10px 15px;border:none;border-radius:4px;cursor:pointer;}
+button:hover{background:#45a049;}
+.account-list{margin-top:20px;border:1px solid #ddd;border-radius:4px;padding:10px;}
+.account-item{margin-bottom:10px;padding:10px;border:1px solid #eee;border-radius:4px;}
+</style>
 </head>
 <body>
-    <div class="container">
-        <h1>Wilzu Bot - Topup & Buy Account</h1>
+<div class="container">
+<h1>Wilzu Bot Dashboard</h1>
 
-        <h2>Topup Saldo</h2>
-        <form id="topup-form">
-            <div class="form-group">
-                <label for="userId">User ID Telegram:</label>
-                <input type="number" id="userId" name="userId" required>
-            </div>
-            <div class="form-group">
-                <label for="amount">Jumlah Topup (Rp):</label>
-                <input type="number" id="amount" name="amount" required>
-            </div>
-            <button type="submit">Kirim Permintaan Topup</button>
-        </form>
+<h2>Topup Saldo</h2>
+<form id="topup-form">
+<div class="form-group"><label>User ID Telegram:</label><input type="number" id="userId" required></div>
+<div class="form-group"><label>Jumlah Topup (Rp):</label><input type="number" id="amount" required></div>
+<button type="submit">Kirim Topup</button>
+</form>
 
-        <h2>Beli Akun</h2>
-        <div class="form-group">
-            <label for="buy-userId">User ID Telegram:</label>
-            <input type="number" id="buy-userId" name="buy-userId" required>
-        </div>
-        <div class="form-group">
-            <label for="account-type">Pilih Kategori Akun:</label>
-            <select id="account-type" name="account-type">
-                <option value="netflix">Netflix (Rp 10.000)</option>
-                <option value="spotify">Spotify (Rp 10.000)</option>
-                <option value="capcut">Capcut (Rp 15.000)</option>
-                <option value="youtube">Youtube (Rp 10.000)</option>
-                <option value="gpt">GPT (Rp 20.000)</option>
-                <option value="freefire">FreeFire (Rp 150.000)</option>
-                <option value="mobilelegend">Mobile Legend (Rp 150.000)</option>
-                <option value="alingmotion">Alight Motion (Rp 5.000)</option>
-            </select>
-        </div>
-        <button onclick="buyAccount()">Beli Akun</button>
+<h2>Beli Akun</h2>
+<div class="form-group"><label>User ID Telegram:</label><input type="number" id="buy-userId" required></div>
+<div class="form-group"><label>Kategori Akun:</label>
+<select id="account-type">
+<option value="netflix">Netflix</option>
+<option value="spotify">Spotify</option>
+<option value="capcut">Capcut</option>
+<option value="youtube">Youtube</option>
+<option value="gpt">GPT</option>
+<option value="freefire">FreeFire</option>
+<option value="mobilelegend">Mobile Legend</option>
+<option value="alingmotion">Alight Motion</option>
+</select>
+</div>
+<button onclick="buyAccount()">Beli Akun</button>
 
-        <h2>Stok Akun</h2>
-        <div class="account-list" id="account-list">
-            <!-- Daftar akun akan ditampilkan di sini -->
-        </div>
-    </div>
+<h2>Restock Akun (Owner)</h2>
+<div class="form-group"><label>Owner ID:</label><input type="number" id="restock-ownerId"></div>
+<div class="form-group"><label>Kategori:</label><input type="text" id="restock-kategori"></div>
+<div class="form-group"><label>Akun (email:pass, ...):</label><input type="text" id="restock-akunString"></div>
+<button onclick="restockAkun()">Restock</button>
 
-    <script>
-        async function submitTopupRequest(event) {
-            event.preventDefault();
-            const userId = document.getElementById('userId').value;
-            const amount = document.getElementById('amount').value;
+<h2>Stok Akun</h2>
+<div class="account-list" id="account-list">Loading...</div>
+</div>
 
-            const response = await fetch('/topup', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ userId: userId, amount: amount }),
-            });
+<script>
+const BACKEND_URL = window.location.origin; // sama server
 
-            const data = await response.json();
-            alert(data.message);  // Menampilkan pesan dari server
-        }
+// Topup
+document.getElementById('topup-form').addEventListener('submit', async e=>{
+  e.preventDefault();
+  const userId=document.getElementById('userId').value;
+  const amount=document.getElementById('amount').value;
+  const res = await fetch(`${BACKEND_URL}/topup`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId,amount})});
+  const data = await res.json();
+  alert(data.message);
+});
 
-        async function buyAccount() {
-            const userId = document.getElementById('buy-userId').value;
-            const accountType = document.getElementById('account-type').value;
+// Buy
+async function buyAccount(){
+  const userId=document.getElementById('buy-userId').value;
+  const accountType=document.getElementById('account-type').value;
+  const res=await fetch(`${BACKEND_URL}/buy`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId,accountType})});
+  const data=await res.json();
+  alert(data.message);
+}
 
-            const response = await fetch('/buy', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ userId: userId, accountType: accountType }),
-            });
+// Restock
+async function restockAkun(){
+  const ownerId=document.getElementById('restock-ownerId').value;
+  const kategori=document.getElementById('restock-kategori').value;
+  const akunString=document.getElementById('restock-akunString').value;
+  const res=await fetch(`${BACKEND_URL}/restock`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({ownerId,kategori,akunString})});
+  const data=await res.json();
+  alert(data.message);
+}
 
-            const data = await response.json();
-            alert(data.message);  // Menampilkan pesan dari server
-            if (data.success && data.akun) {
-                alert(`Detail akun dikirim ke Telegram Anda! Email: ${data.akun.email}, Password: ${data.akun.password}`);
-            }
-        }
-
-        async function loadAccountStock() {
-            const accountList = document.getElementById('account-list');
-            accountList.innerHTML = 'Loading...';
-
-            try {
-                const response = await fetch('/stock');  // Ganti dengan URL server Node.js Anda
-                const data = await response.json();
-
-                let html = '';
-                for (const category in data) {
-                    html += `<h3>${category.charAt(0).toUpperCase() + category.slice(1)} Accounts</h3>`;
-                    data[category].forEach(account => {
-                        html += `
-                            <div class="account-item">
-                                <p><strong>Email:</strong> ${account.email}</p>
-                                <div class="account-details">
-                                    <p><strong>Password:</strong> ${account.password}</p>
-                                </div>
-                            </div>
-                        `;
-                    });
-                }
-
-                accountList.innerHTML = html || 'Tidak ada stok akun.';
-            } catch (error) {
-                console.error("Error loading stock:", error);
-                accountList.innerHTML = "Failed to load stock.";
-            }
-        }
-
-        document.getElementById('topup-form').addEventListener('submit', submitTopupRequest);
-        loadAccountStock();
-    </script>
+// Load stock
+async function loadStock(){
+  const list=document.getElementById('account-list');
+  list.innerHTML='Loading...';
+  try{
+    const res=await fetch(`${BACKEND_URL}/stock`);
+    const data=await res.json();
+    let html='';
+    for(const cat in data){
+      html+=`<h3>${cat.toUpperCase()}</h3>`;
+      data[cat].forEach(acc=>{
+        html+=`<div class="account-item"><p>Email: ${acc.email}</p><p>Password: ${acc.password}</p></div>`;
+      });
+    }
+    list.innerHTML=html || 'Tidak ada stok.';
+  }catch(e){console.error(e);list.innerHTML='Gagal load stock';}
+}
+loadStock();
+</script>
 </body>
 </html>
