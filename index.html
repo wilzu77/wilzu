@@ -3,23 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wilzu Bot Dashboard</title>
+<title>Wilzu Bot - Dashboard</title>
 <style>
-body{font-family:Arial;background:#f4f4f4;margin:0;padding:0;display:flex;justify-content:center;align-items:center;min-height:100vh;}
-.container{background:#fff;padding:20px;border-radius:8px;box-shadow:0 0 10px rgba(0,0,0,0.1);width:80%;max-width:600px;}
-h1,h2{text-align:center;}
-.form-group{margin-bottom:15px;}
-label{display:block;font-weight:bold;margin-bottom:5px;}
-input,select{width:100%;padding:8px;border:1px solid #ddd;border-radius:4px;}
-button{background:#4caf50;color:#fff;padding:10px 15px;border:none;border-radius:4px;cursor:pointer;}
-button:hover{background:#45a049;}
-.account-list{margin-top:20px;border:1px solid #ddd;border-radius:4px;padding:10px;}
-.account-item{margin-bottom:10px;padding:10px;border:1px solid #eee;border-radius:4px;}
+body { font-family: Arial; background:#f4f4f4; display:flex; justify-content:center; align-items:center; min-height:100vh; margin:0; }
+.container { background:#fff; padding:20px; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.1); width:80%; max-width:600px; }
+h1,h2 { text-align:center; color:#333; }
+.form-group { margin-bottom:15px; }
+label { display:block; font-weight:bold; margin-bottom:5px; }
+input[type="number"], select, input[type="text"] { width:100%; padding:8px; border:1px solid #ddd; border-radius:4px; margin-bottom:10px; }
+button { background:#4caf50; color:white; padding:10px 15px; border:none; border-radius:4px; cursor:pointer; font-size:16px; }
+button:hover { background:#45a049; }
+.account-list { margin-top:20px; border:1px solid #ddd; border-radius:4px; padding:10px; }
+.account-item { margin-bottom:10px; padding:10px; border:1px solid #eee; border-radius:4px; }
+.account-details { margin-top:5px; }
 </style>
 </head>
 <body>
 <div class="container">
-<h1>Wilzu Bot Dashboard</h1>
+<h1>Wilzu Bot - Dashboard</h1>
 
 <h2>Topup Saldo</h2>
 <form id="topup-form">
@@ -44,66 +45,47 @@ button:hover{background:#45a049;}
 </div>
 <button onclick="buyAccount()">Beli Akun</button>
 
-<h2>Restock Akun (Owner)</h2>
-<div class="form-group"><label>Owner ID:</label><input type="number" id="restock-ownerId"></div>
-<div class="form-group"><label>Kategori:</label><input type="text" id="restock-kategori"></div>
-<div class="form-group"><label>Akun (email:pass, ...):</label><input type="text" id="restock-akunString"></div>
-<button onclick="restockAkun()">Restock</button>
-
 <h2>Stok Akun</h2>
-<div class="account-list" id="account-list">Loading...</div>
+<div class="account-list" id="account-list"></div>
 </div>
 
 <script>
-const BACKEND_URL = window.location.origin; // sama server
-
-// Topup
-document.getElementById('topup-form').addEventListener('submit', async e=>{
+async function submitTopupRequest(e){
   e.preventDefault();
-  const userId=document.getElementById('userId').value;
-  const amount=document.getElementById('amount').value;
-  const res = await fetch(`${BACKEND_URL}/topup`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId,amount})});
+  const userId = document.getElementById('userId').value;
+  const amount = document.getElementById('amount').value;
+  const res = await fetch('/topup',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId,amount})});
   const data = await res.json();
   alert(data.message);
-});
+}
 
-// Buy
 async function buyAccount(){
-  const userId=document.getElementById('buy-userId').value;
-  const accountType=document.getElementById('account-type').value;
-  const res=await fetch(`${BACKEND_URL}/buy`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId,accountType})});
-  const data=await res.json();
+  const userId = document.getElementById('buy-userId').value;
+  const accountType = document.getElementById('account-type').value;
+  const res = await fetch('/buy',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId,accountType})});
+  const data = await res.json();
   alert(data.message);
 }
 
-// Restock
-async function restockAkun(){
-  const ownerId=document.getElementById('restock-ownerId').value;
-  const kategori=document.getElementById('restock-kategori').value;
-  const akunString=document.getElementById('restock-akunString').value;
-  const res=await fetch(`${BACKEND_URL}/restock`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({ownerId,kategori,akunString})});
-  const data=await res.json();
-  alert(data.message);
-}
-
-// Load stock
-async function loadStock(){
-  const list=document.getElementById('account-list');
-  list.innerHTML='Loading...';
+async function loadAccountStock(){
+  const list = document.getElementById('account-list');
+  list.innerHTML = 'Loading...';
   try{
-    const res=await fetch(`${BACKEND_URL}/stock`);
-    const data=await res.json();
+    const res = await fetch('/stock');
+    const data = await res.json();
     let html='';
     for(const cat in data){
-      html+=`<h3>${cat.toUpperCase()}</h3>`;
-      data[cat].forEach(acc=>{
-        html+=`<div class="account-item"><p>Email: ${acc.email}</p><p>Password: ${acc.password}</p></div>`;
+      html+=`<h3>${cat.charAt(0).toUpperCase()+cat.slice(1)}</h3>`;
+      data[cat].forEach(a=>{
+        html+=`<div class="account-item"><p>Email: ${a.email}</p><div class="account-details"><p>Password: ${a.password}</p></div></div>`;
       });
     }
-    list.innerHTML=html || 'Tidak ada stok.';
-  }catch(e){console.error(e);list.innerHTML='Gagal load stock';}
+    list.innerHTML = html || 'Tidak ada stok.';
+  }catch(e){ list.innerHTML='Gagal load stok'; console.error(e); }
 }
-loadStock();
+
+document.getElementById('topup-form').addEventListener('submit',submitTopupRequest);
+loadAccountStock();
 </script>
 </body>
 </html>
