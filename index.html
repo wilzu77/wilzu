@@ -1,1 +1,94 @@
-[]
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Integrasi GitHub & Telegram Bot</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #121212;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #212121;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            width: 400px;
+            text-align: center;
+        }
+        input[type="text"], button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 4px;
+            background-color: #333;
+            color: #fff;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #007bff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Integrasi GitHub & Telegram Bot</h2>
+        <form id="tokenForm">
+            <input type="text" id="telegramToken" placeholder="Token Bot Telegram" required>
+            <button type="submit">Simpan & Hubungkan</button>
+        </form>
+        <p id="message"></p>
+    </div>
+
+    <script>
+        // Repo GitHub lo
+        const repoName = 'wilzuXyzChv/databaseasu';
+
+        // Token GitHub lo
+        const githubToken = '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';
+
+        document.getElementById('tokenForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const telegramToken = document.getElementById('telegramToken').value;
+            const message = document.getElementById('message');
+
+            // Kirim data ke server (ini contoh sederhana, JANGAN lakukan ini di produksi)
+            fetch('/api/connect', {  // Ganti '/api/connect' dengan URL endpoint server lo
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    github_token: githubToken,
+                    telegram_token: telegramToken,
+                    repo_name: repoName
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                message.textContent = data.message;
+                message.style.color = data.status === 'success' ? '#5cb85c' : '#d9534f'; // Hijau atau merah
+                // Kosongkan input setelah berhasil (atau gagal)
+                document.getElementById('telegramToken').value = '';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                message.textContent = 'Terjadi kesalahan saat menghubungi server.';
+                message.style.color = '#d9534f';
+            });
+        });
+    </script>
+</body>
+</html>
