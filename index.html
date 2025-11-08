@@ -1,91 +1,193 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wilzu Bot - Dashboard</title>
-<style>
-body { font-family: Arial; background:#f4f4f4; display:flex; justify-content:center; align-items:center; min-height:100vh; margin:0; }
-.container { background:#fff; padding:20px; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.1); width:80%; max-width:600px; }
-h1,h2 { text-align:center; color:#333; }
-.form-group { margin-bottom:15px; }
-label { display:block; font-weight:bold; margin-bottom:5px; }
-input[type="number"], select, input[type="text"] { width:100%; padding:8px; border:1px solid #ddd; border-radius:4px; margin-bottom:10px; }
-button { background:#4caf50; color:white; padding:10px 15px; border:none; border-radius:4px; cursor:pointer; font-size:16px; }
-button:hover { background:#45a049; }
-.account-list { margin-top:20px; border:1px solid #ddd; border-radius:4px; padding:10px; }
-.account-item { margin-bottom:10px; padding:10px; border:1px solid #eee; border-radius:4px; }
-.account-details { margin-top:5px; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>W I L Z U</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      background: radial-gradient(circle at center, #3a0072, #0b001a);
+      color: white;
+      text-align: center;
+      overflow-x: hidden;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-top: 40px;
+      text-shadow: 0 0 20px #c77dff, 0 0 40px #7b2cbf;
+      color: #d4b3ff;
+    }
+
+    .container {
+      margin-top: 40px;
+    }
+
+    video {
+      width: 80%;
+      max-width: 600px;
+      border-radius: 20px;
+      cursor: pointer;
+      box-shadow: 0 0 25px #a855f7;
+      transition: all 0.3s ease;
+    }
+
+    video:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 35px #d946ef;
+    }
+
+    .controls {
+      margin-top: 20px;
+    }
+
+    select, button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      margin: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    select {
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    button {
+      background: linear-gradient(90deg, #a855f7, #d946ef);
+      color: white;
+      font-weight: bold;
+      text-shadow: 0 0 10px #fff;
+    }
+
+    button:hover {
+      box-shadow: 0 0 25px #d946ef;
+      transform: scale(1.05);
+    }
+
+    /* TikTok Section */
+    .tiktok-section {
+      margin-top: 60px;
+      padding: 30px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+      width: 90%;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+      box-shadow: 0 0 20px #a855f7;
+    }
+
+    .tiktok-section input {
+      width: 80%;
+      max-width: 500px;
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      text-align: center;
+      font-size: 1rem;
+    }
+
+    .result video {
+      margin-top: 10px;
+      width: 70%;
+      border-radius: 10px;
+    }
+
+    a.download-link {
+      display: inline-block;
+      margin-top: 10px;
+      background: linear-gradient(90deg, #a855f7, #d946ef);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: bold;
+      box-shadow: 0 0 15px #d946ef;
+      transition: all 0.3s ease;
+    }
+
+    a.download-link:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px #f0abfc;
+    }
+
+    footer {
+      margin-top: 80px;
+      padding: 20px;
+      font-size: 0.9rem;
+      opacity: 0.7;
+    }
+  </style>
 </head>
 <body>
-<div class="container">
-<h1>Wilzu Bot - Dashboard</h1>
+  <h1>WILZU💙NEVER</h1>
 
-<h2>Topup Saldo</h2>
-<form id="topup-form">
-<div class="form-group"><label>User ID Telegram:</label><input type="number" id="userId" required></div>
-<div class="form-group"><label>Jumlah Topup (Rp):</label><input type="number" id="amount" required></div>
-<button type="submit">Kirim Topup</button>
-</form>
+  <div class="container">
+    <video id="mainVideo" poster="https://files.catbox.moe/avfc3q.jpg" onclick="this.play()">
+      <source src="https://files.catbox.moe/mnrpbr.mp4" type="video/mp4">
+      Browser kamu tidak mendukung video.
+    </video>
 
-<h2>Beli Akun</h2>
-<div class="form-group"><label>User ID Telegram:</label><input type="number" id="buy-userId" required></div>
-<div class="form-group"><label>Kategori Akun:</label>
-<select id="account-type">
-<option value="netflix">Netflix</option>
-<option value="spotify">Spotify</option>
-<option value="capcut">Capcut</option>
-<option value="youtube">Youtube</option>
-<option value="gpt">GPT</option>
-<option value="freefire">FreeFire</option>
-<option value="mobilelegend">Mobile Legend</option>
-<option value="alingmotion">Alight Motion</option>
-</select>
-</div>
-<button onclick="buyAccount()">Beli Akun</button>
+    <div class="controls">
+      <select>
+        <option value="">-- Pilih Menu --</option>
+        <option value="1">Dashboard</option>
+        <option value="2">Fitur Premium</option>
+        <option value="3">Tentang Kami</option>
+      </select>
+      <button>Pilih</button>
+      <button onclick="window.location.href='https://example.com'">Masuk ke Web</button>
+    </div>
+  </div>
 
-<h2>Stok Akun</h2>
-<div class="account-list" id="account-list"></div>
-</div>
+  <div class="tiktok-section">
+    <h2>unduh video nya lek</h2>
+    <p>Tempel aja link nya lek</p>
+    <input type="text" id="tiktokUrl" placeholder="https://www.tiktok.com/@user/video/12345">
+    <button onclick="downloadTiktok()">Download</button>
 
-<script>
-async function submitTopupRequest(e){
-  e.preventDefault();
-  const userId = document.getElementById('userId').value;
-  const amount = document.getElementById('amount').value;
-  const res = await fetch('/topup',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId,amount})});
-  const data = await res.json();
-  alert(data.message);
-}
+    <div id="resultArea" class="result"></div>
+  </div>
 
-async function buyAccount(){
-  const userId = document.getElementById('buy-userId').value;
-  const accountType = document.getElementById('account-type').value;
-  const res = await fetch('/buy',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId,accountType})});
-  const data = await res.json();
-  alert(data.message);
-}
+  <footer>© copyright by wilzu</footer>
 
-async function loadAccountStock(){
-  const list = document.getElementById('account-list');
-  list.innerHTML = 'Loading...';
-  try{
-    const res = await fetch('/stock');
-    const data = await res.json();
-    let html='';
-    for(const cat in data){
-      html+=`<h3>${cat.charAt(0).toUpperCase()+cat.slice(1)}</h3>`;
-      data[cat].forEach(a=>{
-        html+=`<div class="account-item"><p>Email: ${a.email}</p><div class="account-details"><p>Password: ${a.password}</p></div></div>`;
-      });
+  <script>
+    async function downloadTiktok() {
+      const url = document.getElementById('tiktokUrl').value.trim();
+      const resultArea = document.getElementById('resultArea');
+      if (!url) return alert('Masukkan link TikTok dulu!');
+      
+      resultArea.innerHTML = '⏳ Sedang mengambil data...';
+      try {
+        const res = await fetch(`https://tikwm.com/api/?url=${encodeURIComponent(url)}`);
+        const data = await res.json();
+
+        if (data.data && data.data.play) {
+          resultArea.innerHTML = `
+            <b>done lek 🗿!</b><br>
+            <video controls>
+              <source src="${data.data.play}" type="video/mp4">
+            </video><br>
+            <a href="${data.data.play}" download class="download-link">Download Sekarang</a>
+          `;
+        } else {
+          resultArea.textContent = '⚠Gagal jirr.';
+        }
+      } catch (e) {
+        resultArea.textContent = 'eror banget ngentot .';
+        console.error(e);
+      }
     }
-    list.innerHTML = html || 'Tidak ada stok.';
-  }catch(e){ list.innerHTML='Gagal load stok'; console.error(e); }
-}
-
-document.getElementById('topup-form').addEventListener('submit',submitTopupRequest);
-loadAccountStock();
-</script>
+  </script>
 </body>
 </html>
