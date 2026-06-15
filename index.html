@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>WILZU | NEOVERSE</title>
   <!-- Google Fonts + Font Awesome -->
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
     * {
@@ -15,110 +15,102 @@
     }
 
     body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-family: 'Inter', sans-serif;
       background: #0a0a0f;
-      min-height: 100vh;
+      color: #ffffff;
       overflow-x: hidden;
-      color: #f0f0ff;
+      min-height: 100vh;
     }
 
-    /* dynamic gradient background */
-    .dynamic-bg {
+    /* Background dinamis dengan grain */
+    .bg-prime {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      inset: 0;
+      background: radial-gradient(ellipse at 30% 40%, #0f0c24, #020105);
       z-index: -2;
-      background: radial-gradient(circle at 20% 30%, #0e0b1f, #010003);
     }
-
-    .noise {
+    .grain {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
       pointer-events: none;
       z-index: -1;
-      opacity: 0.12;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-      background-repeat: repeat;
+      opacity: 0.4;
     }
 
-    /* animated orbs */
+    /* Animated orbs */
     .orb {
       position: fixed;
       border-radius: 50%;
-      filter: blur(80px);
-      opacity: 0.35;
-      animation: float 22s infinite alternate ease-in-out;
+      filter: blur(100px);
+      opacity: 0.3;
+      animation: floatOrb 25s infinite alternate;
       z-index: -1;
     }
-    .orb-1 { width: 55vw; height: 55vw; background: #7928ff; top: -20%; left: -20%; }
-    .orb-2 { width: 45vw; height: 45vw; background: #ff4d8c; bottom: -25%; right: -15%; animation-duration: 28s; }
-    .orb-3 { width: 35vw; height: 35vw; background: #00c9b6; bottom: 10%; left: 20%; animation-duration: 18s; opacity: 0.2; }
-    @keyframes float {
+    .orb1 { width: 50vw; height: 50vw; background: #8a2be2; top: -20%; left: -20%; }
+    .orb2 { width: 40vw; height: 40vw; background: #ff3d9f; bottom: -20%; right: -15%; animation-duration: 30s; }
+    .orb3 { width: 35vw; height: 35vw; background: #00d4ff; bottom: 10%; left: 30%; animation-duration: 20s; opacity: 0.2; }
+    @keyframes floatOrb {
       0% { transform: translate(0, 0) scale(1); }
-      100% { transform: translate(5%, 8%) scale(1.2); }
+      100% { transform: translate(6%, 12%) scale(1.2); }
     }
 
-    /* LOGIN SCREEN - GLASS ENHANCED */
-    .login-prime {
+    /* LOGIN SCREEN - SUPERIOR */
+    .login-master {
       position: fixed;
       inset: 0;
-      background: rgba(5, 3, 15, 0.75);
-      backdrop-filter: blur(20px);
-      z-index: 2000;
+      background: rgba(5, 3, 18, 0.82);
+      backdrop-filter: blur(24px);
+      z-index: 1000;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
       visibility: visible;
       opacity: 1;
     }
-    .login-prime.hide-login {
+    .login-master.hidden {
       opacity: 0;
       visibility: hidden;
-      backdrop-filter: blur(0px);
+      backdrop-filter: blur(0);
     }
-    .glass-panel {
-      background: rgba(18, 12, 34, 0.65);
+    .card-login {
+      background: rgba(12, 8, 28, 0.65);
       backdrop-filter: blur(20px);
-      border-radius: 2rem;
-      border: 1px solid rgba(138, 92, 246, 0.5);
+      border-radius: 2.5rem;
+      border: 1px solid rgba(138, 92, 246, 0.6);
       padding: 2rem 2rem 2.2rem;
       width: 90%;
-      max-width: 440px;
+      max-width: 450px;
       text-align: center;
-      box-shadow: 0 25px 45px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(168, 85, 247, 0.2);
+      box-shadow: 0 30px 50px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(168, 85, 247, 0.3);
       transform: scale(0.96);
-      animation: zoomGlow 0.5s ease forwards;
+      animation: cardRise 0.5s ease forwards;
     }
-    @keyframes zoomGlow {
-      0% { opacity: 0; transform: scale(0.92) translateY(20px); }
+    @keyframes cardRise {
+      0% { opacity: 0; transform: scale(0.9) translateY(30px); }
       100% { opacity: 1; transform: scale(1) translateY(0); }
     }
-    .glass-panel h2 {
-      font-size: 2.3rem;
+    .card-login h2 {
+      font-size: 2.5rem;
       font-weight: 800;
-      background: linear-gradient(130deg, #e6c8ff, #bc8eff, #ff8ed0);
+      background: linear-gradient(135deg, #f0e6ff, #c695ff, #ff9ce0);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
-      letter-spacing: -0.5px;
+      letter-spacing: -1px;
     }
-    .glass-panel .brand-sub {
-      color: #bba9ff;
-      margin-bottom: 2rem;
-      font-size: 0.85rem;
+    .subtitle {
+      color: #b9a9ff;
+      margin-bottom: 1.8rem;
       font-weight: 500;
+      font-size: 0.85rem;
     }
-    .input-frost {
+    .input-neo {
       background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(168, 85, 247, 0.4);
+      border: 1.5px solid rgba(168, 85, 247, 0.4);
       border-radius: 3rem;
-      padding: 0.9rem 1.2rem;
+      padding: 0.9rem 1.3rem;
       width: 100%;
       margin-bottom: 1.2rem;
       color: white;
@@ -126,15 +118,15 @@
       transition: all 0.25s;
       outline: none;
     }
-    .input-frost:focus {
-      border-color: #c35eff;
-      box-shadow: 0 0 15px rgba(195, 94, 255, 0.4);
+    .input-neo:focus {
+      border-color: #d946ef;
+      box-shadow: 0 0 18px rgba(217, 70, 239, 0.5);
       background: rgba(255, 255, 255, 0.1);
     }
-    .login-btn-glow {
-      background: linear-gradient(95deg, #9a4eff, #da4eff);
+    .btn-neo {
+      background: linear-gradient(100deg, #9945ff, #db3dff);
       border: none;
-      padding: 0.9rem;
+      padding: 0.9rem 1.5rem;
       width: 100%;
       border-radius: 3rem;
       font-weight: 700;
@@ -142,184 +134,198 @@
       color: white;
       cursor: pointer;
       transition: 0.25s;
-      margin-top: 0.5rem;
-      box-shadow: 0 8px 20px rgba(154, 78, 255, 0.4);
+      box-shadow: 0 8px 20px rgba(153, 69, 255, 0.4);
+      position: relative;
+      overflow: hidden;
     }
-    .login-btn-glow:hover {
+    .btn-neo::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: 0.4s;
+    }
+    .btn-neo:hover::after {
+      left: 100%;
+    }
+    .btn-neo:hover {
       transform: scale(1.02);
-      box-shadow: 0 0 25px #da4eff;
+      box-shadow: 0 0 25px #db3dff;
     }
-    .demo-note {
+    .demo-text {
       font-size: 0.7rem;
-      margin-top: 1.3rem;
+      margin-top: 1.2rem;
       opacity: 0.7;
     }
-    .error-msg {
-      color: #ff9494;
+    .error-login {
+      color: #ff9595;
       font-size: 0.75rem;
-      margin-top: 0.2rem;
-      min-height: 1.5rem;
+      margin-bottom: 0.5rem;
     }
 
-    /* MAIN APP MODERN */
-    .wilzu-dashboard {
+    /* MAIN APP MODERN ELEGANT */
+    .wilzu-app {
       display: none;
       opacity: 0;
-      transition: opacity 0.5s ease;
+      transition: opacity 0.6s ease;
       max-width: 1300px;
       margin: 0 auto;
       padding: 1.5rem 2rem 2rem;
     }
-    .wilzu-dashboard.active {
+    .wilzu-app.active {
       display: block;
       opacity: 1;
     }
-    /* header */
-    .neo-header {
+    /* navbar premium */
+    .glass-nav {
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      margin-bottom: 2rem;
-      padding-bottom: 0.5rem;
+      padding: 0.8rem 0 1.5rem;
       border-bottom: 1px solid rgba(168, 85, 247, 0.3);
+      margin-bottom: 2rem;
     }
-    .logo-area h1 {
-      font-size: 2.2rem;
+    .logo h1 {
+      font-size: 2rem;
       font-weight: 800;
-      background: linear-gradient(115deg, #ffffff, #dca5ff, #fa8eff);
+      background: linear-gradient(125deg, #fff, #dc9eff, #ff99e2);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
     }
-    .badge {
-      background: rgba(138, 92, 246, 0.2);
-      border-radius: 40px;
+    .status-badge {
+      background: rgba(138, 92, 246, 0.25);
+      border-radius: 2rem;
       padding: 0.4rem 1rem;
       font-size: 0.8rem;
-      border: 1px solid rgba(168, 85, 247, 0.5);
       backdrop-filter: blur(4px);
+      border: 1px solid #a855f7;
     }
-    /* video card premium */
-    .media-card {
-      background: rgba(15, 10, 30, 0.5);
-      backdrop-filter: blur(14px);
+    /* video card */
+    .video-verse {
+      background: rgba(15, 10, 34, 0.55);
+      backdrop-filter: blur(12px);
       border-radius: 2rem;
       padding: 1.5rem;
-      margin: 1.5rem 0;
-      border: 1px solid rgba(168, 85, 247, 0.4);
-      transition: 0.2s;
+      margin-bottom: 2rem;
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      transition: transform 0.2s;
     }
     video {
       width: 100%;
       border-radius: 1.5rem;
-      box-shadow: 0 20px 35px -10px black;
+      box-shadow: 0 20px 30px -12px black;
       cursor: pointer;
-      transition: 0.2s;
     }
-    video:hover {
-      transform: scale(0.99);
-      box-shadow: 0 0 0 2px #c084fc;
-    }
-    .action-bar {
+    .action-group {
       display: flex;
       gap: 1rem;
       justify-content: center;
       margin-top: 1.5rem;
       flex-wrap: wrap;
     }
-    .btn-modern {
+    .select-custom {
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(8px);
+      border: 1px solid #b77dff;
+      border-radius: 3rem;
+      padding: 0.7rem 1.8rem;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .select-custom:hover {
+      border-color: #eb6eff;
+    }
+    .btn-glow {
       background: rgba(0, 0, 0, 0.5);
-      border: 1px solid rgba(188, 120, 255, 0.5);
-      padding: 0.7rem 1.5rem;
-      border-radius: 2rem;
+      backdrop-filter: blur(8px);
+      border: 1px solid #a855f7;
+      border-radius: 3rem;
+      padding: 0.7rem 1.8rem;
       font-weight: 600;
       color: white;
       cursor: pointer;
-      transition: 0.2s;
-      backdrop-filter: blur(4px);
+      transition: 0.25s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
     }
-    .btn-modern:hover {
-      background: linear-gradient(135deg, #a855f7, #d946ef);
+    .btn-glow:hover {
+      background: linear-gradient(95deg, #a855f7, #d946ef);
       border-color: transparent;
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(168, 85, 247, 0.3);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(168, 85, 247, 0.4);
     }
-    select {
-      background: rgba(0, 0, 0, 0.6);
-      border: 1px solid #aa66ff;
-      padding: 0.7rem 1.2rem;
+    /* Spotify card khusus */
+    .music-floater {
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(18px);
       border-radius: 2rem;
-      color: white;
-      font-weight: 500;
-      cursor: pointer;
-      backdrop-filter: blur(4px);
-    }
-    /* spotify widget modern */
-    .spotify-embed {
-      background: rgba(0, 0, 0, 0.45);
-      border-radius: 2rem;
-      padding: 0.2rem;
-      margin: 1.8rem 0;
-      border: 1px solid #cc88ff40;
+      padding: 0.5rem;
+      margin: 2rem 0;
+      border: 1px solid rgba(217, 70, 239, 0.5);
+      transition: all 0.3s;
     }
     iframe {
-      border-radius: 1.8rem;
+      border-radius: 1.5rem;
       width: 100%;
       height: 90px;
     }
-    /* tiktok downloader v2 */
-    .tiktok-glass {
-      background: rgba(18, 12, 34, 0.65);
+    /* TikTok modern */
+    .tiktok-neo {
+      background: rgba(20, 12, 38, 0.7);
       backdrop-filter: blur(16px);
       border-radius: 2rem;
-      padding: 1.5rem;
+      padding: 1.6rem;
       margin: 2rem 0;
-      border: 1px solid rgba(200, 130, 255, 0.5);
+      border: 1px solid rgba(168, 85, 247, 0.5);
     }
-    .input-group-inline {
+    .flex-input {
       display: flex;
       gap: 0.8rem;
       flex-wrap: wrap;
       align-items: center;
-      justify-content: center;
+      margin: 1rem 0;
     }
-    .input-tiktok {
+    .input-urban {
       flex: 1;
-      background: rgba(0, 0, 0, 0.5);
-      border: 1px solid #b27eff;
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid #c084fc;
       border-radius: 3rem;
-      padding: 0.8rem 1.2rem;
+      padding: 0.85rem 1.2rem;
       color: white;
       outline: none;
     }
-    .result-preview video {
-      max-height: 350px;
-      width: auto;
+    .result-video {
       margin-top: 1rem;
-      border-radius: 1.2rem;
+      text-align: center;
     }
-    .download-link-neon {
+    .download-btn {
       display: inline-flex;
       align-items: center;
       gap: 0.6rem;
-      background: linear-gradient(95deg, #9945ff, #eb3eb0);
-      padding: 0.6rem 1.5rem;
+      background: linear-gradient(95deg, #9945ff, #f43f99);
+      padding: 0.7rem 1.8rem;
       border-radius: 3rem;
       text-decoration: none;
       color: white;
-      font-weight: 600;
+      font-weight: 700;
       margin-top: 1rem;
       transition: 0.2s;
     }
     footer {
       text-align: center;
       margin-top: 3rem;
-      padding: 1rem;
       opacity: 0.6;
       font-size: 0.8rem;
     }
-    .logout-neon {
+    .logout-zone {
       position: fixed;
       bottom: 1.5rem;
       right: 1.5rem;
@@ -327,208 +333,202 @@
       backdrop-filter: blur(12px);
       padding: 0.7rem 1.3rem;
       border-radius: 3rem;
-      font-weight: 500;
       font-size: 0.85rem;
+      font-weight: 500;
       cursor: pointer;
       border: 1px solid #ff80cc;
       transition: 0.2s;
       z-index: 99;
     }
-    .logout-neon:hover {
+    .logout-zone:hover {
       background: #ff4d8c;
-      color: white;
-      border-color: white;
+      transform: scale(1.05);
     }
-    @media (max-width: 680px) {
-      .wilzu-dashboard { padding: 1rem; }
-      .logo-area h1 { font-size: 1.6rem; }
+    @media (max-width: 700px) {
+      .wilzu-app { padding: 1rem; }
+      .logo h1 { font-size: 1.5rem; }
     }
   </style>
 </head>
 <body>
-<div class="dynamic-bg"></div>
-<div class="noise"></div>
-<div class="orb orb-1"></div>
-<div class="orb orb-2"></div>
-<div class="orb orb-3"></div>
+<div class="bg-prime"></div>
+<div class="grain"></div>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
 
-<!-- LOGIN SECTION PREMIUM -->
-<div id="loginScreenV2" class="login-prime">
-  <div class="glass-panel">
-    <h2>WILZU NEO</h2>
-    <div class="brand-sub">akses penuh ke dimensi baru</div>
-    <input type="text" id="loginUsername" class="input-frost" placeholder="username / kamu" autocomplete="off">
-    <input type="password" id="loginPassword" class="input-frost" placeholder="password (bebas)">
-    <div id="loginErrorMsg" class="error-msg"></div>
-    <button id="loginButtonV2" class="login-btn-glow"><i class="fas fa-arrow-right-to-bracket"></i> MASUK SEKARANG</button>
-    <div class="demo-note">✨ cukup isi kedua field, langsung masuk ke pengalaman baru ✨</div>
+<!-- LOGIN ELEGANT -->
+<div id="loginOverlay" class="login-master">
+  <div class="card-login">
+    <h2>WILZU</h2>
+    <div class="subtitle">✦ enter the neoverse ✦</div>
+    <input type="text" id="loginId" class="input-neo" placeholder="username / nickname" autocomplete="off">
+    <input type="password" id="loginPwd" class="input-neo" placeholder="password (bebas)">
+    <div id="loginErr" class="error-login"></div>
+    <button id="doLoginNeo" class="btn-neo"><i class="fas fa-key"></i> UNLOCK PORTAL</button>
+    <div class="demo-text">✨ isi kedua kolom, bebas — langsung masuk ke pengalaman baru ✨</div>
   </div>
 </div>
 
-<!-- MAIN WEBSITE MODERN -->
-<div id="mainAppModern" class="wilzu-dashboard">
-  <div class="neo-header">
-    <div class="logo-area">
-      <h1>𝑾𝑰𝑳𝒁𝑼 𝑽𝑬𝑹𝑺𝑬</h1>
-      <div class="badge"><i class="fas fa-bolt"></i> NEXT GEN PORTAL</div>
+<!-- MAIN APP UTAMA -->
+<div id="wilzuMain" class="wilzu-app">
+  <div class="glass-nav">
+    <div class="logo">
+      <h1>𝑾𝑰𝑳𝒁𝑼 𝑵𝑬𝑶</h1>
+      <div class="status-badge"><i class="fas fa-bolt"></i> LIVE NOW</div>
     </div>
-    <div class="badge"><i class="fas fa-headphones"></i> SURE THING ON SPOTIFY</div>
+    <div class="status-badge"><i class="fab fa-spotify"></i> SURE THING • MIGUEL</div>
   </div>
 
-  <!-- Video + Menu -->
-  <div class="media-card">
-    <video id="heroVideo" poster="https://files.catbox.moe/avfc3q.jpg" controls>
+  <!-- VIDEO PREMIUM -->
+  <div class="video-verse">
+    <video id="mainVideoHero" poster="https://files.catbox.moe/avfc3q.jpg" controls>
       <source src="https://files.catbox.moe/mnrpbr.mp4" type="video/mp4">
     </video>
-    <div class="action-bar">
-      <select id="menuNeo">
-        <option value="dashboard">✦ DASHBOARD</option>
-        <option value="premium">💎 FITUR PREMIUM</option>
-        <option value="about">🌌 TENTANG KAMI</option>
+    <div class="action-group">
+      <select id="menuNeoSelect" class="select-custom">
+        <option value="dashboard">⚡ DASHBOARD</option>
+        <option value="premium">💎 PREMIUM ACCESS</option>
+        <option value="about">🌀 TENTANG KAMI</option>
       </select>
-      <button id="exploreBtn" class="btn-modern"><i class="fas fa-compass"></i> JELAJAHI</button>
-      <button id="telegramNeoBtn" class="btn-modern" onclick="window.open('https://t.me/Willyishre_bot?start=_tgr_xPMBIpY5Yjhl','_blank')"><i class="fab fa-telegram"></i> BOT TELEGRAM</button>
+      <button id="exploreNeoBtn" class="btn-glow"><i class="fas fa-compass"></i> JELAJAHI</button>
+      <button id="telegramNeoTrigger" class="btn-glow" onclick="window.open('https://t.me/Willyishre_bot?start=_tgr_xPMBIpY5Yjhl','_blank')"><i class="fab fa-telegram"></i> TELEGRAM BOT</button>
     </div>
   </div>
 
-  <!-- SPOTIFY WIDGET : SURE THING MIGUEL -->
-  <div class="spotify-embed">
+  <!-- MUSIK SPOTIFY - SURE THING langsung muncul pas buka website -->
+  <div class="music-floater">
     <iframe src="https://open.spotify.com/embed/track/0Nxx0HZcPr3yprf9tPXAY3?utm_source=generator&theme=0" 
             frameborder="0" allowfullscreen="" 
             allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
             loading="lazy"></iframe>
   </div>
 
-  <!-- TikTok Downloader Upgrade -->
-  <div class="tiktok-glass">
-    <h3 style="display: flex; gap: 10px; align-items: center;"><i class="fab fa-tiktok" style="font-size: 1.5rem;"></i> UNDUH VIDEO TIKTOK</h3>
-    <p>tempel link trus dapetin video & download</p>
-    <div class="input-group-inline">
-      <input type="text" id="tiktokLinkInput" class="input-tiktok" placeholder="https://www.tiktok.com/@user/video/123456789">
-      <button id="tiktokFetchBtn" class="btn-modern"><i class="fas fa-download"></i> Proses</button>
+  <!-- TIKTOK DOWNLOADER MODERN -->
+  <div class="tiktok-neo">
+    <h3 style="display: flex; gap: 10px;"><i class="fab fa-tiktok" style="font-size: 1.6rem;"></i> TikTok Downloader</h3>
+    <p>tempel link video TikTok, dapatkan versi HD</p>
+    <div class="flex-input">
+      <input type="text" id="tiktokUrlNeo" class="input-urban" placeholder="https://www.tiktok.com/@user/video/123456789">
+      <button id="fetchTikTokNeo" class="btn-glow"><i class="fas fa-cloud-download-alt"></i> Proses</button>
     </div>
-    <div id="tiktokResultContainer" class="result-preview" style="margin-top: 20px;"></div>
+    <div id="tiktokResultNeo" class="result-video"></div>
   </div>
 
-  <footer>© 2025 WILZU • built with neo vibes • unlimited inspiration</footer>
-  <div id="logoutNeonBtn" class="logout-neon"><i class="fas fa-sign-out-alt"></i> Keluar</div>
+  <footer>© 2025 WILZU • futuristik audio visual • supersonic vibe</footer>
+  <div id="logoutNeoBtn" class="logout-zone"><i class="fas fa-sign-out-alt"></i> Exit</div>
 </div>
 
 <script>
   (function() {
-    // Login logic dengan efek smooth
-    const loginContainer = document.getElementById('loginScreenV2');
-    const mainApp = document.getElementById('mainAppModern');
-    const loginBtn = document.getElementById('loginButtonV2');
-    const userInput = document.getElementById('loginUsername');
-    const passInput = document.getElementById('loginPassword');
-    const errorSpan = document.getElementById('loginErrorMsg');
+    // LOGIN SYSTEM
+    const loginScreen = document.getElementById('loginOverlay');
+    const mainArea = document.getElementById('wilzuMain');
+    const loginBtn = document.getElementById('doLoginNeo');
+    const userLogin = document.getElementById('loginId');
+    const passLogin = document.getElementById('loginPwd');
+    const errDiv = document.getElementById('loginErr');
 
-    function handleLogin() {
-      const username = userInput.value.trim();
-      const password = passInput.value.trim();
-      if (username === "" || password === "") {
-        errorSpan.innerText = "⚠️ isi kedua kolom (bebas) untuk masuk!";
+    function triggerLogin() {
+      const user = userLogin.value.trim();
+      const pwd = passLogin.value.trim();
+      if (user === "" || pwd === "") {
+        errDiv.innerText = "⚠️ isi kedua kolom untuk melanjutkan";
         return;
       }
-      // success login
-      errorSpan.innerText = "";
-      loginContainer.classList.add('hide-login');
+      errDiv.innerText = "";
+      loginScreen.classList.add('hidden');
       setTimeout(() => {
-        loginContainer.style.display = 'none';
-        mainApp.classList.add('active');
+        loginScreen.style.display = 'none';
+        mainArea.classList.add('active');
         document.body.style.overflow = 'auto';
-        // play subtle entrance
-      }, 700);
+      }, 600);
     }
 
-    loginBtn.addEventListener('click', handleLogin);
-    const enterKeyLogin = (e) => { if(e.key === 'Enter') handleLogin(); };
-    userInput.addEventListener('keypress', enterKeyLogin);
-    passInput.addEventListener('keypress', enterKeyLogin);
+    loginBtn.addEventListener('click', triggerLogin);
+    const handleEnterLogin = (e) => { if(e.key === 'Enter') triggerLogin(); };
+    userLogin.addEventListener('keypress', handleEnterLogin);
+    passLogin.addEventListener('keypress', handleEnterLogin);
 
-    // LOGOUT 
-    const logoutBtn = document.getElementById('logoutNeonBtn');
-    function logout() {
-      mainApp.classList.remove('active');
-      mainApp.style.display = 'none';
-      loginContainer.style.display = 'flex';
+    // LOGOUT
+    const logoutNeo = document.getElementById('logoutNeoBtn');
+    logoutNeo.addEventListener('click', () => {
+      mainArea.classList.remove('active');
+      mainArea.style.display = 'none';
+      loginScreen.style.display = 'flex';
       setTimeout(() => {
-        loginContainer.classList.remove('hide-login');
-        loginContainer.style.opacity = '1';
-        loginContainer.style.visibility = 'visible';
+        loginScreen.classList.remove('hidden');
+        loginScreen.style.opacity = '1';
+        loginScreen.style.visibility = 'visible';
       }, 10);
-      userInput.value = '';
-      passInput.value = '';
-      errorSpan.innerText = '';
+      userLogin.value = '';
+      passLogin.value = '';
+      errDiv.innerText = '';
       document.body.style.overflow = 'hidden';
-      // reset tiktok result
-      const resultDiv = document.getElementById('tiktokResultContainer');
-      if (resultDiv) resultDiv.innerHTML = '';
+      document.getElementById('tiktokResultNeo').innerHTML = '';
+    });
+
+    // MENU LOGIC
+    const selectMenu = document.getElementById('menuNeoSelect');
+    const exploreBtn = document.getElementById('exploreNeoBtn');
+    function showMenuDetail() {
+      const val = selectMenu.value;
+      let message = "";
+      if(val === "dashboard") message = "📊 DASHBOARD: total tayangan 23.4K, pengguna aktif 1.2K, musik teratas: Sure Thing 🎵";
+      else if(val === "premium") message = "💎 PREMIUM: download tanpa batas, akses video eksklusif, efek eksklusif, badge hologram. Hubungi bot Telegram!";
+      else if(val === "about") message = "🌀 TENTANG KAMI: Wilzu adalah ruang kreatif dengan nuansa futuristik, support downloader & visual terbaik.";
+      else message = "✨ pilih opsi yang tersedia";
+      alert(message);
     }
-    logoutBtn.addEventListener('click', logout);
+    exploreBtn.addEventListener('click', showMenuDetail);
 
-    // MENU HANDLER
-    const menuSelect = document.getElementById('menuNeo');
-    const exploreButton = document.getElementById('exploreBtn');
-    function showMenuInfo() {
-      const selected = menuSelect.value;
-      let msg = '';
-      if (selected === 'dashboard') msg = "📊 DASHBOARD WILZU — Statistik: 15.2K tayangan, 890 user aktif, playlist favorit: Sure Thing 🔥";
-      else if (selected === 'premium') msg = "💎 FITUR PREMIUM — Download video tanpa watermark, akses early content, tema eksklusif, dan badge neon. Chat bot Telegram!";
-      else if (selected === 'about') msg = "🌌 TENTANG KAMI — Wilzu Neo adalah ruang imersif buat kamu yang suka estetika, video editor, dan downloader TikTok tanpa ribet. #FutureIsNow";
-      else msg = "✨ Pilih menu yang tersedia.";
-      alert(msg);
-    }
-    exploreButton.addEventListener('click', showMenuInfo);
+    // TIKTOK DOWNLOADER (API TikWM)
+    const tiktokInput = document.getElementById('tiktokUrlNeo');
+    const tiktokBtn = document.getElementById('fetchTikTokNeo');
+    const resultDiv = document.getElementById('tiktokResultNeo');
 
-    // TIKTOK DOWNLOADER ENHANCED (API tikwm)
-    const tiktokInput = document.getElementById('tiktokLinkInput');
-    const tiktokFetch = document.getElementById('tiktokFetchBtn');
-    const resultContainer = document.getElementById('tiktokResultContainer');
-
-    async function fetchTikTok() {
-      const rawUrl = tiktokInput.value.trim();
-      if (!rawUrl) {
-        alert("Masukkan link TikTok dulu, ya!");
+    async function downloadTikTokNow() {
+      const url = tiktokInput.value.trim();
+      if (!url) {
+        alert("Masukkan link TikTok dulu, lek!");
         return;
       }
-      resultContainer.innerHTML = `<div style="display: flex; gap: 8px; justify-content:center; padding: 12px;"><i class="fas fa-circle-notch fa-spin"></i> Sedang mengambil data...</div>`;
+      resultDiv.innerHTML = `<div style="display:flex; justify-content:center; gap:8px;"><i class="fas fa-spinner fa-pulse"></i> Memproses link...</div>`;
       try {
-        const encoded = encodeURIComponent(rawUrl);
+        const encoded = encodeURIComponent(url);
         const response = await fetch(`https://tikwm.com/api/?url=${encoded}`);
-        const data = await response.json();
-        if (data && data.data && data.data.play) {
-          const videoPlay = data.data.play;
-          resultContainer.innerHTML = `
-            <div style="background: rgba(0,0,0,0.4); border-radius: 1.5rem; padding: 1rem; text-align: center;">
-              <i class="fas fa-check-circle" style="color: #c084fc;"></i> <strong>Video siap, lek!</strong><br>
-              <video controls style="max-width: 100%; max-height: 360px; border-radius: 1rem; margin: 10px 0;">
-                <source src="${videoPlay}" type="video/mp4">
+        const json = await response.json();
+        if (json && json.data && json.data.play) {
+          const videoUrl = json.data.play;
+          resultDiv.innerHTML = `
+            <div style="background: rgba(0,0,0,0.4); border-radius: 1.5rem; padding: 1rem;">
+              <i class="fas fa-check-circle" style="color: #c084fc;"></i> <strong>Video berhasil diambil!</strong><br>
+              <video controls style="max-width: 100%; border-radius: 1rem; margin: 12px 0;">
+                <source src="${videoUrl}" type="video/mp4">
               </video><br>
-              <a href="${videoPlay}" download class="download-link-neon"><i class="fas fa-save"></i> Download Video</a>
+              <a href="${videoUrl}" download class="download-btn"><i class="fas fa-download"></i> Download Sekarang</a>
             </div>
           `;
         } else {
-          resultContainer.innerHTML = `<div style="color:#ffb7b7; padding: 12px;">⚠️ Gagal ambil video. Pastikan link publik dan benar.</div>`;
+          resultDiv.innerHTML = `<div style="color:#ffaeae;">⚠️ Gagal, cek link atau coba lagi.</div>`;
         }
-      } catch (err) {
-        console.error(err);
-        resultContainer.innerHTML = `<div style="color:#ff8a8a;">💥 Error total, cek koneksi atau coba lagi nanti.</div>`;
+      } catch (error) {
+        console.error(error);
+        resultDiv.innerHTML = `<div style="color:#ff7b7b;">💀 Error koneksi atau server sibuk.</div>`;
       }
     }
+    tiktokBtn.addEventListener('click', downloadTikTokNow);
 
-    tiktokFetch.addEventListener('click', fetchTikTok);
-    // video main
-    const mainVideo = document.getElementById('heroVideo');
-    if(mainVideo) {
-      mainVideo.addEventListener('click', () => {
-        if(mainVideo.paused) mainVideo.play(); else mainVideo.pause();
+    // Video interaksi
+    const videoEl = document.getElementById('mainVideoHero');
+    if(videoEl) {
+      videoEl.addEventListener('click', () => {
+        if(videoEl.paused) videoEl.play(); else videoEl.pause();
       });
     }
 
-    // tambahan efek hover dan gaya
-    console.log("wilzu neo ready | Sure Thing spotify integrated");
+    // sedikit efek tambahan agar lebih hidup
+    console.log("WILZU NEO | Spotify ready, music widget Sure Thing sudah terpasang");
   })();
 </script>
 </body>
