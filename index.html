@@ -3,574 +3,533 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>WILZU • MODERN PORTAL</title>
-  <!-- Google Fonts & Icons -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <title>WILZU | NEOVERSE</title>
+  <!-- Google Fonts + Font Awesome -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Inter', sans-serif;
     }
 
     body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #0a0a0f;
       min-height: 100vh;
-      background: radial-gradient(ellipse at 30% 40%, #0f0c1f, #020105);
       overflow-x: hidden;
-      position: relative;
+      color: #f0f0ff;
     }
 
-    /* Animated blob background */
-    .blob-bg {
+    /* dynamic gradient background */
+    .dynamic-bg {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
       z-index: -2;
-      overflow: hidden;
-    }
-    .blob {
-      position: absolute;
-      width: 40vw;
-      height: 40vw;
-      border-radius: 62% 38% 72% 28% / 44% 55% 45% 56%;
-      background: linear-gradient(135deg, #b73dff, #5f2eea, #ff6ad5);
-      filter: blur(100px);
-      opacity: 0.4;
-      animation: drift 20s infinite alternate ease-in-out;
-    }
-    .blob:nth-child(1) { top: -15%; left: -10%; animation-duration: 25s; }
-    .blob:nth-child(2) { bottom: -20%; right: -5%; background: linear-gradient(225deg, #00c6fb, #a45eff); animation-duration: 30s; opacity: 0.3; }
-    @keyframes drift {
-      0% { transform: translate(0, 0) rotate(0deg) scale(1); }
-      100% { transform: translate(8%, 12%) rotate(10deg) scale(1.2); }
+      background: radial-gradient(circle at 20% 30%, #0e0b1f, #010003);
     }
 
-    /* LOGIN SECTION - FULLSCREEN ANIMATED */
-    .login-overlay {
+    .noise {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(5, 2, 15, 0.82);
-      backdrop-filter: blur(14px);
-      z-index: 1000;
+      pointer-events: none;
+      z-index: -1;
+      opacity: 0.12;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+    }
+
+    /* animated orbs */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.35;
+      animation: float 22s infinite alternate ease-in-out;
+      z-index: -1;
+    }
+    .orb-1 { width: 55vw; height: 55vw; background: #7928ff; top: -20%; left: -20%; }
+    .orb-2 { width: 45vw; height: 45vw; background: #ff4d8c; bottom: -25%; right: -15%; animation-duration: 28s; }
+    .orb-3 { width: 35vw; height: 35vw; background: #00c9b6; bottom: 10%; left: 20%; animation-duration: 18s; opacity: 0.2; }
+    @keyframes float {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(5%, 8%) scale(1.2); }
+    }
+
+    /* LOGIN SCREEN - GLASS ENHANCED */
+    .login-prime {
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 3, 15, 0.75);
+      backdrop-filter: blur(20px);
+      z-index: 2000;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+      transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
       visibility: visible;
       opacity: 1;
     }
-    .login-overlay.hidden {
+    .login-prime.hide-login {
       opacity: 0;
       visibility: hidden;
       backdrop-filter: blur(0px);
     }
-    .login-card {
-      background: rgba(20, 12, 36, 0.6);
+    .glass-panel {
+      background: rgba(18, 12, 34, 0.65);
       backdrop-filter: blur(20px);
-      border-radius: 48px;
-      padding: 2.2rem 2rem;
+      border-radius: 2rem;
+      border: 1px solid rgba(138, 92, 246, 0.5);
+      padding: 2rem 2rem 2.2rem;
       width: 90%;
-      max-width: 420px;
-      border: 1px solid rgba(168, 85, 247, 0.5);
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(168, 85, 247, 0.3);
-      transform: scale(0.95);
-      animation: floatIn 0.6s ease-out forwards;
+      max-width: 440px;
       text-align: center;
+      box-shadow: 0 25px 45px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(168, 85, 247, 0.2);
+      transform: scale(0.96);
+      animation: zoomGlow 0.5s ease forwards;
     }
-    @keyframes floatIn {
-      0% { opacity: 0; transform: scale(0.92) translateY(30px); }
+    @keyframes zoomGlow {
+      0% { opacity: 0; transform: scale(0.92) translateY(20px); }
       100% { opacity: 1; transform: scale(1) translateY(0); }
     }
-    .login-card h2 {
-      font-size: 2rem;
-      font-weight: 700;
-      background: linear-gradient(135deg, #e2b6ff, #c06eff);
+    .glass-panel h2 {
+      font-size: 2.3rem;
+      font-weight: 800;
+      background: linear-gradient(130deg, #e6c8ff, #bc8eff, #ff8ed0);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
-      margin-bottom: 0.5rem;
+      letter-spacing: -0.5px;
     }
-    .login-card .sub {
-      color: #b9a9ff;
+    .glass-panel .brand-sub {
+      color: #bba9ff;
       margin-bottom: 2rem;
       font-size: 0.85rem;
-      letter-spacing: 1px;
-    }
-    .input-group {
-      margin-bottom: 1.5rem;
-      text-align: left;
-    }
-    .input-group label {
-      font-size: 0.8rem;
       font-weight: 500;
-      color: #cbb6ff;
-      display: block;
-      margin-bottom: 6px;
     }
-    .input-group input {
-      width: 100%;
-      background: rgba(255, 255, 255, 0.08);
+    .input-frost {
+      background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(168, 85, 247, 0.4);
-      padding: 14px 18px;
-      border-radius: 32px;
+      border-radius: 3rem;
+      padding: 0.9rem 1.2rem;
+      width: 100%;
+      margin-bottom: 1.2rem;
       color: white;
       font-size: 1rem;
-      outline: none;
       transition: all 0.25s;
+      outline: none;
     }
-    .input-group input:focus {
-      border-color: #d946ef;
-      box-shadow: 0 0 15px #d946ef66;
-      background: rgba(255, 255, 255, 0.12);
+    .input-frost:focus {
+      border-color: #c35eff;
+      box-shadow: 0 0 15px rgba(195, 94, 255, 0.4);
+      background: rgba(255, 255, 255, 0.1);
     }
-    .login-btn {
-      background: linear-gradient(95deg, #a855f7, #d946ef);
+    .login-btn-glow {
+      background: linear-gradient(95deg, #9a4eff, #da4eff);
       border: none;
+      padding: 0.9rem;
       width: 100%;
-      padding: 14px;
-      border-radius: 40px;
-      font-weight: bold;
-      font-size: 1.1rem;
+      border-radius: 3rem;
+      font-weight: 700;
+      font-size: 1rem;
       color: white;
       cursor: pointer;
-      transition: 0.3s;
-      box-shadow: 0 8px 20px rgba(168, 85, 247, 0.4);
-      margin-top: 10px;
+      transition: 0.25s;
+      margin-top: 0.5rem;
+      box-shadow: 0 8px 20px rgba(154, 78, 255, 0.4);
     }
-    .login-btn:hover {
+    .login-btn-glow:hover {
       transform: scale(1.02);
-      box-shadow: 0 0 25px #d946ef;
+      box-shadow: 0 0 25px #da4eff;
     }
-    .guest-note {
-      margin-top: 18px;
-      font-size: 0.75rem;
-      color: #aa99ff;
+    .demo-note {
+      font-size: 0.7rem;
+      margin-top: 1.3rem;
+      opacity: 0.7;
     }
     .error-msg {
-      color: #ff8a8a;
+      color: #ff9494;
       font-size: 0.75rem;
-      margin-top: 8px;
-      min-height: 20px;
+      margin-top: 0.2rem;
+      min-height: 1.5rem;
     }
 
-    /* MAIN APP CONTENT - AWESOME MODERN */
-    .main-app {
+    /* MAIN APP MODERN */
+    .wilzu-dashboard {
       display: none;
       opacity: 0;
-      transition: opacity 0.7s ease;
-      padding: 1rem 1.5rem 2rem;
+      transition: opacity 0.5s ease;
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 1.5rem 2rem 2rem;
     }
-    .main-app.active {
+    .wilzu-dashboard.active {
       display: block;
       opacity: 1;
     }
-    /* header style */
-    .glass-header {
-      text-align: center;
-      padding: 1rem 0 0.5rem;
+    /* header */
+    .neo-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid rgba(168, 85, 247, 0.3);
     }
-    .glass-header h1 {
-      font-size: 3rem;
+    .logo-area h1 {
+      font-size: 2.2rem;
       font-weight: 800;
-      background: linear-gradient(120deg, #f0e6ff, #c084fc, #ff99f5);
-      background-clip: text;
+      background: linear-gradient(115deg, #ffffff, #dca5ff, #fa8eff);
       -webkit-background-clip: text;
+      background-clip: text;
       color: transparent;
-      text-shadow: 0 0 20px rgba(192, 132, 252, 0.5);
-      letter-spacing: -0.5px;
     }
-    /* video card */
-    .video-card {
-      background: rgba(20, 12, 40, 0.5);
-      backdrop-filter: blur(12px);
-      border-radius: 38px;
-      padding: 20px;
-      margin: 20px auto;
-      max-width: 700px;
+    .badge {
+      background: rgba(138, 92, 246, 0.2);
+      border-radius: 40px;
+      padding: 0.4rem 1rem;
+      font-size: 0.8rem;
+      border: 1px solid rgba(168, 85, 247, 0.5);
+      backdrop-filter: blur(4px);
+    }
+    /* video card premium */
+    .media-card {
+      background: rgba(15, 10, 30, 0.5);
+      backdrop-filter: blur(14px);
+      border-radius: 2rem;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
       border: 1px solid rgba(168, 85, 247, 0.4);
-      box-shadow: 0 20px 35px -12px rgba(0,0,0,0.5);
-      transition: transform 0.2s;
+      transition: 0.2s;
     }
     video {
       width: 100%;
-      border-radius: 28px;
+      border-radius: 1.5rem;
+      box-shadow: 0 20px 35px -10px black;
       cursor: pointer;
-      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.6);
-      transition: all 0.3s;
+      transition: 0.2s;
     }
     video:hover {
-      transform: scale(1.01);
-      box-shadow: 0 0 30px #c77dff80;
+      transform: scale(0.99);
+      box-shadow: 0 0 0 2px #c084fc;
     }
-    .controls {
+    .action-bar {
       display: flex;
+      gap: 1rem;
       justify-content: center;
-      gap: 12px;
-      margin: 20px 0 10px;
+      margin-top: 1.5rem;
       flex-wrap: wrap;
     }
-    select {
-      background: rgba(30, 20, 50, 0.9);
-      backdrop-filter: blur(8px);
-      border: 1px solid #a855f7;
-      padding: 12px 22px;
-      border-radius: 60px;
-      color: white;
-      font-weight: 500;
-      cursor: pointer;
-      outline: none;
-    }
-    button, .btn-glow {
-      background: linear-gradient(95deg, #7c3aed, #db46f0);
-      border: none;
-      padding: 12px 28px;
-      border-radius: 60px;
+    .btn-modern {
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(188, 120, 255, 0.5);
+      padding: 0.7rem 1.5rem;
+      border-radius: 2rem;
       font-weight: 600;
       color: white;
       cursor: pointer;
       transition: 0.2s;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      backdrop-filter: blur(4px);
     }
-    button:hover, .btn-glow:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 22px #d946ef;
+    .btn-modern:hover {
+      background: linear-gradient(135deg, #a855f7, #d946ef);
+      border-color: transparent;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(168, 85, 247, 0.3);
     }
-    /* Spotify Modern Widget */
-    .music-widget {
-      background: rgba(0, 0, 0, 0.45);
-      backdrop-filter: blur(18px);
-      border-radius: 60px;
-      padding: 0.5rem 1rem;
-      margin: 20px auto;
-      max-width: 400px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-    .music-widget iframe {
-      border-radius: 40px;
-      width: 100%;
-      height: 80px;
-    }
-    /* TikTok section upgrade */
-    .tiktok-section {
-      background: rgba(20, 12, 40, 0.55);
-      backdrop-filter: blur(16px);
-      border-radius: 40px;
-      padding: 1.8rem;
-      margin: 30px auto;
-      max-width: 700px;
-      border: 1px solid rgba(220, 110, 255, 0.5);
-    }
-    .tiktok-section input {
-      width: 80%;
-      background: rgba(255,255,255,0.1);
-      border: 1px solid #b57eff;
-      padding: 14px 20px;
-      border-radius: 48px;
+    select {
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid #aa66ff;
+      padding: 0.7rem 1.2rem;
+      border-radius: 2rem;
       color: white;
-      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      backdrop-filter: blur(4px);
+    }
+    /* spotify widget modern */
+    .spotify-embed {
+      background: rgba(0, 0, 0, 0.45);
+      border-radius: 2rem;
+      padding: 0.2rem;
+      margin: 1.8rem 0;
+      border: 1px solid #cc88ff40;
+    }
+    iframe {
+      border-radius: 1.8rem;
+      width: 100%;
+      height: 90px;
+    }
+    /* tiktok downloader v2 */
+    .tiktok-glass {
+      background: rgba(18, 12, 34, 0.65);
+      backdrop-filter: blur(16px);
+      border-radius: 2rem;
+      padding: 1.5rem;
+      margin: 2rem 0;
+      border: 1px solid rgba(200, 130, 255, 0.5);
+    }
+    .input-group-inline {
+      display: flex;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+    }
+    .input-tiktok {
+      flex: 1;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid #b27eff;
+      border-radius: 3rem;
+      padding: 0.8rem 1.2rem;
+      color: white;
       outline: none;
     }
-    .result {
-      margin-top: 20px;
-    }
-    .result video {
+    .result-preview video {
       max-height: 350px;
       width: auto;
-      margin-top: 10px;
+      margin-top: 1rem;
+      border-radius: 1.2rem;
     }
-    a.download-link {
-      background: linear-gradient(95deg, #a855f7, #f43f99);
-      margin-top: 12px;
-      display: inline-block;
-      padding: 10px 24px;
-      border-radius: 50px;
+    .download-link-neon {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: linear-gradient(95deg, #9945ff, #eb3eb0);
+      padding: 0.6rem 1.5rem;
+      border-radius: 3rem;
       text-decoration: none;
       color: white;
-      font-weight: bold;
-      transition: all 0.2s;
+      font-weight: 600;
+      margin-top: 1rem;
+      transition: 0.2s;
     }
     footer {
       text-align: center;
-      padding: 30px 0 20px;
-      opacity: 0.7;
+      margin-top: 3rem;
+      padding: 1rem;
+      opacity: 0.6;
       font-size: 0.8rem;
-      color: #ddccff;
     }
-    .logout-icon {
+    .logout-neon {
       position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: rgba(0,0,0,0.5);
-      backdrop-filter: blur(8px);
-      padding: 10px 15px;
-      border-radius: 40px;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(12px);
+      padding: 0.7rem 1.3rem;
+      border-radius: 3rem;
+      font-weight: 500;
+      font-size: 0.85rem;
       cursor: pointer;
-      font-size: 0.8rem;
-      z-index: 99;
+      border: 1px solid #ff80cc;
       transition: 0.2s;
-      border: 1px solid #a855f7;
+      z-index: 99;
     }
-    .logout-icon:hover {
-      background: #ff4da6aa;
+    .logout-neon:hover {
+      background: #ff4d8c;
+      color: white;
+      border-color: white;
     }
-    @media (max-width: 600px) {
-      .glass-header h1 { font-size: 2.2rem; }
-      .controls select, .controls button { font-size: 0.8rem; padding: 8px 16px; }
+    @media (max-width: 680px) {
+      .wilzu-dashboard { padding: 1rem; }
+      .logo-area h1 { font-size: 1.6rem; }
     }
   </style>
 </head>
 <body>
-<div class="blob-bg">
-  <div class="blob"></div>
-  <div class="blob"></div>
-</div>
+<div class="dynamic-bg"></div>
+<div class="noise"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
 
-<!-- LOGIN PORTAL dengan animasi spektakuler -->
-<div id="loginScreen" class="login-overlay">
-  <div class="login-card">
-    <h2>WILZU VERSE</h2>
-    <div class="sub">✦ akses penuh dengan vibe modern ✦</div>
-    <div class="input-group">
-      <label><i class="fas fa-user-astronaut"></i> Username / Email</label>
-      <input type="text" id="loginUser" placeholder="wilzu / kamu" autocomplete="off">
-    </div>
-    <div class="input-group">
-      <label><i class="fas fa-lock"></i> Password</label>
-      <input type="password" id="loginPass" placeholder="••••••">
-    </div>
-    <div id="loginError" class="error-msg"></div>
-    <button class="login-btn" id="doLoginBtn">↺ MASUK KE DUNIA WILZU</button>
-    <div class="guest-note">✨ cukup isi apapun (demo) — biar vibes masuk ✨</div>
+<!-- LOGIN SECTION PREMIUM -->
+<div id="loginScreenV2" class="login-prime">
+  <div class="glass-panel">
+    <h2>WILZU NEO</h2>
+    <div class="brand-sub">akses penuh ke dimensi baru</div>
+    <input type="text" id="loginUsername" class="input-frost" placeholder="username / kamu" autocomplete="off">
+    <input type="password" id="loginPassword" class="input-frost" placeholder="password (bebas)">
+    <div id="loginErrorMsg" class="error-msg"></div>
+    <button id="loginButtonV2" class="login-btn-glow"><i class="fas fa-arrow-right-to-bracket"></i> MASUK SEKARANG</button>
+    <div class="demo-note">✨ cukup isi kedua field, langsung masuk ke pengalaman baru ✨</div>
   </div>
 </div>
 
-<!-- MAIN APP (hanya tampil setelah login) -->
-<div id="mainApp" class="main-app">
-  <div class="glass-header">
-    <h1>𝑾𝒊𝒍𝒍𝒚 𝑰𝒔 𝑯𝒆𝒓𝒆</h1>
-    <p style="color:#cab8ff; letter-spacing:1px;">✦ futuristic energy ✦</p>
+<!-- MAIN WEBSITE MODERN -->
+<div id="mainAppModern" class="wilzu-dashboard">
+  <div class="neo-header">
+    <div class="logo-area">
+      <h1>𝑾𝑰𝑳𝒁𝑼 𝑽𝑬𝑹𝑺𝑬</h1>
+      <div class="badge"><i class="fas fa-bolt"></i> NEXT GEN PORTAL</div>
+    </div>
+    <div class="badge"><i class="fas fa-headphones"></i> SURE THING ON SPOTIFY</div>
   </div>
 
-  <div class="video-card">
-    <video id="mainVideo" poster="https://files.catbox.moe/avfc3q.jpg" controls controlsList="nodownload" onclick="this.paused ? this.play() : this.pause();">
+  <!-- Video + Menu -->
+  <div class="media-card">
+    <video id="heroVideo" poster="https://files.catbox.moe/avfc3q.jpg" controls>
       <source src="https://files.catbox.moe/mnrpbr.mp4" type="video/mp4">
-      Browser tidak mendukung video.
     </video>
-    <div class="controls">
-      <select id="menuSelect">
-        <option value="dashboard">✨ Dashboard</option>
-        <option value="premium">💎 Fitur Premium</option>
-        <option value="about">🌙 Tentang Kami</option>
+    <div class="action-bar">
+      <select id="menuNeo">
+        <option value="dashboard">✦ DASHBOARD</option>
+        <option value="premium">💎 FITUR PREMIUM</option>
+        <option value="about">🌌 TENTANG KAMI</option>
       </select>
-      <button id="actionMenuBtn">Pilih & Jelajahi</button>
-      <button id="telegramBtn" onclick="window.open('https://t.me/Willyishre_bot?start=_tgr_xPMBIpY5Yjhl','_blank')">𝗕𝗢𝗧-𝗧𝗘𝗟𝗘𝗚𝗥𝗔𝗠</button>
+      <button id="exploreBtn" class="btn-modern"><i class="fas fa-compass"></i> JELAJAHI</button>
+      <button id="telegramNeoBtn" class="btn-modern" onclick="window.open('https://t.me/Willyishre_bot?start=_tgr_xPMBIpY5Yjhl','_blank')"><i class="fab fa-telegram"></i> BOT TELEGRAM</button>
     </div>
   </div>
 
-  <!-- SPOTIFY WIDGET - SURE THING (Miguel) modern embed -->
-  <div class="music-widget">
+  <!-- SPOTIFY WIDGET : SURE THING MIGUEL -->
+  <div class="spotify-embed">
     <iframe src="https://open.spotify.com/embed/track/0Nxx0HZcPr3yprf9tPXAY3?utm_source=generator&theme=0" 
             frameborder="0" allowfullscreen="" 
             allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
-            loading="lazy" style="border-radius: 48px;"></iframe>
+            loading="lazy"></iframe>
   </div>
 
-  <!-- TikTok Downloader Modern -->
-  <div class="tiktok-section">
-    <h2 style="display: flex; gap:8px; justify-content:center; align-items:center;"><i class="fab fa-tiktok"></i> unduh video lek</h2>
-    <p>tempel link tiktok, dapatkan videonya 🔥</p>
-    <input type="text" id="tiktokUrl" placeholder="https://www.tiktok.com/@user/video/123456789">
-    <button id="downloadTikTokBtn" style="margin-top:12px;">⚡ Download Sekarang ⚡</button>
-    <div id="resultArea" class="result"></div>
+  <!-- TikTok Downloader Upgrade -->
+  <div class="tiktok-glass">
+    <h3 style="display: flex; gap: 10px; align-items: center;"><i class="fab fa-tiktok" style="font-size: 1.5rem;"></i> UNDUH VIDEO TIKTOK</h3>
+    <p>tempel link trus dapetin video & download</p>
+    <div class="input-group-inline">
+      <input type="text" id="tiktokLinkInput" class="input-tiktok" placeholder="https://www.tiktok.com/@user/video/123456789">
+      <button id="tiktokFetchBtn" class="btn-modern"><i class="fas fa-download"></i> Proses</button>
+    </div>
+    <div id="tiktokResultContainer" class="result-preview" style="margin-top: 20px;"></div>
   </div>
 
-  <footer>© copyright by wilzu • modern era with Spotify "Sure Thing"</footer>
-  <div class="logout-icon" id="logoutButton">
-    <i class="fas fa-sign-out-alt"></i> Logout
-  </div>
+  <footer>© 2025 WILZU • built with neo vibes • unlimited inspiration</footer>
+  <div id="logoutNeonBtn" class="logout-neon"><i class="fas fa-sign-out-alt"></i> Keluar</div>
 </div>
 
 <script>
-  // ------------------- LOGIC LOGIN + ANIMASI TRANSISI ------------------
-  const loginScreen = document.getElementById('loginScreen');
-  const mainApp = document.getElementById('mainApp');
-  const loginBtn = document.getElementById('doLoginBtn');
-  const loginUser = document.getElementById('loginUser');
-  const loginPass = document.getElementById('loginPass');
-  const loginErrorSpan = document.getElementById('loginError');
+  (function() {
+    // Login logic dengan efek smooth
+    const loginContainer = document.getElementById('loginScreenV2');
+    const mainApp = document.getElementById('mainAppModern');
+    const loginBtn = document.getElementById('loginButtonV2');
+    const userInput = document.getElementById('loginUsername');
+    const passInput = document.getElementById('loginPassword');
+    const errorSpan = document.getElementById('loginErrorMsg');
 
-  // fungsi login (dengan animasi halus)
-  function performLogin() {
-    const username = loginUser.value.trim();
-    const password = loginPass.value.trim();
-    // simple demo: isi field apapun (atau minimal 1 karakter) -> akses diizinkan
-    if (username === "" && password === "") {
-      loginErrorSpan.innerText = "✧ isi dulu dong biar vibes masuk ✧";
-      return;
-    }
-    if (username === "" || password === "") {
-      loginErrorSpan.innerText = "isi username & password (bebas, santai)";
-      return;
-    }
-    // berhasil login -> hide login dengan efek, muncul main app + animasi masuk
-    loginErrorSpan.innerText = "";
-    // animasi fade-out login
-    loginScreen.classList.add('hidden');
-    // setelah transisi, tampilkan mainApp
-    setTimeout(() => {
-      loginScreen.style.display = 'none';
-      mainApp.classList.add('active');
-      // tambahan efek smooth scroll / body style
-      document.body.style.overflow = 'auto';
-      // optional: mainApp muncul dengan animasi transisi
-      mainApp.style.animation = 'fadeSlideUp 0.6s ease';
-    }, 600);
-  }
-
-  // event login
-  loginBtn.addEventListener('click', performLogin);
-  // juga bisa tekan enter pada input
-  const handleEnter = (e) => { if(e.key === 'Enter') performLogin(); };
-  loginUser.addEventListener('keypress', handleEnter);
-  loginPass.addEventListener('keypress', handleEnter);
-
-  // logout function: reset tampilan, tampilkan login lagi
-  const logoutBtn = document.getElementById('logoutButton');
-  function logoutUser() {
-    // reset mainApp hidden
-    mainApp.classList.remove('active');
-    mainApp.style.display = 'none';
-    // reset login screen
-    loginScreen.style.display = 'flex';
-    setTimeout(() => {
-      loginScreen.classList.remove('hidden');
-      loginScreen.style.opacity = '1';
-      loginScreen.style.visibility = 'visible';
-    }, 10);
-    // clear fields
-    loginUser.value = '';
-    loginPass.value = '';
-    loginErrorSpan.innerText = '';
-    document.body.style.overflow = 'hidden';
-    // reset area tiktok result jika perlu
-    const resultDiv = document.getElementById('resultArea');
-    if(resultDiv) resultDiv.innerHTML = '';
-  }
-  if(logoutBtn) logoutBtn.addEventListener('click', logoutUser);
-  
-  // tambahkan animasi di awal
-  window.addEventListener('load', () => {
-    document.body.style.overflow = 'hidden';
-    // efek awal login card sudah muncul animasi floatIn
-  });
-
-  // animasi fade slide untuk main content
-  const styleAnim = document.createElement('style');
-  styleAnim.textContent = `
-    @keyframes fadeSlideUp {
-      0% { opacity: 0; transform: translateY(30px); }
-      100% { opacity: 1; transform: translateY(0); }
-    }
-    .main-app.active {
-      display: block;
-      animation: fadeSlideUp 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
-    }
-  `;
-  document.head.appendChild(styleAnim);
-  
-  // -------------------  HANDLE MENU SELECT (DASHBOARD, PREMIUM, ABOUT) ------------------
-  const menuSelect = document.getElementById('menuSelect');
-  const actionMenuBtn = document.getElementById('actionMenuBtn');
-  
-  function handleMenuAction() {
-    const selected = menuSelect.value;
-    let message = "";
-    if(selected === "dashboard") {
-      message = "📊 DASHBOARD WILZU: Statistik keren, total pengunjung: 12.9K | Lagu diputar: Sure Thing 🎧";
-    } else if(selected === "premium") {
-      message = "💎 FITUR PREMIUM: download tanpa batas, akses early video, efek eksklusif. Hubungi @Willyishre_bot";
-    } else if(selected === "about") {
-      message = "🌙 TENTANG KAMI: Wilzu adalah space buat lo yang suka vibes aesthetic + video editor & tiktok downloader, Powered by futuristik.";
-    } else {
-      message = "✨ Pilih menu yang tersedia ya!";
-    }
-    alert(message);
-  }
-  if(actionMenuBtn) actionMenuBtn.addEventListener('click', handleMenuAction);
-  
-  // ------------------- TIKTOK DOWNLOADER (API TIKWM) upgraded with modern feedback ------------------
-  const tiktokBtn = document.getElementById('downloadTikTokBtn');
-  const tiktokUrlInput = document.getElementById('tiktokUrl');
-  const resultArea = document.getElementById('resultArea');
-  
-  async function downloadTiktok() {
-    const url = tiktokUrlInput.value.trim();
-    if (!url) {
-      alert('Masukkan link TikTok dulu, lek!');
-      return;
-    }
-    resultArea.innerHTML = '<div style="display:flex; gap:6px; justify-content:center;"><i class="fas fa-spinner fa-pulse"></i> Memproses video ...</div>';
-    try {
-      const encodedUrl = encodeURIComponent(url);
-      const response = await fetch(`https://tikwm.com/api/?url=${encodedUrl}`);
-      const data = await response.json();
-      if (data && data.data && data.data.play) {
-        const videoUrl = data.data.play;
-        resultArea.innerHTML = `
-          <div style="background:rgba(0,0,0,0.4); border-radius:28px; padding:12px; margin-top:12px;">
-            <b style="color:#e3b3ff;">✅ done lek 🗿!</b><br>
-            <video controls style="max-width:100%; border-radius:20px; margin-top:8px;">
-              <source src="${videoUrl}" type="video/mp4">
-            </video><br>
-            <a href="${videoUrl}" download class="download-link" style="margin-top:12px;"><i class="fas fa-download"></i> Download Sekarang</a>
-          </div>
-        `;
-      } else {
-        resultArea.innerHTML = '<span style="color:#ffaa88;">⚠️ Gagal jirr. Coba link lain atau pastikan video publik.</span>';
+    function handleLogin() {
+      const username = userInput.value.trim();
+      const password = passInput.value.trim();
+      if (username === "" || password === "") {
+        errorSpan.innerText = "⚠️ isi kedua kolom (bebas) untuk masuk!";
+        return;
       }
-    } catch (err) {
-      console.error(err);
-      resultArea.innerHTML = '<span style="color:#ff7b7b;">💀 Eror banget ngentot. Cek koneksi atau coba lagi nanti.</span>';
+      // success login
+      errorSpan.innerText = "";
+      loginContainer.classList.add('hide-login');
+      setTimeout(() => {
+        loginContainer.style.display = 'none';
+        mainApp.classList.add('active');
+        document.body.style.overflow = 'auto';
+        // play subtle entrance
+      }, 700);
     }
-  }
-  if(tiktokBtn) tiktokBtn.addEventListener('click', downloadTiktok);
-  
-  // tambahan ekstra: handle klik video minor, tidak perlu autoplay masalah
-  const videoElem = document.getElementById('mainVideo');
-  if(videoElem) {
-    videoElem.addEventListener('click', () => {
-      if(videoElem.paused) videoElem.play();
-      else videoElem.pause();
-    });
-  }
-  
-  // Extra style: ketika main aktif, backdrop smooth
-  // inisialisasi tombol telegram tetap mengarah ke link
-  // pastikan BOT TELEGRAM berfungsi
-  
-  // efek modern tambahan: placeholder efek neon
-  const inputs = document.querySelectorAll('input');
-  inputs.forEach(inp => {
-    inp.addEventListener('focus', (e) => {
-      e.target.style.transition = '0.2s';
-    });
-  });
-  
-  // Spotify iframe sudah included, user bisa play langsung "Sure Thing"
-  // perubahan judul dinamis agar modern
-  
-  // optional: saat login berhasil, main video tidak auto-play untuk pengalaman baik
-  console.log("MODERN PORTAL WILZU READY | login before access | Sure Thing on Spotify");
+
+    loginBtn.addEventListener('click', handleLogin);
+    const enterKeyLogin = (e) => { if(e.key === 'Enter') handleLogin(); };
+    userInput.addEventListener('keypress', enterKeyLogin);
+    passInput.addEventListener('keypress', enterKeyLogin);
+
+    // LOGOUT 
+    const logoutBtn = document.getElementById('logoutNeonBtn');
+    function logout() {
+      mainApp.classList.remove('active');
+      mainApp.style.display = 'none';
+      loginContainer.style.display = 'flex';
+      setTimeout(() => {
+        loginContainer.classList.remove('hide-login');
+        loginContainer.style.opacity = '1';
+        loginContainer.style.visibility = 'visible';
+      }, 10);
+      userInput.value = '';
+      passInput.value = '';
+      errorSpan.innerText = '';
+      document.body.style.overflow = 'hidden';
+      // reset tiktok result
+      const resultDiv = document.getElementById('tiktokResultContainer');
+      if (resultDiv) resultDiv.innerHTML = '';
+    }
+    logoutBtn.addEventListener('click', logout);
+
+    // MENU HANDLER
+    const menuSelect = document.getElementById('menuNeo');
+    const exploreButton = document.getElementById('exploreBtn');
+    function showMenuInfo() {
+      const selected = menuSelect.value;
+      let msg = '';
+      if (selected === 'dashboard') msg = "📊 DASHBOARD WILZU — Statistik: 15.2K tayangan, 890 user aktif, playlist favorit: Sure Thing 🔥";
+      else if (selected === 'premium') msg = "💎 FITUR PREMIUM — Download video tanpa watermark, akses early content, tema eksklusif, dan badge neon. Chat bot Telegram!";
+      else if (selected === 'about') msg = "🌌 TENTANG KAMI — Wilzu Neo adalah ruang imersif buat kamu yang suka estetika, video editor, dan downloader TikTok tanpa ribet. #FutureIsNow";
+      else msg = "✨ Pilih menu yang tersedia.";
+      alert(msg);
+    }
+    exploreButton.addEventListener('click', showMenuInfo);
+
+    // TIKTOK DOWNLOADER ENHANCED (API tikwm)
+    const tiktokInput = document.getElementById('tiktokLinkInput');
+    const tiktokFetch = document.getElementById('tiktokFetchBtn');
+    const resultContainer = document.getElementById('tiktokResultContainer');
+
+    async function fetchTikTok() {
+      const rawUrl = tiktokInput.value.trim();
+      if (!rawUrl) {
+        alert("Masukkan link TikTok dulu, ya!");
+        return;
+      }
+      resultContainer.innerHTML = `<div style="display: flex; gap: 8px; justify-content:center; padding: 12px;"><i class="fas fa-circle-notch fa-spin"></i> Sedang mengambil data...</div>`;
+      try {
+        const encoded = encodeURIComponent(rawUrl);
+        const response = await fetch(`https://tikwm.com/api/?url=${encoded}`);
+        const data = await response.json();
+        if (data && data.data && data.data.play) {
+          const videoPlay = data.data.play;
+          resultContainer.innerHTML = `
+            <div style="background: rgba(0,0,0,0.4); border-radius: 1.5rem; padding: 1rem; text-align: center;">
+              <i class="fas fa-check-circle" style="color: #c084fc;"></i> <strong>Video siap, lek!</strong><br>
+              <video controls style="max-width: 100%; max-height: 360px; border-radius: 1rem; margin: 10px 0;">
+                <source src="${videoPlay}" type="video/mp4">
+              </video><br>
+              <a href="${videoPlay}" download class="download-link-neon"><i class="fas fa-save"></i> Download Video</a>
+            </div>
+          `;
+        } else {
+          resultContainer.innerHTML = `<div style="color:#ffb7b7; padding: 12px;">⚠️ Gagal ambil video. Pastikan link publik dan benar.</div>`;
+        }
+      } catch (err) {
+        console.error(err);
+        resultContainer.innerHTML = `<div style="color:#ff8a8a;">💥 Error total, cek koneksi atau coba lagi nanti.</div>`;
+      }
+    }
+
+    tiktokFetch.addEventListener('click', fetchTikTok);
+    // video main
+    const mainVideo = document.getElementById('heroVideo');
+    if(mainVideo) {
+      mainVideo.addEventListener('click', () => {
+        if(mainVideo.paused) mainVideo.play(); else mainVideo.pause();
+      });
+    }
+
+    // tambahan efek hover dan gaya
+    console.log("wilzu neo ready | Sure Thing spotify integrated");
+  })();
 </script>
 </body>
 </html>
