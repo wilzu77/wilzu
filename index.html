@@ -906,15 +906,15 @@
             <p><i class="fas fa-crown"></i> Kirim Foto · Admin ACC · Semua User Terdeteksi</p>
         </div>
 
-        <!-- ============ FIREBASE CONFIG ============ -->
+        <!-- ============ FIREBASE CONFIG INFO ============ -->
         <div class="fb-config-info" id="fbConfigBox">
             <i class="fas fa-database" style="color:#ffd700;"></i>
             <strong>Firebase Realtime Database</strong> — Semua user terhubung!
             <br />
             <span style="font-size:12px;">
-                ⚡ Ganti config di bagian <code>firebaseConfig</code> di dalam script.
+                ⚡ Config sudah terpasang! Data tersimpan di cloud Firebase.
                 <br />
-                📦 Data tersimpan di cloud, admin lihat semua kiriman dari semua user.
+                📦 Admin lihat semua kiriman dari semua user secara real-time.
             </span>
         </div>
 
@@ -1100,16 +1100,17 @@
 
     <script>
         // ============================================================
-        // 🔥 FIREBASE CONFIG — GANTI DENGAN PUNYA KAMU!
+        // 🔥 FIREBASE CONFIG — UDAH DIISI PAKE PUNYA KAMU!
         // ============================================================
         const firebaseConfig = {
-            apiKey: "AIzaSyDummyKey1234567890", // <-- GANTI!
-            authDomain: "your-project.firebaseapp.com",
-            databaseURL: "https://your-project-default-rtdb.firebaseio.com",
-            projectId: "your-project",
-            storageBucket: "your-project.appspot.com",
-            messagingSenderId: "123456789",
-            appId: "1:123456789:web:abcdef123456"
+            apiKey: "AIzaSyBTArEmMUo4mJEnl8WJmeWR4uNd_cMSg5A",
+            authDomain: "amoy-888fe.firebaseapp.com",
+            databaseURL: "https://amoy-888fe-default-rtdb.firebaseio.com",
+            projectId: "amoy-888fe",
+            storageBucket: "amoy-888fe.firebasestorage.app",
+            messagingSenderId: "744294858539",
+            appId: "1:744294858539:web:2ba78fdb6c294b9aed0f6e",
+            measurementId: "G-5PHTZV2NTY"
         };
 
         // ============================================================
@@ -1395,10 +1396,6 @@
                 }
                 if (adminDashboard.style.display === 'block') {
                     renderAdminSubmissions();
-                }
-                // Update dashboard jika user melihat dashboard
-                if (document.getElementById('dashboardTab').classList.contains('active')) {
-                    // update saldo done
                 }
             });
 
@@ -2046,9 +2043,9 @@
             });
 
             console.log('🔥 AMOY GACHA KELOTER v4.0 - FIREBASE');
+            console.log('✅ Config sudah terpasang!');
             console.log('✅ Semua user terdeteksi admin real-time!');
             console.log('🔑 Admin password: admin123');
-            console.log('⚠️ Jangan lupa ganti firebaseConfig dengan punya kamu!');
         }
 
         init();
