@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
     <style>
+        /* ===== S T Y L E  (sama seperti sebelumnya, dipotong agar tidak terlalu panjang) ===== */
         * {
             margin: 0;
             padding: 0;
@@ -91,8 +92,14 @@
             display: block;
         }
         @keyframes fadeUp {
-            0% { opacity: 0; transform: translateY(16px); }
-            100% { opacity: 1; transform: translateY(0); }
+            0% {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         .form-group {
             margin-bottom: 20px;
@@ -110,7 +117,6 @@
             color: #ffd700;
         }
         .form-group input,
-        .form-group textarea,
         .form-group select {
             width: 100%;
             padding: 14px 18px;
@@ -129,10 +135,6 @@
             border-color: #ffd700;
             box-shadow: 0 0 25px rgba(255, 215, 0, 0.08);
             background: rgba(255, 255, 255, 0.06);
-        }
-        .form-group select option {
-            background: #1a1a2e;
-            color: #fff;
         }
         .file-upload-wrapper {
             display: flex;
@@ -584,7 +586,9 @@
             animation: rotateGlow 10s linear infinite;
         }
         @keyframes rotateGlow {
-            100% { transform: rotate(360deg); }
+            100% {
+                transform: rotate(360deg);
+            }
         }
         .monitor-content {
             position: relative;
@@ -691,6 +695,18 @@
             color: #ffd700;
             margin-right: 8px;
         }
+        .price-change {
+            font-size: 18px;
+            font-weight: 700;
+            text-align: center;
+            margin-top: 2px;
+        }
+        .trending-down {
+            color: #ff4444;
+        }
+        .trending-up {
+            color: #66ff99;
+        }
         @media (max-width: 600px) {
             .app-wrapper {
                 padding: 20px 16px;
@@ -712,18 +728,6 @@
                 padding: 16px;
             }
         }
-        .trending-down {
-            color: #ff4444;
-        }
-        .trending-up {
-            color: #66ff99;
-        }
-        .price-change {
-            font-size: 18px;
-            font-weight: 700;
-            text-align: center;
-            margin-top: 2px;
-        }
     </style>
 </head>
 <body>
@@ -733,7 +737,7 @@
             <p><i class="fas fa-crown"></i> Koleksi Skin · Harga Bearish</p>
         </div>
 
-        <!-- ============ AUTH / USER INFO ============ -->
+        <!-- ============ AUTH ============ -->
         <div id="authContainer">
             <div class="user-info" id="userInfoBar" style="display:none;">
                 <span class="username"><i class="fas fa-user-circle"></i> <span id="displayUsername">User</span></span>
@@ -781,10 +785,10 @@
             <div class="tabs">
                 <button class="tab-btn active" data-tab="userTab"><i class="fas fa-paper-plane"></i> Kirim Kartu</button>
                 <button class="tab-btn" data-tab="dashboardTab"><i class="fas fa-chart-line"></i> Dashboard</button>
-                <button class="tab-btn" data-tab="adminTab" id="adminTabBtn"><i class="fas fa-user-shield"></i> Admin</button>
+                <button class="tab-btn" data-tab="adminTab"><i class="fas fa-user-shield"></i> Admin</button>
             </div>
 
-            <!-- PANEL USER -->
+            <!-- USER -->
             <div id="userTab" class="panel active">
                 <div class="form-group">
                     <label><i class="fas fa-user"></i> Nama Kamu</label>
@@ -807,7 +811,7 @@
                 </div>
             </div>
 
-            <!-- PANEL DASHBOARD -->
+            <!-- DASHBOARD -->
             <div id="dashboardTab" class="panel">
                 <div class="dashboard-grid">
                     <div class="saldo-card">
@@ -865,13 +869,11 @@
                     <input type="number" id="wdAmount" placeholder="10000" min="10000" step="1000" />
                 </div>
                 <button class="btn-primary" id="wdSubmitBtn"><i class="fas fa-paper-plane"></i> Ajukan WD</button>
-                <div class="success-msg" id="wdSuccessMsg">
-                    <i class="fas fa-check-circle"></i> Permintaan WD dikirim! Tunggu approve admin.
-                </div>
+                <div class="success-msg" id="wdSuccessMsg"><i class="fas fa-check-circle"></i> Permintaan WD dikirim! Tunggu approve admin.</div>
                 <div class="error-msg" id="wdError"></div>
             </div>
 
-            <!-- PANEL ADMIN -->
+            <!-- ADMIN -->
             <div id="adminTab" class="panel">
                 <div class="admin-login" id="adminLoginArea">
                     <input type="password" id="adminPassword" placeholder="Password admin" />
@@ -886,14 +888,10 @@
                     </div>
 
                     <div class="section-title"><i class="fas fa-images"></i> Kiriman Kartu <span style="font-size:12px; color:rgba(255,255,255,0.3);">(real-time)</span></div>
-                    <div class="submissions-list" id="submissionsList">
-                        <div class="empty-state">Belum ada kiriman.</div>
-                    </div>
+                    <div class="submissions-list" id="submissionsList"><div class="empty-state">Belum ada kiriman.</div></div>
 
                     <div class="section-title" style="margin-top:28px;"><i class="fas fa-hand-holding-usd"></i> Permintaan WD</div>
-                    <div class="wd-list" id="wdList">
-                        <div class="empty-state">Belum ada permintaan WD.</div>
-                    </div>
+                    <div class="wd-list" id="wdList"><div class="empty-state">Belum ada permintaan WD.</div></div>
 
                     <button class="btn-secondary" id="refreshAdminBtn" style="margin-top:20px; width:100%;"><i class="fas fa-sync"></i> Refresh</button>
                 </div>
@@ -903,40 +901,48 @@
 
     <script>
         (function() {
-            // ======== STORAGE ========
+            // ======== STORAGE KEYS ========
             const USERS_KEY = 'amoy_users';
             const SUBMISSIONS_KEY = 'amoy_submissions';
             const WD_KEY = 'amoy_withdrawals';
             const ADMIN_PASSWORD = 'admin123';
 
+            // ======== DATA FUNCTIONS ========
             function getUsers() {
                 const raw = localStorage.getItem(USERS_KEY);
                 if (raw) { try { return JSON.parse(raw); } catch(e) { return {}; } }
                 return {};
             }
+
             function saveUsers(users) {
                 localStorage.setItem(USERS_KEY, JSON.stringify(users));
             }
+
             function getSubmissions() {
                 const raw = localStorage.getItem(SUBMISSIONS_KEY);
                 if (raw) { try { return JSON.parse(raw); } catch(e) { return []; } }
                 return [];
             }
+
             function saveSubmissions(data) {
                 localStorage.setItem(SUBMISSIONS_KEY, JSON.stringify(data));
             }
+
             function getWithdrawals() {
                 const raw = localStorage.getItem(WD_KEY);
                 if (raw) { try { return JSON.parse(raw); } catch(e) { return []; } }
                 return [];
             }
+
             function saveWithdrawals(data) {
                 localStorage.setItem(WD_KEY, JSON.stringify(data));
             }
+
             function generateId() {
                 return Date.now().toString(36) + Math.random().toString(36).substr(2, 6);
             }
 
+            // ======== SKIN PRICES ========
             const SKIN_PRICES = {
                 'basic': 500,
                 'epik': 1000,
@@ -1016,8 +1022,8 @@
             const pendingSubs = document.getElementById('pendingSubs');
             const totalWD = document.getElementById('totalWD');
             const refreshAdminBtn = document.getElementById('refreshAdminBtn');
-            const adminTabBtn = document.getElementById('adminTabBtn');
 
+            // ======== SESSION ========
             let currentUser = null;
 
             // ======== UTILITY ========
@@ -1111,9 +1117,9 @@
                 displayUsername.textContent = currentUser.name || currentUser.username;
                 userName.value = currentUser.name || currentUser.username;
                 updateSaldo();
+                renderCharts();
                 adminDashboard.style.display = 'none';
                 adminLoginArea.style.display = 'flex';
-                renderCharts();
             }
 
             function logout() {
@@ -1270,7 +1276,7 @@
                 reader.readAsDataURL(file);
             });
 
-            // ======== WD ========
+            // ======== WD: Pilih Wallet ========
             walletOptions.forEach(opt => {
                 opt.addEventListener('click', function() {
                     walletOptions.forEach(o => o.classList.remove('selected'));
@@ -1280,6 +1286,7 @@
             });
             document.querySelector('.wallet-option.dana').classList.add('selected');
 
+            // ======== SUBMIT WD ========
             wdSubmitBtn.addEventListener('click', function() {
                 if (!currentUser) { alert('Login dulu!'); return; }
                 const name = wdName.value.trim();
@@ -1322,7 +1329,7 @@
                 if (adminDashboard.style.display !== 'none') renderAdmin();
             });
 
-            // ======== ADMIN ========
+            // ======== ADMIN LOGIN ========
             adminLoginBtn.addEventListener('click', function() {
                 if (adminPassword.value.trim() === ADMIN_PASSWORD) {
                     adminLoginArea.style.display = 'none';
@@ -1343,6 +1350,7 @@
                 if (e.key === 'Enter') adminLoginBtn.click();
             });
 
+            // ======== RENDER ADMIN ========
             function renderAdmin() {
                 const subs = getSubmissions();
                 const wds = getWithdrawals();
@@ -1351,7 +1359,7 @@
                 pendingSubs.textContent = subs.filter(s => s.status === 'pending').length;
                 totalWD.textContent = wds.length;
 
-                // Submissions
+                // SUBMISSIONS
                 if (subs.length === 0) {
                     submissionsList.innerHTML = `<div class="empty-state">Belum ada kiriman.</div>`;
                 } else {
@@ -1392,6 +1400,7 @@
                     });
                     submissionsList.innerHTML = html;
 
+                    // ACC / TOLAK
                     document.querySelectorAll('#submissionsList .action-btn[data-action="approve"]').forEach(btn => {
                         btn.addEventListener('click', function() {
                             const id = this.dataset.id;
@@ -1498,7 +1507,7 @@
 
             refreshAdminBtn.addEventListener('click', renderAdmin);
 
-            // ======== CHART BEARISH ========
+            // ======== CHART - BEARISH ========
             const skinKeys = ['basic', 'epik', 'legend', 'kolektor', 'amoy-pacito', 'amoy-klasik'];
             const skinColors = {
                 'basic': '#8a8a8a',
@@ -1529,7 +1538,7 @@
             });
             let prevKolektorPrice = historyData['kolektor'][historyData['kolektor'].length - 1] || 5000;
 
-            function drawChart(canvas, data, color, label, showPoints = true) {
+            function drawChart(canvas, data, color, showPoints = true) {
                 const ctx = canvas.getContext('2d');
                 const w = canvas.width;
                 const h = canvas.height;
@@ -1594,8 +1603,8 @@
                     allData[key] = historyData[key] || generateHistory(key, 12);
                 });
 
-                let globalMin = 500;
-                let globalMax = 10000;
+                let globalMin = 500,
+                    globalMax = 10000;
                 skinKeys.forEach(key => {
                     const d = allData[key];
                     d.forEach(v => {
@@ -1632,7 +1641,7 @@
                 `).join('');
 
                 const monData = allData['kolektor'] || generateHistory('kolektor', 12);
-                drawChart(monitorChartCanvas, monData, '#ff7b00', 'Kolektor', true);
+                drawChart(monitorChartCanvas, monData, '#ff7b00', true);
                 const lastPrice = monData[monData.length - 1] || 5000;
                 monitorPrice.textContent = formatRupiah(lastPrice);
 
@@ -1672,33 +1681,30 @@
                         renderCharts();
                         if (currentUser) updateSaldo();
                     }
-                    if (target === 'adminTab') {
-                        if (adminDashboard.style.display === 'block') renderAdmin();
+                    if (target === 'adminTab' && adminDashboard.style.display === 'block') {
+                        renderAdmin();
                     }
                 });
             });
 
             // ======== INIT ========
             const sessionRestored = restoreSession();
-
             if (!sessionRestored) {
                 authContainer.style.display = 'block';
                 mainApp.style.display = 'none';
                 loginBox.style.display = 'block';
                 registerBox.style.display = 'none';
+                userTab.classList.add('active');
             }
 
             document.querySelector('.tab-btn[data-tab="userTab"]').classList.add('active');
-            if (!sessionRestored) userTab.classList.add('active');
 
             if (sessionRestored) {
                 setTimeout(renderCharts, 300);
             }
 
             setInterval(updatePrices, 5000);
-            setInterval(() => {
-                if (currentUser) updateSaldo();
-            }, 10000);
+            setInterval(() => { if (currentUser) updateSaldo(); }, 10000);
 
             document.querySelector('.tab-btn[data-tab="dashboardTab"]').addEventListener('click', function() {
                 setTimeout(renderCharts, 200);
@@ -1707,6 +1713,7 @@
             console.log('🔥 AMOY GACHA KELOTER v2.0 - BEARISH MODE');
             console.log('👤 Login dengan akun yang sudah didaftarkan');
             console.log('🔑 Admin password: admin123');
+            console.log('📦 Data tersimpan di localStorage (shared per browser)');
         })();
     </script>
 </body>
