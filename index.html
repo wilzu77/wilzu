@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Amoy Gacha · Trading Beli/Jual</title>
+    <title>Amoy Gacha · Trading Naik/Turun</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
     <style>
+        /* ====== STYLE LENGKAP (sama seperti sebelumnya) ====== */
         * { margin:0; padding:0; box-sizing:border-box; }
         body {
             font-family: 'Poppins', sans-serif;
@@ -115,10 +116,10 @@
         .btn-broadcast:hover { transform:scale(1.05); box-shadow:0 6px 20px rgba(108,92,231,0.3); }
         .btn-pump { background:#00b894; color:#fff; }
         .btn-rungkad { background:#e17055; color:#fff; }
-        .btn-buy { background:#00b894; color:#fff; }
-        .btn-sell { background:#e17055; color:#fff; }
-        .btn-buy:hover { transform:scale(1.05); box-shadow:0 6px 20px rgba(0,184,148,0.3); }
-        .btn-sell:hover { transform:scale(1.05); box-shadow:0 6px 20px rgba(225,112,85,0.3); }
+        .btn-up { background:#00b894; color:#fff; }
+        .btn-down { background:#e17055; color:#fff; }
+        .btn-up:hover { transform:scale(1.05); box-shadow:0 6px 20px rgba(0,184,148,0.3); }
+        .btn-down:hover { transform:scale(1.05); box-shadow:0 6px 20px rgba(225,112,85,0.3); }
         .success-msg {
             background:rgba(0,255,100,0.1); border-left:4px solid #00ff66; padding:14px 18px;
             border-radius:16px; color:#66ff99; font-weight:600; margin-top:16px; display:none;
@@ -359,10 +360,10 @@
             flex:1; padding:12px 16px; border:none; border-radius:40px; font-weight:800;
             font-size:16px; cursor:pointer; transition:0.2s; font-family:'Poppins',sans-serif;
         }
-        .btn-buy { background:#00b894; color:#fff; }
-        .btn-sell { background:#e17055; color:#fff; }
-        .btn-buy:hover { transform:scale(1.05); box-shadow:0 6px 20px rgba(0,184,148,0.3); }
-        .btn-sell:hover { transform:scale(1.05); box-shadow:0 6px 20px rgba(225,112,85,0.3); }
+        .btn-up { background:#00b894; color:#fff; }
+        .btn-down { background:#e17055; color:#fff; }
+        .btn-up:hover { transform:scale(1.05); box-shadow:0 6px 20px rgba(0,184,148,0.3); }
+        .btn-down:hover { transform:scale(1.05); box-shadow:0 6px 20px rgba(225,112,85,0.3); }
         .portofolio-box {
             background:rgba(255,255,255,0.03); border-radius:20px; padding:16px; margin:12px 0;
             border:1px solid rgba(255,255,255,0.04); display:flex; justify-content:space-around; flex-wrap:wrap;
@@ -458,12 +459,12 @@
 <div class="app-wrapper" id="app">
     <div class="header">
         <h1>✨ AMOY GACHA KELOTER ✨</h1>
-        <p><i class="fas fa-crown"></i> Kirim · Trading Beli/Jual · Deposit</p>
+        <p><i class="fas fa-crown"></i> Kirim · Trading Naik/Turun · Deposit</p>
     </div>
 
     <div class="notif-container" id="notifContainer"></div>
 
-    <!-- ========== AUTH ========== -->
+    <!-- AUTH -->
     <div id="authContainer">
         <div class="user-info" id="userInfoBar" style="display:none;">
             <span class="username"><i class="fas fa-user-circle"></i> <span id="displayUsername">User</span></span>
@@ -489,7 +490,7 @@
         </div>
     </div>
 
-    <!-- ========== MAIN APP ========== -->
+    <!-- MAIN APP -->
     <div id="mainApp" style="display:none;">
         <div class="tabs">
             <button class="tab-btn active" data-tab="userTab"><i class="fas fa-paper-plane"></i> Kirim Kartu</button>
@@ -498,7 +499,7 @@
             <button class="tab-btn" data-tab="adminTab"><i class="fas fa-user-shield"></i> Admin</button>
         </div>
 
-        <!-- ========== USER PANEL ========== -->
+        <!-- USER PANEL -->
         <div id="userTab" class="panel active">
             <div class="form-group"><label><i class="fas fa-user"></i> Nama Kamu</label><input type="text" id="userName" placeholder="Nama panggilan" /></div>
             <div class="form-group"><label><i class="fas fa-image"></i> Foto Kartu</label>
@@ -522,32 +523,30 @@
             <div class="success-msg" id="successMsg"><i class="fas fa-check-circle"></i> Kartu terkirim! Admin akan ACC.</div>
         </div>
 
-        <!-- ========== TRADING PANEL ========== -->
+        <!-- TRADING PANEL -->
         <div id="tradingTab" class="panel">
             <div class="trading-panel">
-                <h2 style="color:#fff; font-weight:700;"><i class="fas fa-coins"></i> Trading Beli/Jual Saham</h2>
+                <h2 style="color:#fff; font-weight:700;"><i class="fas fa-coins"></i> Trading Naik/Turun</h2>
                 <div class="price-display" id="tradingPrice">Rp 1.000</div>
                 <div class="change" id="tradingChange">▲ 0%</div>
                 <canvas id="tradingChart" width="400" height="150" style="width:100%; height:150px; background:rgba(0,0,0,0.2); border-radius:20px;"></canvas>
                 <div class="portofolio-box">
-                    <div class="item"><div class="label">Saham</div><div class="value" id="stockAmount">0</div></div>
-                    <div class="item"><div class="label">Nilai</div><div class="value" id="stockValue">Rp 0</div></div>
                     <div class="item"><div class="label">Saldo</div><div class="value" id="tradeBalance">Rp 0</div></div>
                 </div>
 
-                <!-- TRADING FORM -->
+                <!-- FORM NAIK/TURUN -->
                 <div class="trade-form">
-                    <input type="number" id="tradeQty" placeholder="Jumlah saham" min="1" />
+                    <input type="number" id="tradeNominal" placeholder="Nominal (contoh: 1000)" min="100" />
                     <div class="btn-group-trade">
-                        <button class="btn-buy" id="buyBtn"><i class="fas fa-arrow-up"></i> Beli</button>
-                        <button class="btn-sell" id="sellBtn"><i class="fas fa-arrow-down"></i> Jual</button>
+                        <button class="btn-up" id="upBtn"><i class="fas fa-arrow-up"></i> Naik +</button>
+                        <button class="btn-down" id="downBtn"><i class="fas fa-arrow-down"></i> Turun -</button>
                     </div>
                 </div>
                 <div style="font-size:12px; color:rgba(255,255,255,0.3); text-align:center; margin-top:4px;">
-                    ⚡ Beli: harga naik, saldo berkurang | Jual: harga turun, saldo hangus jika harga 0
+                    ⚡ Naik: saldo +nominal  |  Turun: saldo -nominal (hangus)
                 </div>
 
-                <!-- ========== DEPOSIT MANUAL ========== -->
+                <!-- DEPOSIT -->
                 <div class="deposit-section">
                     <h3 style="color:#fff; font-weight:700;"><i class="fas fa-upload"></i> Deposit Manual</h3>
                     <div class="info-box">
@@ -572,7 +571,7 @@
             </div>
         </div>
 
-        <!-- ========== DASHBOARD ========== -->
+        <!-- DASHBOARD -->
         <div id="dashboardTab" class="panel">
             <div class="dashboard-grid">
                 <div class="saldo-card">
@@ -620,7 +619,7 @@
             <div class="error-msg" id="wdError"></div>
         </div>
 
-        <!-- ========== ADMIN PANEL ========== -->
+        <!-- ADMIN PANEL -->
         <div id="adminTab" class="panel">
             <div class="admin-login" id="adminLoginArea">
                 <input type="password" id="adminPassword" placeholder="Password admin" />
@@ -647,8 +646,8 @@
                 <div class="admin-control">
                     <h3 style="color:#fff; font-weight:700;"><i class="fas fa-sliders-h"></i> Atur Harga Saham</h3>
                     <div style="display:flex; align-items:center; gap:12px;">
-                        <span style="color:#fff;">Rp 500</span>
-                        <input type="range" id="priceSlider" min="500" max="6000" value="1000" step="50" style="flex:1;" />
+                        <span style="color:#fff;">Rp 0</span>
+                        <input type="range" id="priceSlider" min="0" max="6000" value="1000" step="50" style="flex:1;" />
                         <span style="color:#fff;">Rp 6.000</span>
                     </div>
                     <div style="text-align:center; margin-top:6px;">
@@ -678,7 +677,7 @@
 
 <script>
     // ================================================================
-    // FIREBASE CONFIG (sudah pakai punya kamu)
+    // FIREBASE CONFIG
     // ================================================================
     const firebaseConfig = {
         apiKey: "AIzaSyBTArEmMUo4mJEnl8WJmeWR4uNd_cMSg5A",
@@ -694,7 +693,7 @@
     const db = firebase.database();
 
     // ================================================================
-    // REFS DATABASE
+    // REFS
     // ================================================================
     const usersRef = db.ref('users');
     const submissionsRef = db.ref('submissions');
@@ -711,7 +710,7 @@
     const SKIN_LABELS = { basic:'Basic', epik:'Epik', legend:'Legend', kolektor:'Kolektor', 'amoy-pacito':'Amoy-Pacito', 'amoy-klasik':'Amoy Klasik' };
 
     // ================================================================
-    // DOM REFS
+    // DOM REFS (singkat)
     // ================================================================
     const authContainer = document.getElementById('authContainer');
     const mainApp = document.getElementById('mainApp');
@@ -774,12 +773,10 @@
     const tradingPrice = document.getElementById('tradingPrice');
     const tradingChange = document.getElementById('tradingChange');
     const tradingChart = document.getElementById('tradingChart');
-    const stockAmount = document.getElementById('stockAmount');
-    const stockValue = document.getElementById('stockValue');
     const tradeBalance = document.getElementById('tradeBalance');
-    const tradeQty = document.getElementById('tradeQty');
-    const buyBtn = document.getElementById('buyBtn');
-    const sellBtn = document.getElementById('sellBtn');
+    const tradeNominal = document.getElementById('tradeNominal');
+    const upBtn = document.getElementById('upBtn');
+    const downBtn = document.getElementById('downBtn');
     const depositImage = document.getElementById('depositImage');
     const depositPreview = document.getElementById('depositPreview');
     const depositAmount = document.getElementById('depositAmount');
@@ -800,7 +797,6 @@
     let allSubmissions = [];
     let allWithdrawals = [];
     let allDeposits = [];
-    let userStocks = 0;
     let stockPrice = 1000;
     let stockHistory = [];
     let lastNotifiedPrice = null;
@@ -844,7 +840,7 @@
     }
 
     // ================================================================
-    // AUTH
+    // AUTH (sama seperti sebelumnya, di-singkat)
     // ================================================================
     async function login(username, password) {
         try {
@@ -866,11 +862,7 @@
             if (username.length<3) { showError(registerError,'Username minimal 3 karakter!'); return false; }
             if (password.length<4) { showError(registerError,'Password minimal 4 karakter!'); return false; }
             if (!name.trim()) { showError(registerError,'Nama harus diisi!'); return false; }
-            await usersRef.child(username).set({
-                name: name.trim(),
-                password,
-                portofolio: { stocks:0, earned:0, spent:0 }
-            });
+            await usersRef.child(username).set({ name: name.trim(), password, portofolio: { stocks:0, earned:0, spent:0 } });
             showSuccess(registerSuccess,'Akun berhasil dibuat! Silakan login.');
             setTimeout(() => { registerBox.style.display='none'; loginBox.style.display='block'; registerSuccess.classList.remove('show'); },1500);
             return true;
@@ -883,9 +875,6 @@
         userInfoBar.style.display = 'flex';
         displayUsername.textContent = currentUser.name || currentUser.username;
         userName.value = currentUser.name || currentUser.username;
-        const portoSnap = await usersRef.child(currentUser.username).child('portofolio').once('value');
-        const porto = portoSnap.val() || { stocks:0, earned:0, spent:0 };
-        userStocks = porto.stocks || 0;
         setupRealtimeListeners();
         await new Promise(resolve => { const check = setInterval(() => { if (allSubmissions.length > 0 || document.querySelector('.empty-state')) { clearInterval(check); resolve(); } },500); setTimeout(resolve,3000); });
         updateSaldo(true);
@@ -898,7 +887,6 @@
         priceSlider.addEventListener('input', function() {
             sliderValue.textContent = formatRupiah(parseInt(this.value));
         });
-        // Auto update harga setiap 1 detik (RANDOM WALK)
         if (window._stockInterval) clearInterval(window._stockInterval);
         window._stockInterval = setInterval(autoUpdatePrice, 1000);
     }
@@ -990,7 +978,7 @@
     }
 
     // ================================================================
-    // AUTO UPDATE HARGA (RANDOM WALK - 1 DETIK)
+    // AUTO UPDATE HARGA (1 DETIK)
     // ================================================================
     async function autoUpdatePrice() {
         if (!currentUser) return;
@@ -1256,7 +1244,7 @@
     adminPassword.addEventListener('keypress', e => { if (e.key === 'Enter') adminLoginBtn.click(); });
 
     // ================================================================
-    // RENDER ADMIN
+    // RENDER ADMIN (sama seperti sebelumnya, tidak diubah)
     // ================================================================
     function renderAdmin() {
         const subs = allSubmissions;
@@ -1486,7 +1474,7 @@
     }
 
     // ================================================================
-    // BROADCAST
+    // BROADCAST ADMIN
     // ================================================================
     broadcastBtn.addEventListener('click', async function() {
         const msg = broadcastMsg.value.trim();
@@ -1555,83 +1543,71 @@
     });
 
     // ================================================================
-    // TRADING BELI / JUAL
+    // TRADING NAIK / TURUN (FITUR UTAMA)
     // ================================================================
-    async function handleTrade(type) {
+    async function handleTrade(action) {
         if (!currentUser) { alert('Login dulu!'); return; }
-        const qty = parseInt(tradeQty.value);
-        if (isNaN(qty) || qty < 1) { alert('Masukkan jumlah saham (min 1)!'); return; }
-        const price = stockPrice;
-        const total = qty * price;
+        const nominal = parseInt(tradeNominal.value);
+        if (isNaN(nominal) || nominal < 100) {
+            alert('Masukkan nominal minimal 100!');
+            return;
+        }
 
         const snap = await usersRef.child(currentUser.username).child('portofolio').once('value');
         const porto = snap.val() || { stocks: 0, earned: 0, spent: 0 };
 
-        if (type === 'buy') {
-            const saldo = await getSaldo(currentUser.username);
-            if (total > saldo) { alert('Saldo tidak cukup!'); return; }
-            const newStocks = (porto.stocks || 0) + qty;
-            const newSpent = (porto.spent || 0) + total;
+        if (action === 'up') {
+            // Naik: saldo bertambah
+            const newEarned = (porto.earned || 0) + nominal;
             await usersRef.child(currentUser.username).child('portofolio').set({
-                stocks: newStocks,
+                stocks: porto.stocks || 0,
+                earned: newEarned,
+                spent: porto.spent || 0
+            });
+            // Harga naik
+            let newPrice = stockPrice + nominal;
+            newPrice = Math.min(newPrice, 6000);
+            newPrice = Math.round(newPrice / 50) * 50;
+            await priceRef.set(newPrice);
+            await broadcastRef.push({
+                message: `📈 ${currentUser.name} menaikkan harga +${formatRupiah(nominal)} menjadi ${formatRupiah(newPrice)}`,
+                timestamp: new Date().toISOString(),
+                from: 'system'
+            });
+            showNotif(`✅ Saldo +${formatRupiah(nominal)}!`, new Date().toISOString());
+        } else if (action === 'down') {
+            // Turun: saldo berkurang (hangus)
+            const newSpent = (porto.spent || 0) + nominal;
+            await usersRef.child(currentUser.username).child('portofolio').set({
+                stocks: porto.stocks || 0,
                 earned: porto.earned || 0,
                 spent: newSpent
             });
-            let newPrice = price + (qty * 10);
-            newPrice = Math.min(newPrice, 6000);
-            await priceRef.set(newPrice);
-            await broadcastRef.push({
-                message: `📈 ${currentUser.name} beli ${qty} saham, harga naik ke ${formatRupiah(newPrice)}`,
-                timestamp: new Date().toISOString(),
-                from: 'system'
-            });
-            showNotif(`✅ Beli ${qty} saham, saldo -${formatRupiah(total)}`, new Date().toISOString());
-        } else if (type === 'sell') {
-            const currentStocks = porto.stocks || 0;
-            if (qty > currentStocks) { alert('Saham tidak cukup!'); return; }
-            const newStocks = currentStocks - qty;
-            let newEarned = porto.earned || 0;
-            if (price > 0) {
-                newEarned += total;
-                await usersRef.child(currentUser.username).child('portofolio').set({
-                    stocks: newStocks,
-                    earned: newEarned,
-                    spent: porto.spent || 0
-                });
-                showNotif(`💰 Jual ${qty} saham, saldo +${formatRupiah(total)}`, new Date().toISOString());
-            } else {
-                await usersRef.child(currentUser.username).child('portofolio').set({
-                    stocks: newStocks,
-                    earned: porto.earned || 0,
-                    spent: porto.spent || 0
-                });
-                showNotif(`💸 Jual ${qty} saham di harga 0 → hangus!`, new Date().toISOString());
-            }
-            let newPrice = price - (qty * 10);
+            // Harga turun
+            let newPrice = stockPrice - nominal;
             newPrice = Math.max(newPrice, 0);
+            newPrice = Math.round(newPrice / 50) * 50;
             await priceRef.set(newPrice);
             await broadcastRef.push({
-                message: `📉 ${currentUser.name} jual ${qty} saham, harga turun ke ${formatRupiah(newPrice)}`,
+                message: `📉 ${currentUser.name} menurunkan harga -${formatRupiah(nominal)} menjadi ${formatRupiah(newPrice)}`,
                 timestamp: new Date().toISOString(),
                 from: 'system'
             });
+            showNotif(`❌ Saldo -${formatRupiah(nominal)} (hangus)`, new Date().toISOString());
         }
-        tradeQty.value = '';
+        tradeNominal.value = '';
         updateSaldo(true);
         updateTradingUI();
     }
 
-    buyBtn.addEventListener('click', () => handleTrade('buy'));
-    sellBtn.addEventListener('click', () => handleTrade('sell'));
+    upBtn.addEventListener('click', () => handleTrade('up'));
+    downBtn.addEventListener('click', () => handleTrade('down'));
 
     // ================================================================
     // TRADING UI & CHART
     // ================================================================
     function updateTradingUI() {
         if (!currentUser) return;
-        stockAmount.textContent = userStocks;
-        const nilai = userStocks * stockPrice;
-        stockValue.textContent = formatRupiah(nilai);
         updateSaldo();
     }
 
@@ -1849,10 +1825,11 @@
         document.querySelector('.tab-btn[data-tab="dashboardTab"]').addEventListener('click', function() {
             setTimeout(renderCharts, 200);
         });
-        console.log('🔥 AMOY GACHA KELOTER v12.0 - BELI/JUAL + GRAFIK 1 DETIK');
+        console.log('🔥 AMOY GACHA KELOTER v13.0 - NAIK/TURUN + GRAFIK 1 DETIK');
         console.log('✅ Admin password: wilzu2233');
-        console.log('✅ Grafik update tiap 1 detik!');
-        console.log('✅ Beli: harga naik, Jual: harga turun, saldo hangus jika jual di 0');
+        console.log('✅ Input nominal → pilih Naik (+) atau Turun (-)');
+        console.log('✅ Naik: saldo +, Turun: saldo - (hangus)');
+        console.log('✅ Grafik update tiap 1 detik');
     }
 
     init();
