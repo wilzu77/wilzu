@@ -208,6 +208,20 @@
         .btn-secondary:hover {
             background: rgba(255, 255, 255, 0.12);
         }
+        .btn-danger {
+            background: rgba(255, 70, 70, 0.15);
+            color: #ff6666;
+            border: 1px solid rgba(255, 70, 70, 0.2);
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.25s;
+            font-family: 'Poppins', sans-serif;
+        }
+        .btn-danger:hover {
+            background: rgba(255, 70, 70, 0.25);
+        }
         .success-msg {
             background: rgba(0, 255, 100, 0.1);
             border-left: 4px solid #00ff66;
@@ -219,6 +233,19 @@
             display: none;
         }
         .success-msg.show {
+            display: block;
+        }
+        .error-msg {
+            background: rgba(255, 70, 70, 0.1);
+            border-left: 4px solid #ff4444;
+            padding: 14px 18px;
+            border-radius: 16px;
+            color: #ff6666;
+            font-weight: 600;
+            margin-top: 16px;
+            display: none;
+        }
+        .error-msg.show {
             display: block;
         }
         .dashboard-grid {
@@ -333,9 +360,15 @@
             color: #fff;
             box-shadow: 0 0 30px rgba(255, 215, 0, 0.05);
         }
-        .wallet-option.dana i { color: #007BFF; }
-        .wallet-option.ovo i { color: #4CAF50; }
-        .wallet-option.gopay i { color: #E53935; }
+        .wallet-option.dana i {
+            color: #007BFF;
+        }
+        .wallet-option.ovo i {
+            color: #4CAF50;
+        }
+        .wallet-option.gopay i {
+            color: #E53935;
+        }
         .admin-login {
             background: rgba(255, 255, 255, 0.02);
             border-radius: 30px;
@@ -391,7 +424,7 @@
             display: flex;
             flex-direction: column;
             gap: 14px;
-            max-height: 400px;
+            max-height: 450px;
             overflow-y: auto;
             padding-right: 6px;
         }
@@ -606,156 +639,270 @@
             color: #ffd700;
             font-size: 16px;
         }
+        .auth-box {
+            max-width: 420px;
+            margin: 0 auto 20px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 30px;
+            padding: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+        .auth-box .auth-title {
+            color: #fff;
+            font-weight: 700;
+            font-size: 22px;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+        .auth-box .auth-title i {
+            color: #ffd700;
+        }
+        .auth-switch {
+            text-align: center;
+            margin-top: 14px;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 14px;
+        }
+        .auth-switch a {
+            color: #ffd700;
+            text-decoration: none;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .auth-switch a:hover {
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 30px;
+            padding: 10px 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+        .user-info .username {
+            color: #fff;
+            font-weight: 700;
+            font-size: 16px;
+        }
+        .user-info .username i {
+            color: #ffd700;
+            margin-right: 8px;
+        }
         @media (max-width: 600px) {
-            .app-wrapper { padding: 20px 16px; }
-            .header h1 { font-size: 28px; }
-            .tab-btn { padding: 10px 16px; font-size: 12px; }
-            .saldo-card .amount { font-size: 36px; }
-            .monitor-content .price-big { font-size: 40px; }
+            .app-wrapper {
+                padding: 20px 16px;
+            }
+            .header h1 {
+                font-size: 28px;
+            }
+            .tab-btn {
+                padding: 10px 16px;
+                font-size: 12px;
+            }
+            .saldo-card .amount {
+                font-size: 36px;
+            }
+            .monitor-content .price-big {
+                font-size: 40px;
+            }
+            .auth-box {
+                padding: 16px;
+            }
+        }
+        .trending-down {
+            color: #ff4444;
+        }
+        .trending-up {
+            color: #66ff99;
+        }
+        .price-change {
+            font-size: 18px;
+            font-weight: 700;
+            text-align: center;
+            margin-top: 2px;
         }
     </style>
 </head>
 <body>
-    <div class="app-wrapper">
+    <div class="app-wrapper" id="app">
         <div class="header">
             <h1>✨ AMOY GACHA KELOTER ✨</h1>
-            <p><i class="fas fa-crown"></i> Koleksi Skin · Harga Naik Turun</p>
+            <p><i class="fas fa-crown"></i> Koleksi Skin · Harga Bearish</p>
         </div>
 
-        <div class="tabs">
-            <button class="tab-btn active" data-tab="userTab"><i class="fas fa-paper-plane"></i> Kirim Kartu</button>
-            <button class="tab-btn" data-tab="dashboardTab"><i class="fas fa-chart-line"></i> Dashboard</button>
-            <button class="tab-btn" data-tab="adminTab"><i class="fas fa-user-shield"></i> Admin</button>
-        </div>
-
-        <!-- ============ PANEL USER (KIRIM) ============ -->
-        <div id="userTab" class="panel active">
-            <div class="form-group">
-                <label><i class="fas fa-user"></i> Nama Kamu</label>
-                <input type="text" id="userName" placeholder="Contoh: Amoy Gacor" />
+        <!-- ============ AUTH / USER INFO ============ -->
+        <div id="authContainer">
+            <!-- User info bar (hidden when not logged in) -->
+            <div class="user-info" id="userInfoBar" style="display:none;">
+                <span class="username"><i class="fas fa-user-circle"></i> <span id="displayUsername">User</span></span>
+                <button class="btn-danger" id="logoutBtn" style="padding:6px 16px; font-size:13px;"><i class="fas fa-sign-out-alt"></i> Logout</button>
             </div>
-            <div class="form-group">
-                <label><i class="fas fa-image"></i> Foto Kartu</label>
-                <div class="file-upload-wrapper">
-                    <input type="file" id="cardImage" accept="image/*" />
-                    <img class="file-preview" id="imagePreview" alt="Preview" />
+
+            <!-- Login Form -->
+            <div class="auth-box" id="loginBox">
+                <div class="auth-title"><i class="fas fa-sign-in-alt"></i> Login</div>
+                <div class="form-group">
+                    <label><i class="fas fa-user"></i> Username</label>
+                    <input type="text" id="loginUser" placeholder="Username" />
                 </div>
+                <div class="form-group">
+                    <label><i class="fas fa-lock"></i> Password</label>
+                    <input type="password" id="loginPass" placeholder="Password" />
+                </div>
+                <button class="btn-primary" id="loginBtn"><i class="fas fa-sign-in-alt"></i> Masuk</button>
+                <div class="auth-switch">Belum punya akun? <a id="goToRegister">Daftar di sini</a></div>
+                <div class="error-msg" id="loginError"></div>
             </div>
-            <div class="form-group">
-                <label><i class="fas fa-tag"></i> Pilih Jenis Skin</label>
-                <select id="skinType">
-                    <option value="basic">Basic</option>
-                    <option value="epik">Epik</option>
-                    <option value="legend">Legend</option>
-                    <option value="kolektor">Kolektor</option>
-                    <option value="amoy-pacito">Amoy-Pacito</option>
-                    <option value="amoy-klasik">Amoy Klasik</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label><i class="fas fa-phone"></i> Nomor Dana (penerima)</label>
-                <input type="text" id="danaNumber" placeholder="Masukkan nomor Dana" />
-            </div>
-            <button class="btn-primary" id="submitBtn"><i class="fas fa-paper-plane"></i> Kirim & Tunggu ACC Admin</button>
-            <div class="success-msg" id="successMsg">
-                <i class="fas fa-check-circle"></i> Kartu terkirim! Admin akan ACC skin-mu.
+
+            <!-- Register Form -->
+            <div class="auth-box" id="registerBox" style="display:none;">
+                <div class="auth-title"><i class="fas fa-user-plus"></i> Daftar Akun</div>
+                <div class="form-group">
+                    <label><i class="fas fa-user"></i> Username</label>
+                    <input type="text" id="regUser" placeholder="Buat username" />
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-user-tag"></i> Nama Panggilan</label>
+                    <input type="text" id="regName" placeholder="Nama kamu" />
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-lock"></i> Password</label>
+                    <input type="password" id="regPass" placeholder="Min 4 karakter" />
+                </div>
+                <button class="btn-primary" id="registerBtn"><i class="fas fa-user-plus"></i> Daftar</button>
+                <div class="auth-switch">Sudah punya akun? <a id="goToLogin">Login di sini</a></div>
+                <div class="error-msg" id="registerError"></div>
+                <div class="success-msg" id="registerSuccess"></div>
             </div>
         </div>
 
-        <!-- ============ PANEL DASHBOARD ============ -->
-        <div id="dashboardTab" class="panel">
-            <div class="dashboard-grid">
-                <div class="saldo-card">
-                    <div class="label">💎 SALDO KAMU</div>
-                    <div class="amount" id="userSaldo">Rp 0</div>
-                    <div class="sub">Masukkan nama lalu klik cek saldo</div>
-                    <div style="margin-top:12px; display:flex; gap:8px;">
-                        <input type="text" id="cekSaldoName" placeholder="Nama kamu" style="flex:1; padding:10px 16px; border-radius:40px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); color:#fff; outline:none; font-family:'Poppins',sans-serif;" />
-                        <button class="btn-secondary" id="cekSaldoBtn" style="flex-shrink:0;"><i class="fas fa-search"></i> Cek</button>
+        <!-- ============ MAIN APP (hidden until login) ============ -->
+        <div id="mainApp" style="display:none;">
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="userTab"><i class="fas fa-paper-plane"></i> Kirim Kartu</button>
+                <button class="tab-btn" data-tab="dashboardTab"><i class="fas fa-chart-line"></i> Dashboard</button>
+                <button class="tab-btn" data-tab="adminTab" id="adminTabBtn"><i class="fas fa-user-shield"></i> Admin</button>
+            </div>
+
+            <!-- ============ PANEL USER (KIRIM) ============ -->
+            <div id="userTab" class="panel active">
+                <div class="form-group">
+                    <label><i class="fas fa-user"></i> Nama Kamu</label>
+                    <input type="text" id="userName" placeholder="Nama panggilan" />
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-image"></i> Foto Kartu</label>
+                    <div class="file-upload-wrapper">
+                        <input type="file" id="cardImage" accept="image/*" />
+                        <img class="file-preview" id="imagePreview" alt="Preview" />
                     </div>
                 </div>
-                <div class="chart-container">
-                    <h3><i class="fas fa-candlestick-chart"></i> Harga Skin (Trending)</h3>
-                    <canvas id="priceChart" width="400" height="200"></canvas>
-                    <div class="chart-legend" id="chartLegend"></div>
+                <div class="form-group">
+                    <label><i class="fas fa-phone"></i> Nomor Dana (penerima)</label>
+                    <input type="text" id="danaNumber" placeholder="Masukkan nomor Dana" />
+                </div>
+                <button class="btn-primary" id="submitBtn"><i class="fas fa-paper-plane"></i> Kirim & Tunggu ACC Admin</button>
+                <div class="success-msg" id="successMsg">
+                    <i class="fas fa-check-circle"></i> Kartu terkirim! Admin akan menentukan skin-mu.
                 </div>
             </div>
 
-            <!-- Monitor Kolektor -->
-            <div class="monitor">
-                <div class="monitor-content">
-                    <h2>$Harga Pasar Amoy 😹</h2>
-                    <div class="price-big" id="monitorPrice">Rp 5.000</div>
-                    <div style="text-align:center; color:rgba(255,255,255,0.3); font-size:13px;">Price Update - + /5 second</div>
-                    <div class="chart-wrap">
-                        <canvas id="monitorChart" width="400" height="120"></canvas>
+            <!-- ============ PANEL DASHBOARD ============ -->
+            <div id="dashboardTab" class="panel">
+                <div class="dashboard-grid">
+                    <div class="saldo-card">
+                        <div class="label">💎 SALDO KAMU</div>
+                        <div class="amount" id="userSaldo">Rp 0</div>
+                        <div class="sub" id="saldoDetail">0 skin approved</div>
+                    </div>
+                    <div class="chart-container">
+                        <h3><i class="fas fa-candlestick-chart"></i> Harga Skin (Trending)</h3>
+                        <canvas id="priceChart" width="400" height="200"></canvas>
+                        <div class="chart-legend" id="chartLegend"></div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Daftar harga skin -->
-            <div class="skin-price-list">
-                <div class="skin-price-item"><div class="skin-name">Basic</div><div class="skin-price">Rp 500</div></div>
-                <div class="skin-price-item"><div class="skin-name">Epik</div><div class="skin-price">Rp 1.000</div></div>
-                <div class="skin-price-item"><div class="skin-name">Legend</div><div class="skin-price">Rp 2.500</div></div>
-                <div class="skin-price-item"><div class="skin-name">Amoy-Pacito</div><div class="skin-price">Rp 3.000</div></div>
-                <div class="skin-price-item"><div class="skin-name">Kolektor</div><div class="skin-price">Rp 5.000</div></div>
-                <div class="skin-price-item"><div class="skin-name">Amoy Klasik</div><div class="skin-price">Rp 500</div></div>
-            </div>
-
-            <!-- Form WD -->
-            <h3 style="color:#fff; font-weight:700; margin:24px 0 12px;"><i class="fas fa-hand-holding-usd"></i> Tarik Saldo (WD)</h3>
-            <div class="form-group">
-                <label>Pilih E-Wallet</label>
-                <div class="wallet-options" id="walletOptions">
-                    <div class="wallet-option dana" data-wallet="dana"><i class="fab fa-google-pay"></i> Dana</div>
-                    <div class="wallet-option ovo" data-wallet="ovo"><i class="fas fa-mobile-alt"></i> OVO</div>
-                    <div class="wallet-option gopay" data-wallet="gopay"><i class="fas fa-money-bill-wave"></i> Gopay</div>
-                </div>
-            </div>
-            <div class="form-group">
-                <label><i class="fas fa-user"></i> Nama Penerima</label>
-                <input type="text" id="wdName" placeholder="Nama lengkap" />
-            </div>
-            <div class="form-group">
-                <label><i class="fas fa-phone"></i> Nomor E-Wallet</label>
-                <input type="text" id="wdAccount" placeholder="Masukkan nomor e-wallet tujuan" />
-            </div>
-            <div class="form-group">
-                <label><i class="fas fa-coins"></i> Jumlah (min Rp 10.000)</label>
-                <input type="number" id="wdAmount" placeholder="10000" min="10000" step="1000" />
-            </div>
-            <button class="btn-primary" id="wdSubmitBtn"><i class="fas fa-paper-plane"></i> Ajukan WD</button>
-            <div class="success-msg" id="wdSuccessMsg">
-                <i class="fas fa-check-circle"></i> Permintaan WD dikirim! Tunggu approve admin.
-            </div>
-        </div>
-
-        <!-- ============ PANEL ADMIN ============ -->
-        <div id="adminTab" class="panel">
-            <div class="admin-login" id="adminLoginArea">
-                <input type="password" id="adminPassword" placeholder="Password admin" />
-                <button class="btn-secondary" id="adminLoginBtn"><i class="fas fa-unlock"></i> Buka Dashboard</button>
-                <span style="color:rgba(255,255,255,0.2); font-size:12px; margin-left:auto;">default: admin123</span>
-            </div>
-            <div id="adminDashboard" style="display:none;">
-                <div class="admin-stats">
-                    <div class="stat-card"><div class="number" id="totalSubs">0</div><div class="label">Kiriman</div></div>
-                    <div class="stat-card"><div class="number" id="pendingSubs">0</div><div class="label">Pending</div></div>
-                    <div class="stat-card"><div class="number" id="totalWD">0</div><div class="label">WD</div></div>
+                <!-- Monitor Kolektor BEARISH -->
+                <div class="monitor">
+                    <div class="monitor-content">
+                        <h2>📉 Harga Pasar Amoy</h2>
+                        <div class="price-big" id="monitorPrice">Rp 5.000</div>
+                        <div class="price-change" id="priceChange">▼ 0%</div>
+                        <div style="text-align:center; color:rgba(255,255,255,0.3); font-size:13px;">Trend Bearish · Update tiap 5 detik</div>
+                        <div class="chart-wrap">
+                            <canvas id="monitorChart" width="400" height="120"></canvas>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="section-title"><i class="fas fa-images"></i> Kiriman Kartu</div>
-                <div class="submissions-list" id="submissionsList">
-                    <div class="empty-state">Belum ada kiriman.</div>
+                <!-- Daftar harga skin -->
+                <div class="skin-price-list">
+                    <div class="skin-price-item"><div class="skin-name">Basic</div><div class="skin-price">Rp 500</div></div>
+                    <div class="skin-price-item"><div class="skin-name">Epik</div><div class="skin-price">Rp 1.000</div></div>
+                    <div class="skin-price-item"><div class="skin-name">Legend</div><div class="skin-price">Rp 2.500</div></div>
+                    <div class="skin-price-item"><div class="skin-name">Amoy-Pacito</div><div class="skin-price">Rp 3.000</div></div>
+                    <div class="skin-price-item"><div class="skin-name">Kolektor</div><div class="skin-price">Rp 5.000</div></div>
+                    <div class="skin-price-item"><div class="skin-name">Amoy Klasik</div><div class="skin-price">Rp 500</div></div>
                 </div>
 
-                <div class="section-title" style="margin-top:28px;"><i class="fas fa-hand-holding-usd"></i> Permintaan WD</div>
-                <div class="wd-list" id="wdList">
-                    <div class="empty-state">Belum ada permintaan WD.</div>
+                <!-- Form WD -->
+                <h3 style="color:#fff; font-weight:700; margin:24px 0 12px;"><i class="fas fa-hand-holding-usd"></i> Tarik Saldo (WD)</h3>
+                <div class="form-group">
+                    <label>Pilih E-Wallet</label>
+                    <div class="wallet-options" id="walletOptions">
+                        <div class="wallet-option dana" data-wallet="dana"><i class="fab fa-google-pay"></i> Dana</div>
+                        <div class="wallet-option ovo" data-wallet="ovo"><i class="fas fa-mobile-alt"></i> OVO</div>
+                        <div class="wallet-option gopay" data-wallet="gopay"><i class="fas fa-money-bill-wave"></i> Gopay</div>
+                    </div>
                 </div>
+                <div class="form-group">
+                    <label><i class="fas fa-user"></i> Nama Penerima</label>
+                    <input type="text" id="wdName" placeholder="Nama lengkap" />
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-phone"></i> Nomor E-Wallet</label>
+                    <input type="text" id="wdAccount" placeholder="Masukkan nomor e-wallet tujuan" />
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-coins"></i> Jumlah (min Rp 10.000)</label>
+                    <input type="number" id="wdAmount" placeholder="10000" min="10000" step="1000" />
+                </div>
+                <button class="btn-primary" id="wdSubmitBtn"><i class="fas fa-paper-plane"></i> Ajukan WD</button>
+                <div class="success-msg" id="wdSuccessMsg">
+                    <i class="fas fa-check-circle"></i> Permintaan WD dikirim! Tunggu approve admin.
+                </div>
+                <div class="error-msg" id="wdError"></div>
+            </div>
 
-                <button class="btn-secondary" id="refreshAdminBtn" style="margin-top:20px; width:100%;"><i class="fas fa-sync"></i> Refresh</button>
+            <!-- ============ PANEL ADMIN ============ -->
+            <div id="adminTab" class="panel">
+                <div class="admin-login" id="adminLoginArea">
+                    <input type="password" id="adminPassword" placeholder="Password admin" />
+                    <button class="btn-secondary" id="adminLoginBtn"><i class="fas fa-unlock"></i> Buka Dashboard</button>
+                    <span style="color:rgba(255,255,255,0.2); font-size:12px; margin-left:auto;">default: admin123</span>
+                </div>
+                <div id="adminDashboard" style="display:none;">
+                    <div class="admin-stats">
+                        <div class="stat-card"><div class="number" id="totalSubs">0</div><div class="label">Kiriman</div></div>
+                        <div class="stat-card"><div class="number" id="pendingSubs">0</div><div class="label">Pending</div></div>
+                        <div class="stat-card"><div class="number" id="totalWD">0</div><div class="label">WD</div></div>
+                    </div>
+
+                    <div class="section-title"><i class="fas fa-images"></i> Kiriman Kartu <span style="font-size:12px; color:rgba(255,255,255,0.3);">(real-time)</span></div>
+                    <div class="submissions-list" id="submissionsList">
+                        <div class="empty-state">Belum ada kiriman.</div>
+                    </div>
+
+                    <div class="section-title" style="margin-top:28px;"><i class="fas fa-hand-holding-usd"></i> Permintaan WD</div>
+                    <div class="wd-list" id="wdList">
+                        <div class="empty-state">Belum ada permintaan WD.</div>
+                    </div>
+
+                    <button class="btn-secondary" id="refreshAdminBtn" style="margin-top:20px; width:100%;"><i class="fas fa-sync"></i> Refresh</button>
+                </div>
             </div>
         </div>
     </div>
@@ -763,23 +910,47 @@
     <script>
         (function() {
             // ======== STORAGE ========
-            const STORAGE_KEY = 'amoy_gacha_data';
+            const USERS_KEY = 'amoy_users';
+            const SUBMISSIONS_KEY = 'amoy_submissions';
+            const WD_KEY = 'amoy_withdrawals';
+            const ADMIN_PASSWORD = 'admin123';
 
-            function getData() {
-                const raw = localStorage.getItem(STORAGE_KEY);
-                if (raw) {
-                    try { return JSON.parse(raw); } catch(e) { return { submissions: [], withdrawals: [] }; }
-                }
-                return { submissions: [], withdrawals: [] };
+            // ======== DATA FUNCTIONS ========
+            function getUsers() {
+                const raw = localStorage.getItem(USERS_KEY);
+                if (raw) { try { return JSON.parse(raw); } catch(e) { return {}; } }
+                return {};
             }
-            function saveData(data) {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+
+            function saveUsers(users) {
+                localStorage.setItem(USERS_KEY, JSON.stringify(users));
             }
+
+            function getSubmissions() {
+                const raw = localStorage.getItem(SUBMISSIONS_KEY);
+                if (raw) { try { return JSON.parse(raw); } catch(e) { return []; } }
+                return [];
+            }
+
+            function saveSubmissions(data) {
+                localStorage.setItem(SUBMISSIONS_KEY, JSON.stringify(data));
+            }
+
+            function getWithdrawals() {
+                const raw = localStorage.getItem(WD_KEY);
+                if (raw) { try { return JSON.parse(raw); } catch(e) { return []; } }
+                return [];
+            }
+
+            function saveWithdrawals(data) {
+                localStorage.setItem(WD_KEY, JSON.stringify(data));
+            }
+
             function generateId() {
                 return Date.now().toString(36) + Math.random().toString(36).substr(2, 6);
             }
 
-            // ======== SKIN PRICE MAP ========
+            // ======== SKIN PRICES ========
             const SKIN_PRICES = {
                 'basic': 500,
                 'epik': 1000,
@@ -797,34 +968,57 @@
                 'amoy-klasik': 'Amoy Klasik'
             };
 
-            // ======== DOM ========
+            // ======== DOM REFS ========
+            const authContainer = document.getElementById('authContainer');
+            const mainApp = document.getElementById('mainApp');
+            const userInfoBar = document.getElementById('userInfoBar');
+            const displayUsername = document.getElementById('displayUsername');
+
+            const loginBox = document.getElementById('loginBox');
+            const registerBox = document.getElementById('registerBox');
+            const loginUser = document.getElementById('loginUser');
+            const loginPass = document.getElementById('loginPass');
+            const loginBtn = document.getElementById('loginBtn');
+            const loginError = document.getElementById('loginError');
+            const goToRegister = document.getElementById('goToRegister');
+            const goToLogin = document.getElementById('goToLogin');
+
+            const regUser = document.getElementById('regUser');
+            const regName = document.getElementById('regName');
+            const regPass = document.getElementById('regPass');
+            const registerBtn = document.getElementById('registerBtn');
+            const registerError = document.getElementById('registerError');
+            const registerSuccess = document.getElementById('registerSuccess');
+
+            const logoutBtn = document.getElementById('logoutBtn');
+
+            const tabBtns = document.querySelectorAll('.tab-btn');
             const userTab = document.getElementById('userTab');
             const dashboardTab = document.getElementById('dashboardTab');
             const adminTab = document.getElementById('adminTab');
-            const tabBtns = document.querySelectorAll('.tab-btn');
 
             const userName = document.getElementById('userName');
             const cardImage = document.getElementById('cardImage');
             const imagePreview = document.getElementById('imagePreview');
-            const skinType = document.getElementById('skinType');
             const danaNumber = document.getElementById('danaNumber');
             const submitBtn = document.getElementById('submitBtn');
             const successMsg = document.getElementById('successMsg');
 
-            const cekSaldoName = document.getElementById('cekSaldoName');
-            const cekSaldoBtn = document.getElementById('cekSaldoBtn');
             const userSaldo = document.getElementById('userSaldo');
+            const saldoDetail = document.getElementById('saldoDetail');
             const walletOptions = document.querySelectorAll('.wallet-option');
             const wdName = document.getElementById('wdName');
             const wdAccount = document.getElementById('wdAccount');
             const wdAmount = document.getElementById('wdAmount');
             const wdSubmitBtn = document.getElementById('wdSubmitBtn');
             const wdSuccessMsg = document.getElementById('wdSuccessMsg');
+            const wdError = document.getElementById('wdError');
             let selectedWallet = 'dana';
 
             const priceChartCanvas = document.getElementById('priceChart');
             const monitorChartCanvas = document.getElementById('monitorChart');
             const monitorPrice = document.getElementById('monitorPrice');
+            const priceChange = document.getElementById('priceChange');
 
             const adminLoginArea = document.getElementById('adminLoginArea');
             const adminPassword = document.getElementById('adminPassword');
@@ -836,15 +1030,25 @@
             const pendingSubs = document.getElementById('pendingSubs');
             const totalWD = document.getElementById('totalWD');
             const refreshAdminBtn = document.getElementById('refreshAdminBtn');
+            const adminTabBtn = document.getElementById('adminTabBtn');
 
-            // ======== Utility ========
-            function getSaldo(name) {
-                const data = getData();
-                const approved = data.submissions.filter(s => s.name === name && s.status === 'approved');
+            // ======== SESSION ========
+            let currentUser = null; // { username, name }
+
+            // ======== UTILITY ========
+            function getSaldo(username) {
+                const subs = getSubmissions();
+                const approved = subs.filter(s => s.username === username && s.status === 'approved');
                 const totalEarned = approved.reduce((sum, s) => sum + (SKIN_PRICES[s.skinType] || 0), 0);
-                const wdApproved = data.withdrawals.filter(w => w.name === name && w.status === 'approved');
+                const wds = getWithdrawals();
+                const wdApproved = wds.filter(w => w.username === username && w.status === 'approved');
                 const totalWDed = wdApproved.reduce((sum, w) => sum + w.amount, 0);
                 return totalEarned - totalWDed;
+            }
+
+            function getApprovedCount(username) {
+                const subs = getSubmissions();
+                return subs.filter(s => s.username === username && s.status === 'approved').length;
             }
 
             function formatRupiah(amount) {
@@ -857,7 +1061,188 @@
                 return div.innerHTML;
             }
 
-            // ======== Preview Image ========
+            function showError(el, msg) {
+                el.textContent = msg;
+                el.classList.add('show');
+                setTimeout(() => el.classList.remove('show'), 5000);
+            }
+
+            function showSuccess(el, msg) {
+                el.textContent = msg;
+                el.classList.add('show');
+                setTimeout(() => el.classList.remove('show'), 5000);
+            }
+
+            // ======== AUTH ========
+            function login(username, password) {
+                const users = getUsers();
+                if (!users[username]) {
+                    showError(loginError, 'Username tidak ditemukan!');
+                    return false;
+                }
+                if (users[username].password !== password) {
+                    showError(loginError, 'Password salah!');
+                    return false;
+                }
+                currentUser = users[username];
+                currentUser.username = username;
+                enterApp();
+                return true;
+            }
+
+            function register(username, name, password) {
+                const users = getUsers();
+                if (users[username]) {
+                    showError(registerError, 'Username sudah dipakai!');
+                    return false;
+                }
+                if (username.length < 3) {
+                    showError(registerError, 'Username minimal 3 karakter!');
+                    return false;
+                }
+                if (password.length < 4) {
+                    showError(registerError, 'Password minimal 4 karakter!');
+                    return false;
+                }
+                if (!name.trim()) {
+                    showError(registerError, 'Nama harus diisi!');
+                    return false;
+                }
+                users[username] = { name: name.trim(), password: password };
+                saveUsers(users);
+                showSuccess(registerSuccess, 'Akun berhasil dibuat! Silakan login.');
+                setTimeout(() => {
+                    registerBox.style.display = 'none';
+                    loginBox.style.display = 'block';
+                    registerSuccess.classList.remove('show');
+                }, 1500);
+                return true;
+            }
+
+            function enterApp() {
+                authContainer.style.display = 'none';
+                mainApp.style.display = 'block';
+                userInfoBar.style.display = 'flex';
+                displayUsername.textContent = currentUser.name || currentUser.username;
+                userName.value = currentUser.name || currentUser.username;
+                updateSaldo();
+                // Cek apakah admin tab visible? nanti
+                renderCharts();
+                // Jika admin sudah login sebelumnya, sembunyikan
+                adminDashboard.style.display = 'none';
+                adminLoginArea.style.display = 'flex';
+            }
+
+            function logout() {
+                currentUser = null;
+                authContainer.style.display = 'block';
+                mainApp.style.display = 'none';
+                userInfoBar.style.display = 'none';
+                loginBox.style.display = 'block';
+                registerBox.style.display = 'none';
+                loginUser.value = '';
+                loginPass.value = '';
+                loginError.classList.remove('show');
+                adminDashboard.style.display = 'none';
+                adminLoginArea.style.display = 'flex';
+                // Reset tabs
+                document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+                userTab.classList.add('active');
+                tabBtns.forEach(b => b.classList.remove('active'));
+                document.querySelector('.tab-btn[data-tab="userTab"]').classList.add('active');
+            }
+
+            function updateSaldo() {
+                if (!currentUser) return;
+                const saldo = getSaldo(currentUser.username);
+                userSaldo.textContent = formatRupiah(saldo);
+                const count = getApprovedCount(currentUser.username);
+                saldoDetail.textContent = `${count} skin approved`;
+            }
+
+            // ======== AUTH EVENTS ========
+            loginBtn.addEventListener('click', function() {
+                const username = loginUser.value.trim();
+                const password = loginPass.value.trim();
+                if (!username || !password) {
+                    showError(loginError, 'Isi username dan password!');
+                    return;
+                }
+                login(username, password);
+            });
+
+            loginPass.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') loginBtn.click();
+            });
+
+            registerBtn.addEventListener('click', function() {
+                const username = regUser.value.trim();
+                const name = regName.value.trim();
+                const password = regPass.value.trim();
+                register(username, name, password);
+            });
+
+            regPass.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') registerBtn.click();
+            });
+
+            goToRegister.addEventListener('click', function(e) {
+                e.preventDefault();
+                loginBox.style.display = 'none';
+                registerBox.style.display = 'block';
+                loginError.classList.remove('show');
+                registerError.classList.remove('show');
+                registerSuccess.classList.remove('show');
+            });
+
+            goToLogin.addEventListener('click', function(e) {
+                e.preventDefault();
+                registerBox.style.display = 'none';
+                loginBox.style.display = 'block';
+                loginError.classList.remove('show');
+                registerError.classList.remove('show');
+                registerSuccess.classList.remove('show');
+            });
+
+            logoutBtn.addEventListener('click', logout);
+
+            // ======== CHECK SESSION ========
+            // Coba restore session dari localStorage
+            function restoreSession() {
+                const saved = localStorage.getItem('amoy_session');
+                if (saved) {
+                    try {
+                        const data = JSON.parse(saved);
+                        const users = getUsers();
+                        if (users[data.username]) {
+                            currentUser = users[data.username];
+                            currentUser.username = data.username;
+                            enterApp();
+                            return true;
+                        }
+                    } catch(e) {}
+                }
+                return false;
+            }
+
+            // Simpan session saat login
+            const origLogin = login;
+            login = function(username, password) {
+                const result = origLogin(username, password);
+                if (result) {
+                    localStorage.setItem('amoy_session', JSON.stringify({ username: username }));
+                }
+                return result;
+            };
+
+            // Hapus session saat logout
+            const origLogout = logout;
+            logout = function() {
+                localStorage.removeItem('amoy_session');
+                origLogout();
+            };
+
+            // ======== PREVIEW IMAGE ========
             cardImage.addEventListener('change', function(e) {
                 const file = e.target.files[0];
                 if (file) {
@@ -872,11 +1257,14 @@
                 }
             });
 
-            // ======== Submit Kiriman ========
+            // ======== SUBMIT KIRIMAN ========
             submitBtn.addEventListener('click', function() {
+                if (!currentUser) {
+                    alert('Silakan login dulu!');
+                    return;
+                }
                 const name = userName.value.trim();
                 const file = cardImage.files[0];
-                const skin = skinType.value;
                 const dana = danaNumber.value.trim();
 
                 if (!name) { alert('Isi nama kamu!'); userName.focus(); return; }
@@ -891,16 +1279,17 @@
                 reader.onload = function(ev) {
                     const submission = {
                         id: generateId(),
+                        username: currentUser.username,
                         name: name,
                         image: ev.target.result,
                         dana: dana,
-                        skinType: skin,
+                        skinType: 'basic', // default, admin akan atur
                         status: 'pending',
                         timestamp: new Date().toISOString()
                     };
-                    const data = getData();
-                    data.submissions.push(submission);
-                    saveData(data);
+                    const subs = getSubmissions();
+                    subs.push(submission);
+                    saveSubmissions(subs);
 
                     userName.value = '';
                     cardImage.value = '';
@@ -909,6 +1298,7 @@
                     successMsg.classList.add('show');
                     setTimeout(() => successMsg.classList.remove('show'), 5000);
 
+                    // Jika admin dashboard terbuka, refresh
                     if (adminDashboard.style.display !== 'none') renderAdmin();
                 };
                 reader.readAsDataURL(file);
@@ -924,17 +1314,9 @@
             });
             document.querySelector('.wallet-option.dana').classList.add('selected');
 
-            // ======== Cek Saldo ========
-            cekSaldoBtn.addEventListener('click', function() {
-                const name = cekSaldoName.value.trim();
-                if (!name) { alert('Masukkan nama kamu!'); return; }
-                const saldo = getSaldo(name);
-                userSaldo.textContent = formatRupiah(saldo);
-                wdName.value = name;
-            });
-
-            // ======== Submit WD ========
+            // ======== SUBMIT WD ========
             wdSubmitBtn.addEventListener('click', function() {
+                if (!currentUser) { alert('Login dulu!'); return; }
                 const name = wdName.value.trim();
                 const account = wdAccount.value.trim();
                 const amount = parseInt(wdAmount.value.trim());
@@ -944,14 +1326,17 @@
                 if (!amount || amount < 10000) { alert('Minimal WD Rp 10.000'); return; }
                 if (amount % 1000 !== 0) { alert('Jumlah harus kelipatan 1.000'); return; }
 
-                const saldo = getSaldo(name);
+                const saldo = getSaldo(currentUser.username);
                 if (amount > saldo) {
-                    alert(`Saldo tidak cukup! Saldo Anda: ${formatRupiah(saldo)}`);
+                    wdError.textContent = `Saldo tidak cukup! Saldo: ${formatRupiah(saldo)}`;
+                    wdError.classList.add('show');
+                    setTimeout(() => wdError.classList.remove('show'), 5000);
                     return;
                 }
 
                 const wdRequest = {
                     id: generateId(),
+                    username: currentUser.username,
                     name: name,
                     method: selectedWallet,
                     account: account,
@@ -959,55 +1344,61 @@
                     status: 'pending',
                     timestamp: new Date().toISOString()
                 };
-                const data = getData();
-                data.withdrawals.push(wdRequest);
-                saveData(data);
+                const wds = getWithdrawals();
+                wds.push(wdRequest);
+                saveWithdrawals(wds);
 
                 wdAccount.value = '';
                 wdAmount.value = '';
                 wdSuccessMsg.classList.add('show');
                 setTimeout(() => wdSuccessMsg.classList.remove('show'), 5000);
 
-                const saldoBaru = getSaldo(name);
-                userSaldo.textContent = formatRupiah(saldoBaru);
+                updateSaldo();
                 if (adminDashboard.style.display !== 'none') renderAdmin();
             });
 
-            // ======== Admin Login ========
-            const ADMIN_PASSWORD = 'admin123';
+            // ======== ADMIN LOGIN ========
             adminLoginBtn.addEventListener('click', function() {
                 if (adminPassword.value.trim() === ADMIN_PASSWORD) {
                     adminLoginArea.style.display = 'none';
                     adminDashboard.style.display = 'block';
                     renderAdmin();
+                    // Auto refresh every 2 seconds for real-time
+                    if (window._adminInterval) clearInterval(window._adminInterval);
+                    window._adminInterval = setInterval(() => {
+                        if (adminDashboard.style.display === 'block') renderAdmin();
+                    }, 2000);
                 } else {
-                    alert('Password salah!');
+                    alert('Password admin salah!');
                     adminPassword.value = '';
                     adminPassword.focus();
                 }
             });
+
             adminPassword.addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') adminLoginBtn.click();
             });
 
-            // ======== Render Admin ========
+            // ======== RENDER ADMIN ========
             function renderAdmin() {
-                const data = getData();
-                const subs = data.submissions || [];
-                const wds = data.withdrawals || [];
+                const subs = getSubmissions();
+                const wds = getWithdrawals();
 
                 totalSubs.textContent = subs.length;
                 pendingSubs.textContent = subs.filter(s => s.status === 'pending').length;
                 totalWD.textContent = wds.length;
 
+                // Submissions
                 if (subs.length === 0) {
                     submissionsList.innerHTML = `<div class="empty-state">Belum ada kiriman.</div>`;
                 } else {
                     let html = '';
                     subs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
                     subs.forEach(item => {
-                        const statusClass = item.status === 'pending' ? 'pending' : 'approved';
-                        const statusLabel = item.status === 'pending' ? '⏳ Pending' : '✅ Approved';
+                        const statusClass = item.status === 'pending' ? 'pending' :
+                            item.status === 'approved' ? 'approved' : 'rejected';
+                        const statusLabel = item.status === 'pending' ? '⏳ Pending' :
+                            item.status === 'approved' ? '✅ Approved' : '❌ Rejected';
                         const skinLabel = SKIN_LABELS[item.skinType] || item.skinType;
                         const price = SKIN_PRICES[item.skinType] || 0;
                         let actions = '';
@@ -1022,12 +1413,13 @@
                         } else {
                             actions = `<span style="color:rgba(255,255,255,0.3);">Sudah di-ACC</span>`;
                         }
+                        const userInfo = item.username ? `@${escapeHtml(item.username)}` : '';
                         html += `
                             <div class="submission-item" data-id="${item.id}">
                                 <img class="photo-thumb" src="${item.image}" alt="Kartu" />
                                 <div class="info">
-                                    <div class="name">${escapeHtml(item.name)} <span style="font-size:14px; color:#ffd700;">${skinLabel}</span></div>
-                                    <div class="dana"><i class="fas fa-phone"></i> Dana: ${escapeHtml(item.dana)} · Harga: ${formatRupiah(price)}</div>
+                                    <div class="name">${escapeHtml(item.name)} <span style="font-size:13px; color:#aaa;">${userInfo}</span></div>
+                                    <div class="dana"><i class="fas fa-phone"></i> Dana: ${escapeHtml(item.dana)} · Skin: <strong style="color:#ffd700;">${skinLabel}</strong> (${formatRupiah(price)})</div>
                                     <div class="time">${new Date(item.timestamp).toLocaleString('id-ID')}</div>
                                 </div>
                                 <span class="status-badge ${statusClass}">${statusLabel}</span>
@@ -1037,32 +1429,37 @@
                     });
                     submissionsList.innerHTML = html;
 
+                    // ACC / Tolak
                     document.querySelectorAll('#submissionsList .action-btn[data-action="approve"]').forEach(btn => {
                         btn.addEventListener('click', function() {
                             const id = this.dataset.id;
                             const container = this.closest('.submission-item');
                             const select = container.querySelector('.admin-skin-select');
                             const newSkin = select ? select.value : 'basic';
-                            let data = getData();
-                            const sub = data.submissions.find(s => s.id === id);
+                            let subs = getSubmissions();
+                            const sub = subs.find(s => s.id === id);
                             if (sub && sub.status === 'pending') {
                                 sub.skinType = newSkin;
                                 sub.status = 'approved';
-                                saveData(data);
+                                saveSubmissions(subs);
                                 renderAdmin();
                                 const price = SKIN_PRICES[newSkin] || 0;
                                 alert(`✅ Skin ${SKIN_LABELS[newSkin]} di-ACC! Saldo ${sub.name} +${formatRupiah(price)}`);
+                                // Update saldo di dashboard jika user yang login adalah pemilik
+                                if (currentUser && currentUser.username === sub.username) {
+                                    updateSaldo();
+                                }
                             }
                         });
                     });
                     document.querySelectorAll('#submissionsList .action-btn[data-action="reject"]').forEach(btn => {
                         btn.addEventListener('click', function() {
                             const id = this.dataset.id;
-                            let data = getData();
-                            const sub = data.submissions.find(s => s.id === id);
+                            let subs = getSubmissions();
+                            const sub = subs.find(s => s.id === id);
                             if (sub && sub.status === 'pending') {
                                 sub.status = 'rejected';
-                                saveData(data);
+                                saveSubmissions(subs);
                                 renderAdmin();
                                 alert(`❌ Kiriman dari ${sub.name} ditolak.`);
                             }
@@ -1070,6 +1467,7 @@
                     });
                 }
 
+                // WD
                 if (wds.length === 0) {
                     wdList.innerHTML = `<div class="empty-state">Belum ada permintaan WD.</div>`;
                 } else {
@@ -1091,10 +1489,11 @@
                         }
                         const methodIcon = item.method === 'dana' ? 'fab fa-google-pay' :
                             item.method === 'ovo' ? 'fas fa-mobile-alt' : 'fas fa-money-bill-wave';
+                        const userInfo = item.username ? `@${escapeHtml(item.username)}` : '';
                         html += `
                             <div class="wd-item" data-id="${item.id}">
                                 <div class="info">
-                                    <div class="name">${escapeHtml(item.name)} <i class="${methodIcon}" style="color:#ffd700;"></i></div>
+                                    <div class="name">${escapeHtml(item.name)} ${userInfo} <i class="${methodIcon}" style="color:#ffd700;"></i></div>
                                     <div class="detail">${escapeHtml(item.account)} · ${formatRupiah(item.amount)}</div>
                                     <div class="time">${new Date(item.timestamp).toLocaleString('id-ID')}</div>
                                 </div>
@@ -1109,22 +1508,25 @@
                         btn.addEventListener('click', function() {
                             const id = this.dataset.id;
                             const action = this.dataset.action;
-                            let data = getData();
-                            const wd = data.withdrawals.find(w => w.id === id);
+                            let wds = getWithdrawals();
+                            const wd = wds.find(w => w.id === id);
                             if (!wd) return;
                             if (action === 'approve') {
-                                const saldo = getSaldo(wd.name);
+                                const saldo = getSaldo(wd.username);
                                 if (wd.amount > saldo) {
                                     alert('Saldo tidak cukup!');
                                     return;
                                 }
                                 wd.status = 'approved';
-                                saveData(data);
+                                saveWithdrawals(wds);
                                 renderAdmin();
                                 alert(`✅ WD ${wd.name} sebesar ${formatRupiah(wd.amount)} disetujui.`);
+                                if (currentUser && currentUser.username === wd.username) {
+                                    updateSaldo();
+                                }
                             } else if (action === 'reject') {
                                 wd.status = 'rejected';
-                                saveData(data);
+                                saveWithdrawals(wds);
                                 renderAdmin();
                                 alert(`❌ WD ${wd.name} ditolak.`);
                             }
@@ -1135,7 +1537,7 @@
 
             refreshAdminBtn.addEventListener('click', renderAdmin);
 
-            // ======== CHART & HARGA FLUKTUATIF ========
+            // ======== CHART - BEARISH TREND ========
             const skinKeys = ['basic', 'epik', 'legend', 'kolektor', 'amoy-pacito', 'amoy-klasik'];
             const skinColors = {
                 'basic': '#8a8a8a',
@@ -1146,14 +1548,14 @@
                 'amoy-klasik': '#66ff99'
             };
 
-            // Generate history dengan range 500 - 10000
-            function generateHistory(skinType, days = 10) {
+            // Generate history dengan trend BEARISH (cenderung turun)
+            function generateHistory(skinType, days = 12) {
                 const basePrice = SKIN_PRICES[skinType] || 1000;
                 const history = [];
-                let price = Math.max(basePrice, 500);
+                let price = basePrice;
                 for (let i = 0; i < days; i++) {
-                    // Fluktuasi -30% s/d +40%
-                    const change = (Math.random() * 0.7) - 0.3;
+                    // Bearish: lebih sering turun (-15% s/d +5%) dengan bias ke bawah
+                    const change = (Math.random() * 0.2) - 0.15; // -15% s/d +5%
                     price = price * (1 + change);
                     // Batasi antara 500 dan 10000
                     price = Math.min(Math.max(price, 500), 10000);
@@ -1165,10 +1567,12 @@
 
             let historyData = {};
             skinKeys.forEach(key => {
-                historyData[key] = generateHistory(key, 10);
+                historyData[key] = generateHistory(key, 12);
             });
 
-            // Draw chart
+            // Track previous price for change display
+            let prevKolektorPrice = historyData['kolektor'][historyData['kolektor'].length - 1] || 5000;
+
             function drawChart(canvas, data, color, label, showPoints = true) {
                 const ctx = canvas.getContext('2d');
                 const w = canvas.width;
@@ -1232,7 +1636,7 @@
 
                 const allData = {};
                 skinKeys.forEach(key => {
-                    allData[key] = historyData[key] || generateHistory(key, 10);
+                    allData[key] = historyData[key] || generateHistory(key, 12);
                 });
 
                 let globalMin = 500;
@@ -1272,32 +1676,41 @@
                     <span class="legend-item"><span class="dot" style="background:${skinColors[key]};"></span> ${SKIN_LABELS[key]}</span>
                 `).join('');
 
-                const monData = allData['kolektor'] || generateHistory('kolektor', 10);
+                // Monitor chart - KOLEKTOR
+                const monData = allData['kolektor'] || generateHistory('kolektor', 12);
                 drawChart(monitorChartCanvas, monData, '#ff7b00', 'Kolektor', true);
                 const lastPrice = monData[monData.length - 1] || 5000;
                 monitorPrice.textContent = formatRupiah(lastPrice);
+
+                // Price change
+                const change = ((lastPrice - prevKolektorPrice) / prevKolektorPrice * 100);
+                const changeText = change >= 0 ? `▲ +${change.toFixed(1)}%` : `▼ ${change.toFixed(1)}%`;
+                priceChange.textContent = changeText;
+                priceChange.className = 'price-change ' + (change >= 0 ? 'trending-up' : 'trending-down');
+                prevKolektorPrice = lastPrice;
             }
 
-            // Update harga setiap 5 detik dengan fluktuasi acak
+            // Update harga dengan BIAS BEARISH (cenderung turun)
             function updatePrices() {
                 skinKeys.forEach(key => {
                     const hist = historyData[key];
                     if (hist && hist.length > 0) {
                         const last = hist[hist.length - 1];
-                        // Fluktuasi lebih ekstrem: -25% s/d +35%
-                        const change = (Math.random() * 0.6) - 0.25;
+                        // BEARISH: -18% s/d +6% (lebih sering turun)
+                        const change = (Math.random() * 0.24) - 0.18;
                         let newPrice = last * (1 + change);
-                        // Batasi antara 500 dan 10000
                         newPrice = Math.min(Math.max(newPrice, 500), 10000);
                         newPrice = Math.round(newPrice / 100) * 100;
                         hist.push(newPrice);
-                        if (hist.length > 10) hist.shift();
+                        if (hist.length > 12) hist.shift();
                     }
                 });
                 renderCharts();
+                // Update saldo di dashboard (just in case)
+                if (currentUser) updateSaldo();
             }
 
-            // ======== TAB ========
+            // ======== TABS ========
             tabBtns.forEach(btn => {
                 btn.addEventListener('click', function() {
                     tabBtns.forEach(b => b.classList.remove('active'));
@@ -1307,26 +1720,56 @@
                     document.getElementById(target).classList.add('active');
                     if (target === 'dashboardTab') {
                         renderCharts();
+                        if (currentUser) updateSaldo();
+                    }
+                    if (target === 'adminTab') {
+                        // If admin already logged in, refresh
+                        if (adminDashboard.style.display === 'block') renderAdmin();
                     }
                 });
             });
 
             // ======== INIT ========
-            document.querySelector('.tab-btn[data-tab="userTab"]').classList.add('active');
-            userTab.classList.add('active');
-            setTimeout(renderCharts, 300);
+            // Coba restore session
+            const sessionRestored = restoreSession();
 
-            // Update setiap 5 DETIK (5000ms)
+            if (!sessionRestored) {
+                // Tampilkan login
+                authContainer.style.display = 'block';
+                mainApp.style.display = 'none';
+                loginBox.style.display = 'block';
+                registerBox.style.display = 'none';
+            }
+
+            // Set default tab
+            document.querySelector('.tab-btn[data-tab="userTab"]').classList.add('active');
+            if (!sessionRestored) {
+                userTab.classList.add('active');
+            }
+
+            // Chart initial render (if logged in)
+            if (sessionRestored) {
+                setTimeout(renderCharts, 300);
+            }
+
+            // Update harga setiap 5 DETIK (BEARISH)
             setInterval(updatePrices, 5000);
 
-            // Refresh admin setiap 3 detik
+            // Update saldo setiap 10 detik
             setInterval(() => {
-                if (adminDashboard.style.display === 'block') renderAdmin();
-            }, 3000);
+                if (currentUser) updateSaldo();
+            }, 10000);
 
+            // Admin auto-refresh handled inside renderAdmin with interval
+
+            // Tab dashboard click handler for chart
             document.querySelector('.tab-btn[data-tab="dashboardTab"]').addEventListener('click', function() {
                 setTimeout(renderCharts, 200);
             });
+
+            console.log('🔥 AMOY GACHA KELOTER v2.0 - BEARISH MODE');
+            console.log('👤 Login dengan akun yang sudah didaftarkan');
+            console.log('🔑 Admin password: admin123');
 
         })();
     </script>
