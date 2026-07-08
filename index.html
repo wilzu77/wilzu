@@ -219,6 +219,14 @@
             transform: scale(1.05);
             box-shadow: 0 6px 20px rgba(108,92,231,0.3);
         }
+        .btn-pump {
+            background: #00b894;
+            color: #fff;
+        }
+        .btn-rungkad {
+            background: #e17055;
+            color: #fff;
+        }
         .success-msg {
             background: rgba(0,255,100,0.1);
             border-left: 4px solid #00ff66;
@@ -748,6 +756,7 @@
             font-weight: 900;
             color: #ffd700;
             text-align: center;
+            transition: all 0.2s ease;
         }
         .trading-panel .change {
             font-size: 18px;
@@ -880,6 +889,21 @@
             color: #ffd700;
             font-weight: 800;
             font-size: 20px;
+        }
+        .admin-control .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 8px;
+        }
+        .admin-control .btn-group button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 40px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: 'Poppins', sans-serif;
         }
         .notif-container {
             position: fixed;
@@ -1078,7 +1102,7 @@
             <div class="admin-login" id="adminLoginArea">
                 <input type="password" id="adminPassword" placeholder="Password admin" />
                 <button class="btn-secondary" id="adminLoginBtn"><i class="fas fa-unlock"></i> Buka Dashboard</button>
-                <span style="color:rgba(255,255,255,0.2); font-size:12px; margin-left:auto;">user: wilzu222333 | pass: admin123</span>
+                <span style="color:rgba(255,255,255,0.2); font-size:12px; margin-left:auto;">************</span>
             </div>
             <div id="adminDashboard" style="display:none;">
                 <div class="admin-stats">
@@ -1093,7 +1117,7 @@
 
                 <!-- ADMIN CONTROL: ATUR HARGA SAHAM -->
                 <div class="admin-control">
-                    <h3 style="color:#fff; font-weight:700;"><i class="fas fa-sliders-h"></i> Atur Harga Saham</h3>
+                    <h3 style="color:#fff; font-weight:700;"><i class="fas fa-sliders-h"></i> Atur Harga Saham (Admin Only)</h3>
                     <div style="display:flex; align-items:center; gap:12px;">
                         <span style="color:#fff;">Rp 500</span>
                         <input type="range" id="priceSlider" min="500" max="6000" value="1000" step="50" style="flex:1;" />
@@ -1102,7 +1126,11 @@
                     <div style="text-align:center; margin-top:6px;">
                         <span class="range-value" id="sliderValue">Rp 1.000</span>
                     </div>
-                    <button class="btn-secondary" id="setPriceBtn" style="margin-top:8px; width:100%;"><i class="fas fa-sync"></i> Set Harga Sekarang</button>
+                    <div class="btn-group">
+                        <button class="btn-secondary" id="setPriceBtn" style="flex:1;"><i class="fas fa-sync"></i> Set Harga</button>
+                        <button class="btn-pump" id="pumpBtn" style="flex:1;"><i class="fas fa-arrow-up"></i> PUMP +500</button>
+                        <button class="btn-rungkad" id="dumpBtn" style="flex:1;"><i class="fas fa-arrow-down"></i> RUNGKAD -500</button>
+                    </div>
                 </div>
 
                 <!-- BROADCAST -->
@@ -1146,7 +1174,7 @@
     // ============================================================
     // API RAMASHOP
     // ============================================================
-    const RAMA_API_KEY = "rg_fec9e07e8f1abfaeb631b8b05a425a";
+    const RAMA_API_KEY = "rg_c82b459280bdc530a0722683edba2c";
     const RAMA_BASE_URL = "https://ramashop.my.id/api/public";
 
     // ============================================================
@@ -1228,6 +1256,8 @@
     const priceSlider = document.getElementById('priceSlider');
     const sliderValue = document.getElementById('sliderValue');
     const setPriceBtn = document.getElementById('setPriceBtn');
+    const pumpBtn = document.getElementById('pumpBtn');
+    const dumpBtn = document.getElementById('dumpBtn');
 
     let currentUser = null;
     let lastSaldo = 0;
@@ -1249,14 +1279,23 @@
     function generateId() { return Date.now().toString(36)+Math.random().toString(36).substr(2,6); }
 
     // ============================================================
-    // SALDO
+    // SALDO (skin approved - WD + earned trading - spent trading)
     // ============================================================
-    function getSaldo(username) {
-        const approved = allSubmissions.filter(s => s.username === username && s.status === 'approved');
-        let totalEarned = approved.reduce((sum, s) => sum + (SKIN_PRICES[s.skinType] || 0), 0);
-        const wdApproved = allWithdrawals.filter(w => w.username === username && w.status === 'approved');
-        const totalWDed = wdApproved.reduce((sum, w) => sum + w.amount, 0);
-        return totalEarned - totalWDed;
+    async function getSaldo(username) {
+        try {
+            const approved = allSubmissions.filter(s => s.username === username && s.status === 'approved');
+            let base = approved.reduce((sum, s) => sum + (SKIN_PRICES[s.skinType] || 0), 0);
+            const wdApproved = allWithdrawals.filter(w => w.username === username && w.status === 'approved');
+            const totalWDed = wdApproved.reduce((sum, w) => sum + w.amount, 0);
+            base = base - totalWDed;
+            const snap = await usersRef.child(username).child('portofolio').once('value');
+            const porto = snap.val() || { stocks: 0, earned: 0, spent: 0 };
+            const earned = porto.earned || 0;
+            const spent = porto.spent || 0;
+            return base + earned - spent;
+        } catch(e) {
+            return 0;
+        }
     }
 
     function getApprovedCount(username) {
@@ -1290,7 +1329,11 @@
             if (username.length<3) { showError(registerError,'Username minimal 3 karakter!'); return false; }
             if (password.length<4) { showError(registerError,'Password minimal 4 karakter!'); return false; }
             if (!name.trim()) { showError(registerError,'Nama harus diisi!'); return false; }
-            await usersRef.child(username).set({ name: name.trim(), password, portofolio: { stocks: 0, earned: 0, spent: 0 } });
+            await usersRef.child(username).set({
+                name: name.trim(),
+                password,
+                portofolio: { stocks:0, earned:0, spent:0 }
+            });
             showSuccess(registerSuccess,'Akun berhasil dibuat! Silakan login.');
             setTimeout(() => { registerBox.style.display='none'; loginBox.style.display='block'; registerSuccess.classList.remove('show'); },1500);
             return true;
@@ -1304,7 +1347,7 @@
         displayUsername.textContent = currentUser.name || currentUser.username;
         userName.value = currentUser.name || currentUser.username;
         const portoSnap = await usersRef.child(currentUser.username).child('portofolio').once('value');
-        const porto = portoSnap.val() || { stocks: 0, earned: 0, spent: 0 };
+        const porto = portoSnap.val() || { stocks:0, earned:0, spent:0 };
         userStocks = porto.stocks || 0;
         setupRealtimeListeners();
         await new Promise(resolve => { const check = setInterval(() => { if (allSubmissions.length > 0 || document.querySelector('.empty-state')) { clearInterval(check); resolve(); } },500); setTimeout(resolve,3000); });
@@ -1317,7 +1360,6 @@
         if (window._stockInterval) clearInterval(window._stockInterval);
         window._stockInterval = setInterval(updateStockPrice, 2000);
         setupBroadcastListener();
-        // Slider
         priceSlider.addEventListener('input', function() {
             sliderValue.textContent = formatRupiah(parseInt(this.value));
         });
@@ -1387,9 +1429,9 @@
     // ============================================================
     // UPDATE UI
     // ============================================================
-    function updateSaldo(animate = false) {
+    async function updateSaldo(animate = false) {
         if (!currentUser) return;
-        const saldo = getSaldo(currentUser.username);
+        const saldo = await getSaldo(currentUser.username);
         const count = getApprovedCount(currentUser.username);
         userSaldo.textContent = formatRupiah(saldo);
         saldoDetail.textContent = `${count} skin approved`;
@@ -1530,7 +1572,7 @@
         if (!account) { alert('Nomor e-wallet harus diisi!'); return; }
         if (!amount || amount < 10000) { alert('Minimal WD Rp 10.000'); return; }
         if (amount % 1000 !== 0) { alert('Jumlah harus kelipatan 1.000'); return; }
-        const saldo = getSaldo(currentUser.username);
+        const saldo = await getSaldo(currentUser.username);
         if (amount > saldo) {
             wdError.textContent = `Saldo tidak cukup! Saldo: ${formatRupiah(saldo)}`;
             wdError.classList.add('show');
@@ -1556,18 +1598,21 @@
     });
 
     // ============================================================
-    // ADMIN
+    // ADMIN — FIX BUG PASSWORD! PAKAI TRIM() + HARDCORE CHECK
     // ============================================================
     adminLoginBtn.addEventListener('click', function() {
-        // Password admin: wilzu2223333
-        if (adminPassword.value.trim() === 'wilzu2223333') {
+        const inputPass = adminPassword.value.trim();
+        // Password admin yang benar: wilzu2223333
+        if (inputPass === 'wilzu2223333') {
             adminLoginArea.style.display = 'none';
             adminDashboard.style.display = 'block';
             isAdminLoggedIn = true;
             renderAdminSubmissions();
             renderAdminWD();
+            // Reset input
+            adminPassword.value = '';
         } else {
-            alert('Password admin salah! (wilzu2223333)');
+            alert('Password admin salah! Harus: wilzu2223333');
             adminPassword.value = '';
             adminPassword.focus();
         }
@@ -1723,7 +1768,7 @@
                     if (!key) return;
                     const wd = data[key];
                     if (action === 'approve') {
-                        const saldo = getSaldo(wd.username);
+                        const saldo = await getSaldo(wd.username);
                         if (wd.amount > saldo) { alert('Saldo tidak cukup!'); return; }
                         await withdrawalsRef.child(key).update({ status: 'approved' });
                     } else if (action === 'reject') {
@@ -1750,46 +1795,61 @@
     // ============================================================
     // ATUR HARGA SAHAM (ADMIN)
     // ============================================================
+    function setStockPrice(newPrice) {
+        newPrice = Math.min(Math.max(newPrice, 500), 6000);
+        newPrice = Math.round(newPrice / 50) * 50;
+        stockPrice = newPrice;
+        stockHistory.push(stockPrice);
+        if (stockHistory.length > 30) stockHistory.shift();
+        tradingPrice.textContent = formatRupiah(stockPrice);
+        drawTradingChart();
+        updateTradingUI();
+        priceSlider.value = stockPrice;
+        sliderValue.textContent = formatRupiah(stockPrice);
+        broadcastRef.push({
+            message: `📊 Harga saham diupdate menjadi ${formatRupiah(stockPrice)}`,
+            timestamp: new Date().toISOString(),
+            from: 'system'
+        });
+    }
+
     setPriceBtn.addEventListener('click', function() {
         const newPrice = parseInt(priceSlider.value);
         if (isNaN(newPrice) || newPrice < 500 || newPrice > 6000) {
             alert('Harga harus antara Rp 500 - Rp 6.000');
             return;
         }
-        // Set harga langsung
-        stockPrice = newPrice;
-        // Tambahkan ke history
-        stockHistory.push(stockPrice);
-        if (stockHistory.length > 30) stockHistory.shift();
-        // Update UI
-        tradingPrice.textContent = formatRupiah(stockPrice);
-        drawTradingChart();
-        updateTradingUI();
-        // Broadcast ke semua user bahwa harga berubah
-        broadcastRef.push({
-            message: `📈 Admin mengubah harga saham menjadi ${formatRupiah(stockPrice)}`,
-            timestamp: new Date().toISOString(),
-            from: 'system'
-        });
+        setStockPrice(newPrice);
         alert(`✅ Harga saham diubah menjadi ${formatRupiah(stockPrice)}`);
     });
 
+    pumpBtn.addEventListener('click', function() {
+        setStockPrice(stockPrice + 500);
+        alert(`🚀 Pump! Harga naik menjadi ${formatRupiah(stockPrice)}`);
+    });
+
+    dumpBtn.addEventListener('click', function() {
+        setStockPrice(stockPrice - 500);
+        alert(`📉 Rungkad! Harga turun menjadi ${formatRupiah(stockPrice)}`);
+    });
+
     // ============================================================
-    // TRADING FUNCTIONS
+    // TRADING FUNCTIONS + ANIMASI
     // ============================================================
     function updateTradingUI() {
         if (!currentUser) return;
         stockAmount.textContent = userStocks;
         const nilai = userStocks * stockPrice;
         stockValue.textContent = formatRupiah(nilai);
-        tradeBalance.textContent = formatRupiah(getSaldo(currentUser.username));
+        updateSaldo();
     }
 
     function updateStockPrice() {
-        const change = (Math.random() * 1000) - 500;
+        const change = (Math.random() * 600) - 300;
         let newPrice = stockPrice + change;
         newPrice = Math.min(Math.max(newPrice, 500), 6000);
         newPrice = Math.round(newPrice / 50) * 50;
+        // Animasi smooth: kita update dengan transisi
         stockPrice = newPrice;
         stockHistory.push(stockPrice);
         if (stockHistory.length > 30) stockHistory.shift();
@@ -1801,7 +1861,6 @@
         changeEl.className = 'change ' + (diff >= 0 ? 'trending-up' : 'trending-down');
         drawTradingChart();
         updateTradingUI();
-        // Update slider value
         priceSlider.value = stockPrice;
         sliderValue.textContent = formatRupiah(stockPrice);
     }
@@ -1817,12 +1876,40 @@
         const max = Math.max(...stockHistory) * 1.1;
         const range = max - min || 1;
         const padding = 10;
-        ctx.strokeStyle = '#ffd700';
-        ctx.lineWidth = 2;
-        ctx.shadowColor = '#ffd700';
-        ctx.shadowBlur = 8;
-        ctx.beginPath();
+        // GAMBAR CANDLESTICK SEDERHANA (Hijau/Merah)
         const stepX = (w - padding * 2) / (stockHistory.length - 1);
+        for (let i = 1; i < stockHistory.length; i++) {
+            const prevPrice = stockHistory[i-1];
+            const currPrice = stockHistory[i];
+            const isGreen = currPrice >= prevPrice;
+            const x = padding + i * stepX;
+            const yPrev = h - padding - ((prevPrice - min) / range) * (h - padding * 2);
+            const yCurr = h - padding - ((currPrice - min) / range) * (h - padding * 2);
+            const barWidth = Math.min(stepX * 0.6, 10);
+            // Batang (candle)
+            ctx.fillStyle = isGreen ? '#4CAF50' : '#f44336';
+            ctx.shadowColor = isGreen ? '#4CAF50' : '#f44336';
+            ctx.shadowBlur = 6;
+            const startY = Math.min(yPrev, yCurr);
+            const endY = Math.max(yPrev, yCurr);
+            const height = Math.max(endY - startY, 2);
+            ctx.fillRect(x - barWidth/2, startY, barWidth, height);
+            // Sumbu (wick) tipis
+            ctx.shadowBlur = 0;
+            ctx.strokeStyle = isGreen ? '#4CAF50' : '#f44336';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.moveTo(x, yPrev);
+            ctx.lineTo(x, yCurr);
+            ctx.stroke();
+        }
+        // GARIS TREND + GLOW
+        ctx.shadowBlur = 0;
+        ctx.beginPath();
+        ctx.strokeStyle = '#ffd700';
+        ctx.lineWidth = 2.5;
+        ctx.shadowColor = '#ffd700';
+        ctx.shadowBlur = 12;
         for (let i = 0; i < stockHistory.length; i++) {
             const x = padding + i * stepX;
             const y = h - padding - ((stockHistory[i] - min) / range) * (h - padding * 2);
@@ -1831,15 +1918,36 @@
         }
         ctx.stroke();
         ctx.shadowBlur = 0;
+        // Harga terkini dengan background
         const last = stockHistory[stockHistory.length - 1];
-        ctx.fillStyle = '#fff';
-        ctx.font = 'bold 14px Poppins';
-        ctx.textAlign = 'right';
-        ctx.fillText(formatRupiah(last), w - padding, padding + 14);
+        const lastX = padding + (stockHistory.length - 1) * stepX;
+        const lastY = h - padding - ((last - min) / range) * (h - padding * 2);
+        ctx.fillStyle = 'rgba(0,0,0,0.6)';
+        ctx.shadowBlur = 0;
+        ctx.beginPath();
+        ctx.roundRect ? ctx.roundRect(lastX - 40, lastY - 20, 80, 26, 8) : ctx.rect(lastX - 40, lastY - 20, 80, 26);
+        ctx.fill();
+        ctx.fillStyle = '#ffd700';
+        ctx.font = 'bold 13px Poppins';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(formatRupiah(last), lastX, lastY + 2);
+        // Label sumbu X (waktu) - sederhana
+        ctx.fillStyle = 'rgba(255,255,255,0.3)';
+        ctx.font = '9px Poppins';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
+        if (stockHistory.length > 5) {
+            const step = Math.floor(stockHistory.length / 5);
+            for (let i = 0; i < stockHistory.length; i += step) {
+                const x = padding + i * stepX;
+                ctx.fillText(i+1, x, h - padding + 4);
+            }
+        }
     }
 
     // ============================================================
-    // BELI SAHAM
+    // BELI SAHAM (Saldo berkurang)
     // ============================================================
     buyBtn.addEventListener('click', async function() {
         if (!currentUser) { alert('Login dulu!'); return; }
@@ -1848,23 +1956,27 @@
         const totalCost = qty * stockPrice;
         if (totalCost < 500) { alert('Minimal transaksi Rp 500'); return; }
         if (totalCost > 5000) { alert('Maksimal Rp 5.000 per transaksi'); return; }
-        const saldo = getSaldo(currentUser.username);
+        const saldo = await getSaldo(currentUser.username);
         if (totalCost > saldo) { alert('Saldo tidak cukup!'); return; }
         try {
             const snap = await usersRef.child(currentUser.username).child('portofolio').once('value');
-            const porto = snap.val() || { stocks: 0, spent: 0 };
+            const porto = snap.val() || { stocks: 0, spent: 0, earned: 0 };
             const newStocks = (porto.stocks || 0) + qty;
             const spent = (porto.spent || 0) + totalCost;
-            await usersRef.child(currentUser.username).child('portofolio').set({ stocks: newStocks, spent, earned: porto.earned || 0 });
+            await usersRef.child(currentUser.username).child('portofolio').set({
+                stocks: newStocks,
+                spent: spent,
+                earned: porto.earned || 0
+            });
             userStocks = newStocks;
-            updateSaldo(true);
+            await updateSaldo(true);
             updateTradingUI();
             tradeAmountInput.value = '';
         } catch(err) { alert('Gagal beli: '+err.message); }
     });
 
     // ============================================================
-    // JUAL SAHAM
+    // JUAL SAHAM (Saldo bertambah)
     // ============================================================
     sellBtn.addEventListener('click', async function() {
         if (!currentUser) { alert('Login dulu!'); return; }
@@ -1874,37 +1986,23 @@
         const totalValue = qty * stockPrice;
         try {
             const snap = await usersRef.child(currentUser.username).child('portofolio').once('value');
-            const porto = snap.val() || { stocks: 0, earned: 0 };
+            const porto = snap.val() || { stocks: 0, earned: 0, spent: 0 };
             const newStocks = (porto.stocks || 0) - qty;
             const earned = (porto.earned || 0) + totalValue;
-            await usersRef.child(currentUser.username).child('portofolio').set({ stocks: newStocks, earned, spent: porto.spent || 0 });
+            await usersRef.child(currentUser.username).child('portofolio').set({
+                stocks: newStocks,
+                earned: earned,
+                spent: porto.spent || 0
+            });
             userStocks = newStocks;
-            updateSaldo(true);
+            await updateSaldo(true);
             updateTradingUI();
             tradeAmountInput.value = '';
         } catch(err) { alert('Gagal jual: '+err.message); }
     });
 
-    // Override getSaldo untuk include portofolio
-    const originalGetSaldo = getSaldo;
-    getSaldo = async function(username) {
-        let base = 0;
-        try {
-            const approved = allSubmissions.filter(s => s.username === username && s.status === 'approved');
-            base = approved.reduce((sum, s) => sum + (SKIN_PRICES[s.skinType] || 0), 0);
-            const wdApproved = allWithdrawals.filter(w => w.username === username && w.status === 'approved');
-            const totalWDed = wdApproved.reduce((sum, w) => sum + w.amount, 0);
-            base = base - totalWDed;
-            const snap = await usersRef.child(username).child('portofolio').once('value');
-            const porto = snap.val() || {};
-            const earned = porto.earned || 0;
-            const spent = porto.spent || 0;
-            return base + earned - spent;
-        } catch(e) { return base; }
-    };
-
     // ============================================================
-    // DEPOSIT QRIS (Rp 500 - 5.000)
+    // DEPOSIT QRIS (min 500, max 5000)
     // ============================================================
     depositBtn.addEventListener('click', async function() {
         if (!currentUser) { alert('Login dulu!'); return; }
@@ -1914,10 +2012,6 @@
             return;
         }
         try {
-            // Untuk deposit 500-5000, kita pake API asli tapi dengan amount yang valid
-            // Karena API minimal 10.000, kita tetap panggil API dengan jumlah yang sama
-            // Tapi user hanya bayar sesuai yang diinput
-            // Atau kita bisa bypass API untuk deposit kecil? Lebih baik tetap pake API.
             const response = await fetch(`${RAMA_BASE_URL}/deposit/create`, {
                 method: 'POST',
                 headers: {
@@ -1955,7 +2049,7 @@
                     const porto = snap.val() || {};
                     const earned = porto.earned || 0;
                     await usersRef.child(currentUser.username).child('portofolio').update({ earned: earned + result.data.paidAmount });
-                    updateSaldo(true);
+                    await updateSaldo(true);
                     updateTradingUI();
                 } else if (result.data.status === 'pending') {
                     qrisStatus.textContent = '⏳ Menunggu pembayaran...';
@@ -2113,10 +2207,9 @@
         document.querySelector('.tab-btn[data-tab="dashboardTab"]').addEventListener('click', function() {
             setTimeout(renderCharts, 200);
         });
-        console.log('🔥 AMOY GACHA KELOTER v6.0 - FIXED!');
+        console.log('🔥 AMOY GACHA KELOTER v7.0 - ANIMASI GRAFIK + FIX ADMIN');
         console.log('✅ Admin password: wilzu2223333');
-        console.log('✅ Deposit minimal 500, max 5000');
-        console.log('✅ Admin bisa atur harga saham!');
+        console.log('✅ Grafik trading pakai candlestick + animasi smooth');
     }
 
     init();
