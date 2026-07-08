@@ -3,9 +3,12 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Amoy Gacha Keloter · Auto ACC</title>
+    <title>Amoy Gacha Keloter · Firebase</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
     <style>
         * {
             margin: 0;
@@ -864,14 +867,6 @@
             background: #1a1a2e;
             color: #fff;
         }
-        .submission-item .request-skin {
-            font-size: 13px;
-            color: rgba(255, 255, 255, 0.4);
-            background: rgba(255, 255, 255, 0.04);
-            padding: 2px 12px;
-            border-radius: 20px;
-            display: inline-block;
-        }
         .total-count {
             font-size: 14px;
             color: rgba(255, 255, 255, 0.3);
@@ -883,13 +878,44 @@
             flex-wrap: wrap;
             align-items: center;
         }
+        .fb-config-info {
+            background: rgba(255, 215, 0, 0.05);
+            border: 1px solid rgba(255, 215, 0, 0.1);
+            border-radius: 16px;
+            padding: 16px 20px;
+            margin-bottom: 20px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 13px;
+        }
+        .fb-config-info strong {
+            color: #ffd700;
+        }
+        .fb-config-info code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            color: #66ff99;
+        }
     </style>
 </head>
 <body>
     <div class="app-wrapper" id="app">
         <div class="header">
             <h1>✨ AMOY GACHA KELOTER ✨</h1>
-            <p><i class="fas fa-crown"></i> Kirim Foto · Admin ACC · Saldo Auto</p>
+            <p><i class="fas fa-crown"></i> Kirim Foto · Admin ACC · Semua User Terdeteksi</p>
+        </div>
+
+        <!-- ============ FIREBASE CONFIG ============ -->
+        <div class="fb-config-info" id="fbConfigBox">
+            <i class="fas fa-database" style="color:#ffd700;"></i>
+            <strong>Firebase Realtime Database</strong> — Semua user terhubung!
+            <br />
+            <span style="font-size:12px;">
+                ⚡ Ganti config di bagian <code>firebaseConfig</code> di dalam script.
+                <br />
+                📦 Data tersimpan di cloud, admin lihat semua kiriman dari semua user.
+            </span>
         </div>
 
         <!-- ============ AUTH ============ -->
@@ -1055,9 +1081,9 @@
                     </div>
 
                     <div class="section-title">
-                        <i class="fas fa-images"></i> Kiriman Kartu 
+                        <i class="fas fa-images"></i> Kiriman Kartu
                         <span class="total-count" id="subCount">(0)</span>
-                        <span style="font-size:12px; color:rgba(255,255,255,0.3);">real-time 1 detik</span>
+                        <span style="font-size:12px; color:rgba(255,255,255,0.3);">real-time dari semua user</span>
                     </div>
                     <div class="submissions-list" id="submissionsList">
                         <div class="empty-state">Belum ada kiriman.</div>
@@ -1073,185 +1099,223 @@
     </div>
 
     <script>
-        (function() {
-            // ======== STORAGE KEYS ========
-            const USERS_KEY = 'amoy_users';
-            const SUBMISSIONS_KEY = 'amoy_submissions';
-            const WD_KEY = 'amoy_withdrawals';
-            const ADMIN_PASSWORD = 'admin123';
+        // ============================================================
+        // 🔥 FIREBASE CONFIG — GANTI DENGAN PUNYA KAMU!
+        // ============================================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyDummyKey1234567890", // <-- GANTI!
+            authDomain: "your-project.firebaseapp.com",
+            databaseURL: "https://your-project-default-rtdb.firebaseio.com",
+            projectId: "your-project",
+            storageBucket: "your-project.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "1:123456789:web:abcdef123456"
+        };
 
-            // ======== DATA FUNCTIONS ========
-            function getUsers() {
-                const raw = localStorage.getItem(USERS_KEY);
-                if (raw) { try { return JSON.parse(raw); } catch(e) { return {}; } }
-                return {};
-            }
-            function saveUsers(users) { localStorage.setItem(USERS_KEY, JSON.stringify(users)); }
+        // ============================================================
+        // INISIALISASI FIREBASE
+        // ============================================================
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
 
-            function getSubmissions() {
-                const raw = localStorage.getItem(SUBMISSIONS_KEY);
-                if (raw) { try { return JSON.parse(raw); } catch(e) { return []; } }
-                return [];
-            }
-            function saveSubmissions(data) { localStorage.setItem(SUBMISSIONS_KEY, JSON.stringify(data)); }
+        // ============================================================
+        // REFS DATABASE
+        // ============================================================
+        const usersRef = db.ref('users');
+        const submissionsRef = db.ref('submissions');
+        const withdrawalsRef = db.ref('withdrawals');
 
-            function getWithdrawals() {
-                const raw = localStorage.getItem(WD_KEY);
-                if (raw) { try { return JSON.parse(raw); } catch(e) { return []; } }
-                return [];
-            }
-            function saveWithdrawals(data) { localStorage.setItem(WD_KEY, JSON.stringify(data)); }
+        // ============================================================
+        // SKIN PRICES
+        // ============================================================
+        const SKIN_PRICES = {
+            'basic': 500,
+            'epik': 1000,
+            'legend': 2500,
+            'kolektor': 5000,
+            'amoy-pacito': 3000,
+            'amoy-klasik': 500
+        };
+        const SKIN_LABELS = {
+            'basic': 'Basic',
+            'epik': 'Epik',
+            'legend': 'Legend',
+            'kolektor': 'Kolektor',
+            'amoy-pacito': 'Amoy-Pacito',
+            'amoy-klasik': 'Amoy Klasik'
+        };
 
-            function generateId() { return Date.now().toString(36) + Math.random().toString(36).substr(2, 6); }
+        // ============================================================
+        // DOM REFS
+        // ============================================================
+        const authContainer = document.getElementById('authContainer');
+        const mainApp = document.getElementById('mainApp');
+        const userInfoBar = document.getElementById('userInfoBar');
+        const displayUsername = document.getElementById('displayUsername');
 
-            // ======== SKIN PRICES ========
-            const SKIN_PRICES = {
-                'basic': 500,
-                'epik': 1000,
-                'legend': 2500,
-                'kolektor': 5000,
-                'amoy-pacito': 3000,
-                'amoy-klasik': 500
-            };
-            const SKIN_LABELS = {
-                'basic': 'Basic',
-                'epik': 'Epik',
-                'legend': 'Legend',
-                'kolektor': 'Kolektor',
-                'amoy-pacito': 'Amoy-Pacito',
-                'amoy-klasik': 'Amoy Klasik'
-            };
+        const loginBox = document.getElementById('loginBox');
+        const registerBox = document.getElementById('registerBox');
+        const loginUser = document.getElementById('loginUser');
+        const loginPass = document.getElementById('loginPass');
+        const loginBtn = document.getElementById('loginBtn');
+        const loginError = document.getElementById('loginError');
+        const goToRegister = document.getElementById('goToRegister');
+        const goToLogin = document.getElementById('goToLogin');
 
-            // ======== DOM REFS ========
-            const authContainer = document.getElementById('authContainer');
-            const mainApp = document.getElementById('mainApp');
-            const userInfoBar = document.getElementById('userInfoBar');
-            const displayUsername = document.getElementById('displayUsername');
+        const regUser = document.getElementById('regUser');
+        const regName = document.getElementById('regName');
+        const regPass = document.getElementById('regPass');
+        const registerBtn = document.getElementById('registerBtn');
+        const registerError = document.getElementById('registerError');
+        const registerSuccess = document.getElementById('registerSuccess');
+        const logoutBtn = document.getElementById('logoutBtn');
 
-            const loginBox = document.getElementById('loginBox');
-            const registerBox = document.getElementById('registerBox');
-            const loginUser = document.getElementById('loginUser');
-            const loginPass = document.getElementById('loginPass');
-            const loginBtn = document.getElementById('loginBtn');
-            const loginError = document.getElementById('loginError');
-            const goToRegister = document.getElementById('goToRegister');
-            const goToLogin = document.getElementById('goToLogin');
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const userTab = document.getElementById('userTab');
+        const dashboardTab = document.getElementById('dashboardTab');
+        const adminTab = document.getElementById('adminTab');
 
-            const regUser = document.getElementById('regUser');
-            const regName = document.getElementById('regName');
-            const regPass = document.getElementById('regPass');
-            const registerBtn = document.getElementById('registerBtn');
-            const registerError = document.getElementById('registerError');
-            const registerSuccess = document.getElementById('registerSuccess');
-            const logoutBtn = document.getElementById('logoutBtn');
+        const userName = document.getElementById('userName');
+        const cardImage = document.getElementById('cardImage');
+        const imagePreview = document.getElementById('imagePreview');
+        const requestedSkin = document.getElementById('requestedSkin');
+        const danaNumber = document.getElementById('danaNumber');
+        const submitBtn = document.getElementById('submitBtn');
+        const successMsg = document.getElementById('successMsg');
 
-            const tabBtns = document.querySelectorAll('.tab-btn');
-            const userTab = document.getElementById('userTab');
-            const dashboardTab = document.getElementById('dashboardTab');
-            const adminTab = document.getElementById('adminTab');
+        const userSaldo = document.getElementById('userSaldo');
+        const saldoDetail = document.getElementById('saldoDetail');
+        const saldoNotif = document.getElementById('saldoNotif');
+        const walletOptions = document.querySelectorAll('.wallet-option');
+        const wdName = document.getElementById('wdName');
+        const wdAccount = document.getElementById('wdAccount');
+        const wdAmount = document.getElementById('wdAmount');
+        const wdSubmitBtn = document.getElementById('wdSubmitBtn');
+        const wdSuccessMsg = document.getElementById('wdSuccessMsg');
+        const wdError = document.getElementById('wdError');
+        let selectedWallet = 'dana';
 
-            const userName = document.getElementById('userName');
-            const cardImage = document.getElementById('cardImage');
-            const imagePreview = document.getElementById('imagePreview');
-            const requestedSkin = document.getElementById('requestedSkin');
-            const danaNumber = document.getElementById('danaNumber');
-            const submitBtn = document.getElementById('submitBtn');
-            const successMsg = document.getElementById('successMsg');
+        const priceChartCanvas = document.getElementById('priceChart');
+        const monitorChartCanvas = document.getElementById('monitorChart');
+        const monitorPrice = document.getElementById('monitorPrice');
+        const priceChange = document.getElementById('priceChange');
 
-            const userSaldo = document.getElementById('userSaldo');
-            const saldoDetail = document.getElementById('saldoDetail');
-            const saldoNotif = document.getElementById('saldoNotif');
-            const walletOptions = document.querySelectorAll('.wallet-option');
-            const wdName = document.getElementById('wdName');
-            const wdAccount = document.getElementById('wdAccount');
-            const wdAmount = document.getElementById('wdAmount');
-            const wdSubmitBtn = document.getElementById('wdSubmitBtn');
-            const wdSuccessMsg = document.getElementById('wdSuccessMsg');
-            const wdError = document.getElementById('wdError');
-            let selectedWallet = 'dana';
+        const adminLoginArea = document.getElementById('adminLoginArea');
+        const adminPassword = document.getElementById('adminPassword');
+        const adminLoginBtn = document.getElementById('adminLoginBtn');
+        const adminDashboard = document.getElementById('adminDashboard');
+        const submissionsList = document.getElementById('submissionsList');
+        const wdList = document.getElementById('wdList');
+        const totalSubs = document.getElementById('totalSubs');
+        const pendingSubs = document.getElementById('pendingSubs');
+        const totalWD = document.getElementById('totalWD');
+        const subCount = document.getElementById('subCount');
 
-            const priceChartCanvas = document.getElementById('priceChart');
-            const monitorChartCanvas = document.getElementById('monitorChart');
-            const monitorPrice = document.getElementById('monitorPrice');
-            const priceChange = document.getElementById('priceChange');
+        let currentUser = null;
+        let lastSaldo = 0;
+        let allSubmissions = [];
+        let allWithdrawals = [];
 
-            const adminLoginArea = document.getElementById('adminLoginArea');
-            const adminPassword = document.getElementById('adminPassword');
-            const adminLoginBtn = document.getElementById('adminLoginBtn');
-            const adminDashboard = document.getElementById('adminDashboard');
-            const submissionsList = document.getElementById('submissionsList');
-            const wdList = document.getElementById('wdList');
-            const totalSubs = document.getElementById('totalSubs');
-            const pendingSubs = document.getElementById('pendingSubs');
-            const totalWD = document.getElementById('totalWD');
-            const subCount = document.getElementById('subCount');
+        // ============================================================
+        // UTILITY
+        // ============================================================
+        function formatRupiah(amount) {
+            return 'Rp ' + amount.toLocaleString('id-ID');
+        }
 
-            let currentUser = null;
-            let lastSaldo = 0;
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
 
-            // ======== UTILITY ========
-            function getSaldo(username) {
-                const subs = getSubmissions();
-                const approved = subs.filter(s => s.username === username && s.status === 'approved');
-                const totalEarned = approved.reduce((sum, s) => sum + (SKIN_PRICES[s.skinType] || 0), 0);
-                const wds = getWithdrawals();
-                const wdApproved = wds.filter(w => w.username === username && w.status === 'approved');
-                const totalWDed = wdApproved.reduce((sum, w) => sum + w.amount, 0);
-                return totalEarned - totalWDed;
-            }
+        function showError(el, msg) {
+            el.textContent = msg;
+            el.classList.add('show');
+            setTimeout(() => el.classList.remove('show'), 5000);
+        }
 
-            function getApprovedCount(username) {
-                const subs = getSubmissions();
-                return subs.filter(s => s.username === username && s.status === 'approved').length;
-            }
+        function showSuccess(el, msg) {
+            el.textContent = msg;
+            el.classList.add('show');
+            setTimeout(() => el.classList.remove('show'), 5000);
+        }
 
-            function getPendingCount() {
-                const subs = getSubmissions();
-                return subs.filter(s => s.status === 'pending').length;
-            }
+        function generateId() {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2, 6);
+        }
 
-            function formatRupiah(amount) {
-                return 'Rp ' + amount.toLocaleString('id-ID');
-            }
+        // ============================================================
+        // SALDO CALCULATION (dari Firebase)
+        // ============================================================
+        function getSaldo(username) {
+            const approved = allSubmissions.filter(s =>
+                s.username === username && s.status === 'approved'
+            );
+            const totalEarned = approved.reduce((sum, s) => sum + (SKIN_PRICES[s.skinType] || 0), 0);
+            const wdApproved = allWithdrawals.filter(w =>
+                w.username === username && w.status === 'approved'
+            );
+            const totalWDed = wdApproved.reduce((sum, w) => sum + w.amount, 0);
+            return totalEarned - totalWDed;
+        }
 
-            function escapeHtml(text) {
-                const div = document.createElement('div');
-                div.textContent = text;
-                return div.innerHTML;
-            }
+        function getApprovedCount(username) {
+            return allSubmissions.filter(s => s.username === username && s.status === 'approved').length;
+        }
 
-            function showError(el, msg) {
-                el.textContent = msg;
-                el.classList.add('show');
-                setTimeout(() => el.classList.remove('show'), 5000);
-            }
+        function getPendingCount() {
+            return allSubmissions.filter(s => s.status === 'pending').length;
+        }
 
-            function showSuccess(el, msg) {
-                el.textContent = msg;
-                el.classList.add('show');
-                setTimeout(() => el.classList.remove('show'), 5000);
-            }
-
-            // ======== AUTH ========
-            function login(username, password) {
-                const users = getUsers();
-                if (!users[username]) { showError(loginError, 'Username tidak ditemukan!'); return false; }
-                if (users[username].password !== password) { showError(loginError, 'Password salah!'); return false; }
-                currentUser = users[username];
-                currentUser.username = username;
+        // ============================================================
+        // AUTH
+        // ============================================================
+        async function login(username, password) {
+            try {
+                const snapshot = await usersRef.child(username).once('value');
+                const data = snapshot.val();
+                if (!data) {
+                    showError(loginError, 'Username tidak ditemukan!');
+                    return false;
+                }
+                if (data.password !== password) {
+                    showError(loginError, 'Password salah!');
+                    return false;
+                }
+                currentUser = { username: username, ...data };
                 localStorage.setItem('amoy_session', JSON.stringify({ username: username }));
-                enterApp();
+                await enterApp();
                 return true;
+            } catch (err) {
+                showError(loginError, 'Error: ' + err.message);
+                return false;
             }
+        }
 
-            function register(username, name, password) {
-                const users = getUsers();
-                if (users[username]) { showError(registerError, 'Username sudah dipakai!'); return false; }
-                if (username.length < 3) { showError(registerError, 'Username minimal 3 karakter!'); return false; }
-                if (password.length < 4) { showError(registerError, 'Password minimal 4 karakter!'); return false; }
-                if (!name.trim()) { showError(registerError, 'Nama harus diisi!'); return false; }
-                users[username] = { name: name.trim(), password: password };
-                saveUsers(users);
+        async function register(username, name, password) {
+            try {
+                const snapshot = await usersRef.child(username).once('value');
+                if (snapshot.exists()) {
+                    showError(registerError, 'Username sudah dipakai!');
+                    return false;
+                }
+                if (username.length < 3) {
+                    showError(registerError, 'Username minimal 3 karakter!');
+                    return false;
+                }
+                if (password.length < 4) {
+                    showError(registerError, 'Password minimal 4 karakter!');
+                    return false;
+                }
+                if (!name.trim()) {
+                    showError(registerError, 'Nama harus diisi!');
+                    return false;
+                }
+                await usersRef.child(username).set({
+                    name: name.trim(),
+                    password: password
+                });
                 showSuccess(registerSuccess, 'Akun berhasil dibuat! Silakan login.');
                 setTimeout(() => {
                     registerBox.style.display = 'none';
@@ -1259,666 +1323,735 @@
                     registerSuccess.classList.remove('show');
                 }, 1500);
                 return true;
-            }
-
-            function enterApp() {
-                authContainer.style.display = 'none';
-                mainApp.style.display = 'block';
-                userInfoBar.style.display = 'flex';
-                displayUsername.textContent = currentUser.name || currentUser.username;
-                userName.value = currentUser.name || currentUser.username;
-                updateSaldo(true);
-                renderCharts();
-                adminDashboard.style.display = 'none';
-                adminLoginArea.style.display = 'flex';
-                updatePendingBadge();
-            }
-
-            function logout() {
-                localStorage.removeItem('amoy_session');
-                currentUser = null;
-                authContainer.style.display = 'block';
-                mainApp.style.display = 'none';
-                userInfoBar.style.display = 'none';
-                loginBox.style.display = 'block';
-                registerBox.style.display = 'none';
-                loginUser.value = '';
-                loginPass.value = '';
-                loginError.classList.remove('show');
-                adminDashboard.style.display = 'none';
-                adminLoginArea.style.display = 'flex';
-                document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-                userTab.classList.add('active');
-                tabBtns.forEach(b => b.classList.remove('active'));
-                document.querySelector('.tab-btn[data-tab="userTab"]').classList.add('active');
-                if (window._adminInterval) { clearInterval(window._adminInterval);
-                    window._adminInterval = null; }
-            }
-
-            function updateSaldo(animate = false) {
-                if (!currentUser) return;
-                const saldo = getSaldo(currentUser.username);
-                const count = getApprovedCount(currentUser.username);
-                userSaldo.textContent = formatRupiah(saldo);
-                saldoDetail.textContent = `${count} skin approved`;
-
-                if (saldo > lastSaldo && animate) {
-                    const diff = saldo - lastSaldo;
-                    saldoNotif.textContent = `+${formatRupiah(diff)}`;
-                    saldoNotif.classList.add('show');
-                    userSaldo.classList.add('pulse');
-                    setTimeout(() => {
-                        saldoNotif.classList.remove('show');
-                        userSaldo.classList.remove('pulse');
-                    }, 3000);
-                }
-                lastSaldo = saldo;
-            }
-
-            function updatePendingBadge() {
-                const pending = getPendingCount();
-                const badge = document.getElementById('adminLiveBadge');
-                if (pending > 0) {
-                    badge.textContent = `${pending} pending`;
-                    badge.style.background = '#ff4444';
-                    badge.classList.add('pending-badge');
-                } else {
-                    badge.textContent = 'LIVE';
-                    badge.style.background = '#4CAF50';
-                    badge.classList.remove('pending-badge');
-                }
-            }
-
-            // ======== AUTH EVENTS ========
-            loginBtn.addEventListener('click', () => {
-                const username = loginUser.value.trim();
-                const password = loginPass.value.trim();
-                if (!username || !password) { showError(loginError, 'Isi username dan password!'); return; }
-                login(username, password);
-            });
-            loginPass.addEventListener('keypress', e => { if (e.key === 'Enter') loginBtn.click(); });
-
-            registerBtn.addEventListener('click', () => {
-                const username = regUser.value.trim();
-                const name = regName.value.trim();
-                const password = regPass.value.trim();
-                register(username, name, password);
-            });
-            regPass.addEventListener('keypress', e => { if (e.key === 'Enter') registerBtn.click(); });
-
-            goToRegister.addEventListener('click', e => {
-                e.preventDefault();
-                loginBox.style.display = 'none';
-                registerBox.style.display = 'block';
-                loginError.classList.remove('show');
-                registerError.classList.remove('show');
-                registerSuccess.classList.remove('show');
-            });
-            goToLogin.addEventListener('click', e => {
-                e.preventDefault();
-                registerBox.style.display = 'none';
-                loginBox.style.display = 'block';
-                loginError.classList.remove('show');
-                registerError.classList.remove('show');
-                registerSuccess.classList.remove('show');
-            });
-
-            logoutBtn.addEventListener('click', logout);
-
-            // Restore session
-            function restoreSession() {
-                const saved = localStorage.getItem('amoy_session');
-                if (saved) {
-                    try {
-                        const data = JSON.parse(saved);
-                        const users = getUsers();
-                        if (users[data.username]) {
-                            currentUser = users[data.username];
-                            currentUser.username = data.username;
-                            enterApp();
-                            return true;
-                        }
-                    } catch (e) {}
-                }
+            } catch (err) {
+                showError(registerError, 'Error: ' + err.message);
                 return false;
             }
+        }
 
-            // ======== PREVIEW IMAGE ========
-            cardImage.addEventListener('change', function(e) {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(ev) {
-                        imagePreview.src = ev.target.result;
-                        imagePreview.classList.add('show');
-                    };
-                    reader.readAsDataURL(file);
-                } else {
-                    imagePreview.classList.remove('show');
+        async function enterApp() {
+            authContainer.style.display = 'none';
+            mainApp.style.display = 'block';
+            userInfoBar.style.display = 'flex';
+            displayUsername.textContent = currentUser.name || currentUser.username;
+            userName.value = currentUser.name || currentUser.username;
+
+            // Subscribe ke data submissions & withdrawals
+            setupRealtimeListeners();
+
+            // Tunggu data pertama
+            await new Promise(resolve => {
+                const check = setInterval(() => {
+                    if (allSubmissions.length > 0 || document.querySelector('.empty-state')) {
+                        clearInterval(check);
+                        resolve();
+                    }
+                }, 500);
+                setTimeout(resolve, 3000);
+            });
+
+            updateSaldo(true);
+            renderCharts();
+            adminDashboard.style.display = 'none';
+            adminLoginArea.style.display = 'flex';
+            updatePendingBadge();
+        }
+
+        function logout() {
+            localStorage.removeItem('amoy_session');
+            currentUser = null;
+            authContainer.style.display = 'block';
+            mainApp.style.display = 'none';
+            userInfoBar.style.display = 'none';
+            loginBox.style.display = 'block';
+            registerBox.style.display = 'none';
+            loginUser.value = '';
+            loginPass.value = '';
+            loginError.classList.remove('show');
+            adminDashboard.style.display = 'none';
+            adminLoginArea.style.display = 'flex';
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+            userTab.classList.add('active');
+            tabBtns.forEach(b => b.classList.remove('active'));
+            document.querySelector('.tab-btn[data-tab="userTab"]').classList.add('active');
+            // Detach listeners
+            if (window._subListener) { window._subListener(); }
+            if (window._wdListener) { window._wdListener(); }
+        }
+
+        // ============================================================
+        // REALTIME LISTENERS (FIREBASE)
+        // ============================================================
+        function setupRealtimeListeners() {
+            // Submissions
+            if (window._subListener) window._subListener();
+            window._subListener = submissionsRef.on('value', (snapshot) => {
+                const data = snapshot.val();
+                allSubmissions = data ? Object.values(data) : [];
+                // Update UI
+                if (currentUser) {
+                    updateSaldo();
+                    updatePendingBadge();
+                }
+                if (adminDashboard.style.display === 'block') {
+                    renderAdminSubmissions();
+                }
+                // Update dashboard jika user melihat dashboard
+                if (document.getElementById('dashboardTab').classList.contains('active')) {
+                    // update saldo done
                 }
             });
 
-            // ======== SUBMIT ========
-            submitBtn.addEventListener('click', function() {
-                if (!currentUser) { alert('Silakan login dulu!'); return; }
-                const name = userName.value.trim();
-                const file = cardImage.files[0];
-                const dana = danaNumber.value.trim();
-                const reqSkin = requestedSkin.value;
-
-                if (!name) { alert('Isi nama kamu!'); userName.focus(); return; }
-                if (!file) { alert('Upload foto kartu!'); return; }
-                if (!dana) { alert('Masukkan nomor Dana!'); danaNumber.focus(); return; }
-                if (!/^\d{10,15}$/.test(dana.replace(/\s/g, ''))) {
-                    alert('Nomor Dana tidak valid (10-15 digit).');
-                    return;
+            // Withdrawals
+            if (window._wdListener) window._wdListener();
+            window._wdListener = withdrawalsRef.on('value', (snapshot) => {
+                const data = snapshot.val();
+                allWithdrawals = data ? Object.values(data) : [];
+                if (currentUser) {
+                    updateSaldo();
                 }
+                if (adminDashboard.style.display === 'block') {
+                    renderAdminWD();
+                }
+            });
+        }
 
+        // ============================================================
+        // UPDATE UI
+        // ============================================================
+        function updateSaldo(animate = false) {
+            if (!currentUser) return;
+            const saldo = getSaldo(currentUser.username);
+            const count = getApprovedCount(currentUser.username);
+            userSaldo.textContent = formatRupiah(saldo);
+            saldoDetail.textContent = `${count} skin approved`;
+
+            if (saldo > lastSaldo && animate) {
+                const diff = saldo - lastSaldo;
+                saldoNotif.textContent = `+${formatRupiah(diff)}`;
+                saldoNotif.classList.add('show');
+                userSaldo.classList.add('pulse');
+                setTimeout(() => {
+                    saldoNotif.classList.remove('show');
+                    userSaldo.classList.remove('pulse');
+                }, 3000);
+            }
+            lastSaldo = saldo;
+        }
+
+        function updatePendingBadge() {
+            const pending = getPendingCount();
+            const badge = document.getElementById('adminLiveBadge');
+            if (pending > 0) {
+                badge.textContent = `${pending} pending`;
+                badge.style.background = '#ff4444';
+                badge.classList.add('pending-badge');
+            } else {
+                badge.textContent = 'LIVE';
+                badge.style.background = '#4CAF50';
+                badge.classList.remove('pending-badge');
+            }
+        }
+
+        // ============================================================
+        // AUTH EVENTS
+        // ============================================================
+        loginBtn.addEventListener('click', () => {
+            const username = loginUser.value.trim();
+            const password = loginPass.value.trim();
+            if (!username || !password) { showError(loginError, 'Isi username dan password!'); return; }
+            login(username, password);
+        });
+        loginPass.addEventListener('keypress', e => { if (e.key === 'Enter') loginBtn.click(); });
+
+        registerBtn.addEventListener('click', () => {
+            const username = regUser.value.trim();
+            const name = regName.value.trim();
+            const password = regPass.value.trim();
+            register(username, name, password);
+        });
+        regPass.addEventListener('keypress', e => { if (e.key === 'Enter') registerBtn.click(); });
+
+        goToRegister.addEventListener('click', e => {
+            e.preventDefault();
+            loginBox.style.display = 'none';
+            registerBox.style.display = 'block';
+            loginError.classList.remove('show');
+            registerError.classList.remove('show');
+            registerSuccess.classList.remove('show');
+        });
+        goToLogin.addEventListener('click', e => {
+            e.preventDefault();
+            registerBox.style.display = 'none';
+            loginBox.style.display = 'block';
+            loginError.classList.remove('show');
+            registerError.classList.remove('show');
+            registerSuccess.classList.remove('show');
+        });
+
+        logoutBtn.addEventListener('click', logout);
+
+        // Restore session
+        async function restoreSession() {
+            const saved = localStorage.getItem('amoy_session');
+            if (saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    const snapshot = await usersRef.child(data.username).once('value');
+                    const userData = snapshot.val();
+                    if (userData) {
+                        currentUser = { username: data.username, ...userData };
+                        await enterApp();
+                        return true;
+                    }
+                } catch (e) {
+                    console.log('Session restore error:', e);
+                }
+            }
+            return false;
+        }
+
+        // ============================================================
+        // PREVIEW IMAGE
+        // ============================================================
+        cardImage.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
                 const reader = new FileReader();
                 reader.onload = function(ev) {
-                    const submission = {
-                        id: generateId(),
-                        username: currentUser.username,
-                        name: name,
-                        image: ev.target.result,
-                        dana: dana,
-                        requestedSkin: reqSkin,
-                        skinType: reqSkin,
-                        status: 'pending',
-                        timestamp: new Date().toISOString()
-                    };
-                    const subs = getSubmissions();
-                    subs.push(submission);
-                    saveSubmissions(subs);
+                    imagePreview.src = ev.target.result;
+                    imagePreview.classList.add('show');
+                };
+                reader.readAsDataURL(file);
+            } else {
+                imagePreview.classList.remove('show');
+            }
+        });
 
+        // ============================================================
+        // SUBMIT KIRIMAN
+        // ============================================================
+        submitBtn.addEventListener('click', async function() {
+            if (!currentUser) { alert('Silakan login dulu!'); return; }
+            const name = userName.value.trim();
+            const file = cardImage.files[0];
+            const dana = danaNumber.value.trim();
+            const reqSkin = requestedSkin.value;
+
+            if (!name) { alert('Isi nama kamu!'); userName.focus(); return; }
+            if (!file) { alert('Upload foto kartu!'); return; }
+            if (!dana) { alert('Masukkan nomor Dana!'); danaNumber.focus(); return; }
+            if (!/^\d{10,15}$/.test(dana.replace(/\s/g, ''))) {
+                alert('Nomor Dana tidak valid (10-15 digit).');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = async function(ev) {
+                const submission = {
+                    id: generateId(),
+                    username: currentUser.username,
+                    name: name,
+                    image: ev.target.result,
+                    dana: dana,
+                    requestedSkin: reqSkin,
+                    skinType: reqSkin,
+                    status: 'pending',
+                    timestamp: new Date().toISOString()
+                };
+                try {
+                    await submissionsRef.push(submission);
                     userName.value = '';
                     cardImage.value = '';
                     imagePreview.classList.remove('show');
                     danaNumber.value = '';
                     successMsg.classList.add('show');
                     setTimeout(() => successMsg.classList.remove('show'), 5000);
-
-                    if (adminDashboard.style.display !== 'none') renderAdmin();
-                    updatePendingBadge();
-                };
-                reader.readAsDataURL(file);
-            });
-
-            // ======== WD ========
-            walletOptions.forEach(opt => {
-                opt.addEventListener('click', function() {
-                    walletOptions.forEach(o => o.classList.remove('selected'));
-                    this.classList.add('selected');
-                    selectedWallet = this.dataset.wallet;
-                });
-            });
-            document.querySelector('.wallet-option.dana').classList.add('selected');
-
-            wdSubmitBtn.addEventListener('click', function() {
-                if (!currentUser) { alert('Login dulu!'); return; }
-                const name = wdName.value.trim();
-                const account = wdAccount.value.trim();
-                const amount = parseInt(wdAmount.value.trim());
-
-                if (!name) { alert('Nama penerima harus diisi!'); return; }
-                if (!account) { alert('Nomor e-wallet harus diisi!'); return; }
-                if (!amount || amount < 10000) { alert('Minimal WD Rp 10.000'); return; }
-                if (amount % 1000 !== 0) { alert('Jumlah harus kelipatan 1.000'); return; }
-
-                const saldo = getSaldo(currentUser.username);
-                if (amount > saldo) {
-                    wdError.textContent = `Saldo tidak cukup! Saldo: ${formatRupiah(saldo)}`;
-                    wdError.classList.add('show');
-                    setTimeout(() => wdError.classList.remove('show'), 5000);
-                    return;
+                } catch (err) {
+                    alert('Gagal kirim: ' + err.message);
                 }
+            };
+            reader.readAsDataURL(file);
+        });
 
-                const wdRequest = {
-                    id: generateId(),
-                    username: currentUser.username,
-                    name: name,
-                    method: selectedWallet,
-                    account: account,
-                    amount: amount,
-                    status: 'pending',
-                    timestamp: new Date().toISOString()
-                };
-                const wds = getWithdrawals();
-                wds.push(wdRequest);
-                saveWithdrawals(wds);
+        // ============================================================
+        // WD
+        // ============================================================
+        walletOptions.forEach(opt => {
+            opt.addEventListener('click', function() {
+                walletOptions.forEach(o => o.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedWallet = this.dataset.wallet;
+            });
+        });
+        document.querySelector('.wallet-option.dana').classList.add('selected');
 
+        wdSubmitBtn.addEventListener('click', async function() {
+            if (!currentUser) { alert('Login dulu!'); return; }
+            const name = wdName.value.trim();
+            const account = wdAccount.value.trim();
+            const amount = parseInt(wdAmount.value.trim());
+
+            if (!name) { alert('Nama penerima harus diisi!'); return; }
+            if (!account) { alert('Nomor e-wallet harus diisi!'); return; }
+            if (!amount || amount < 10000) { alert('Minimal WD Rp 10.000'); return; }
+            if (amount % 1000 !== 0) { alert('Jumlah harus kelipatan 1.000'); return; }
+
+            const saldo = getSaldo(currentUser.username);
+            if (amount > saldo) {
+                wdError.textContent = `Saldo tidak cukup! Saldo: ${formatRupiah(saldo)}`;
+                wdError.classList.add('show');
+                setTimeout(() => wdError.classList.remove('show'), 5000);
+                return;
+            }
+
+            const wdRequest = {
+                id: generateId(),
+                username: currentUser.username,
+                name: name,
+                method: selectedWallet,
+                account: account,
+                amount: amount,
+                status: 'pending',
+                timestamp: new Date().toISOString()
+            };
+            try {
+                await withdrawalsRef.push(wdRequest);
                 wdAccount.value = '';
                 wdAmount.value = '';
                 showSuccess(wdSuccessMsg, '✅ Permintaan WD dikirim! Tunggu approve admin.');
-
                 updateSaldo();
-                if (adminDashboard.style.display !== 'none') renderAdmin();
-            });
+            } catch (err) {
+                alert('Gagal WD: ' + err.message);
+            }
+        });
 
-            // ======== ADMIN ========
-            adminLoginBtn.addEventListener('click', function() {
-                if (adminPassword.value.trim() === ADMIN_PASSWORD) {
-                    adminLoginArea.style.display = 'none';
-                    adminDashboard.style.display = 'block';
-                    renderAdmin();
-                    if (window._adminInterval) clearInterval(window._adminInterval);
-                    window._adminInterval = setInterval(() => {
-                        if (adminDashboard.style.display === 'block') {
-                            renderAdmin();
-                            updatePendingBadge();
-                        }
-                    }, 1000);
-                } else {
-                    alert('Password admin salah!');
-                    adminPassword.value = '';
-                    adminPassword.focus();
-                }
-            });
-            adminPassword.addEventListener('keypress', e => { if (e.key === 'Enter') adminLoginBtn.click(); });
+        // ============================================================
+        // ADMIN
+        // ============================================================
+        adminLoginBtn.addEventListener('click', function() {
+            if (adminPassword.value.trim() === 'admin123') {
+                adminLoginArea.style.display = 'none';
+                adminDashboard.style.display = 'block';
+                renderAdminSubmissions();
+                renderAdminWD();
+            } else {
+                alert('Password admin salah!');
+                adminPassword.value = '';
+                adminPassword.focus();
+            }
+        });
+        adminPassword.addEventListener('keypress', e => { if (e.key === 'Enter') adminLoginBtn.click(); });
 
-            function renderAdmin() {
-                const subs = getSubmissions();
-                const wds = getWithdrawals();
+        function renderAdminSubmissions() {
+            const subs = allSubmissions;
+            totalSubs.textContent = subs.length;
+            pendingSubs.textContent = subs.filter(s => s.status === 'pending').length;
+            if (subCount) subCount.textContent = `(${subs.length})`;
 
-                totalSubs.textContent = subs.length;
-                pendingSubs.textContent = subs.filter(s => s.status === 'pending').length;
-                totalWD.textContent = wds.length;
-                if (subCount) subCount.textContent = `(${subs.length})`;
-
-                // ===== SUBMISSIONS =====
-                if (subs.length === 0) {
-                    submissionsList.innerHTML = `<div class="empty-state">Belum ada kiriman.</div>`;
-                } else {
-                    let html = '';
-                    // Urutkan dari yang terbaru
-                    const sorted = [...subs].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-                    sorted.forEach((item, index) => {
-                        const statusClass = item.status === 'pending' ? 'pending' :
-                            item.status === 'approved' ? 'approved' : 'rejected';
-                        const statusLabel = item.status === 'pending' ? '⏳ Pending' :
-                            item.status === 'approved' ? '✅ Approved' : '❌ Rejected';
-                        const skinLabel = SKIN_LABELS[item.skinType] || item.skinType;
-                        const reqLabel = SKIN_LABELS[item.requestedSkin] || item.requestedSkin || 'Basic';
-                        const price = SKIN_PRICES[item.skinType] || 0;
-
-                        let actions = '';
-                        if (item.status === 'pending') {
-                            actions = `
-                                <div class="action-group">
-                                    <select class="skin-select-admin" data-id="${item.id}">
-                                        ${Object.entries(SKIN_LABELS).map(([val, label]) => 
-                                            `<option value="${val}" ${val===item.skinType?'selected':''}>${label}</option>`
-                                        ).join('')}
-                                    </select>
-                                    <button class="action-btn approve" data-id="${item.id}" data-action="approve"><i class="fas fa-check"></i> ACC</button>
-                                    <button class="action-btn reject" data-id="${item.id}" data-action="reject"><i class="fas fa-times"></i></button>
-                                    <button class="action-btn delete-btn" data-id="${item.id}" data-action="delete"><i class="fas fa-trash"></i></button>
-                                </div>
-                            `;
-                        } else {
-                            actions = `
-                                <span style="color:rgba(255,255,255,0.3); font-size:13px;">${statusLabel}</span>
-                                <button class="action-btn delete-btn" data-id="${item.id}" data-action="delete"><i class="fas fa-trash"></i></button>
-                            `;
-                        }
-
-                        const userInfo = item.username ? `@${escapeHtml(item.username)}` : '';
-                        // Cek apakah image base64 valid
-                        const imgSrc = item.image && item.image.startsWith('data:image') ? item.image : 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="70" height="70"%3E%3Crect fill="%231a1a2e" width="70" height="70"/%3E%3Ctext x="35" y="40" font-size="12" fill="%23666" text-anchor="middle"%3ENo Image%3C/text%3E%3C/svg%3E';
-
-                        html += `
-                            <div class="submission-item" data-id="${item.id}" data-index="${index}">
-                                <img class="photo-thumb" src="${imgSrc}" alt="Kartu" onclick="window.open('${imgSrc}','_blank')" />
-                                <div class="info">
-                                    <div class="name">${escapeHtml(item.name)} <span style="font-size:13px; color:#aaa;">${userInfo}</span></div>
-                                    <div class="dana">
-                                        <i class="fas fa-phone"></i> Dana: ${escapeHtml(item.dana)} 
-                                        · Request: <span style="color:#ffd700;">${reqLabel}</span>
-                                        · ACC: <strong style="color:#66ff99;">${skinLabel}</strong> (${formatRupiah(price)})
-                                    </div>
-                                    <div class="time">${new Date(item.timestamp).toLocaleString('id-ID')}</div>
-                                </div>
-                                <span class="status-badge ${statusClass}">${statusLabel}</span>
-                                ${actions}
-                            </div>
-                        `;
-                    });
-                    submissionsList.innerHTML = html;
-
-                    // ===== EVENT LISTENERS =====
-                    // Approve
-                    document.querySelectorAll('#submissionsList .action-btn[data-action="approve"]').forEach(btn => {
-                        btn.addEventListener('click', function(e) {
-                            e.stopPropagation();
-                            const id = this.dataset.id;
-                            const container = this.closest('.submission-item');
-                            const select = container.querySelector('.skin-select-admin');
-                            const newSkin = select ? select.value : 'basic';
-                            let subs = getSubmissions();
-                            const sub = subs.find(s => s.id === id);
-                            if (sub && sub.status === 'pending') {
-                                sub.skinType = newSkin;
-                                sub.status = 'approved';
-                                saveSubmissions(subs);
-                                renderAdmin();
-                                updatePendingBadge();
-                                if (currentUser && currentUser.username === sub.username) {
-                                    updateSaldo(true);
-                                }
-                            }
-                        });
-                    });
-
-                    // Reject
-                    document.querySelectorAll('#submissionsList .action-btn[data-action="reject"]').forEach(btn => {
-                        btn.addEventListener('click', function(e) {
-                            e.stopPropagation();
-                            const id = this.dataset.id;
-                            let subs = getSubmissions();
-                            const sub = subs.find(s => s.id === id);
-                            if (sub && sub.status === 'pending') {
-                                sub.status = 'rejected';
-                                saveSubmissions(subs);
-                                renderAdmin();
-                                updatePendingBadge();
-                            }
-                        });
-                    });
-
-                    // Delete (Hapus permanen)
-                    document.querySelectorAll('#submissionsList .action-btn[data-action="delete"]').forEach(btn => {
-                        btn.addEventListener('click', function(e) {
-                            e.stopPropagation();
-                            const id = this.dataset.id;
-                            if (confirm('Hapus kiriman ini secara permanen?')) {
-                                let subs = getSubmissions();
-                                subs = subs.filter(s => s.id !== id);
-                                saveSubmissions(subs);
-                                renderAdmin();
-                                updatePendingBadge();
-                                if (currentUser) updateSaldo();
-                            }
-                        });
-                    });
-                }
-
-                // ===== WD =====
-                if (wds.length === 0) {
-                    wdList.innerHTML = `<div class="empty-state">Belum ada permintaan WD.</div>`;
-                } else {
-                    let html = '';
-                    const sortedWD = [...wds].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-                    sortedWD.forEach(item => {
-                        const statusClass = item.status === 'pending' ? 'pending' :
-                            item.status === 'approved' ? 'approved' : 'rejected';
-                        const statusLabel = item.status === 'pending' ? '⏳ Pending' :
-                            item.status === 'approved' ? '✅ Approved' : '❌ Rejected';
-                        let actions = '';
-                        if (item.status === 'pending') {
-                            actions = `
-                                <button class="action-btn approve" data-id="${item.id}" data-action="approve"><i class="fas fa-check"></i> Approve</button>
-                                <button class="action-btn reject" data-id="${item.id}" data-action="reject"><i class="fas fa-times"></i></button>
-                            `;
-                        } else {
-                            actions = `<span style="color:rgba(255,255,255,0.2);">${statusLabel}</span>`;
-                        }
-                        const methodIcon = item.method === 'dana' ? 'fab fa-google-pay' :
-                            item.method === 'ovo' ? 'fas fa-mobile-alt' : 'fas fa-money-bill-wave';
-                        const userInfo = item.username ? `@${escapeHtml(item.username)}` : '';
-                        html += `
-                            <div class="wd-item" data-id="${item.id}">
-                                <div class="info">
-                                    <div class="name">${escapeHtml(item.name)} ${userInfo} <i class="${methodIcon}" style="color:#ffd700;"></i></div>
-                                    <div class="detail">${escapeHtml(item.account)} · ${formatRupiah(item.amount)}</div>
-                                    <div class="time">${new Date(item.timestamp).toLocaleString('id-ID')}</div>
-                                </div>
-                                <span class="status-badge ${statusClass}">${statusLabel}</span>
-                                ${actions}
-                            </div>
-                        `;
-                    });
-                    wdList.innerHTML = html;
-
-                    document.querySelectorAll('#wdList .action-btn').forEach(btn => {
-                        btn.addEventListener('click', function() {
-                            const id = this.dataset.id;
-                            const action = this.dataset.action;
-                            let wds = getWithdrawals();
-                            const wd = wds.find(w => w.id === id);
-                            if (!wd) return;
-                            if (action === 'approve') {
-                                const saldo = getSaldo(wd.username);
-                                if (wd.amount > saldo) {
-                                    alert('Saldo tidak cukup!');
-                                    return;
-                                }
-                                wd.status = 'approved';
-                                saveWithdrawals(wds);
-                                renderAdmin();
-                                if (currentUser && currentUser.username === wd.username) {
-                                    updateSaldo(true);
-                                }
-                            } else if (action === 'reject') {
-                                wd.status = 'rejected';
-                                saveWithdrawals(wds);
-                                renderAdmin();
-                            }
-                        });
-                    });
-                }
+            if (subs.length === 0) {
+                submissionsList.innerHTML = `<div class="empty-state">Belum ada kiriman.</div>`;
+                return;
             }
 
-            // ======== CHART ========
-            const skinKeys = ['basic', 'epik', 'legend', 'kolektor', 'amoy-pacito', 'amoy-klasik'];
-            const skinColors = {
-                'basic': '#8a8a8a',
-                'epik': '#3b9eff',
-                'legend': '#b44eff',
-                'kolektor': '#ff7b00',
-                'amoy-pacito': '#ffd700',
-                'amoy-klasik': '#66ff99'
-            };
+            let html = '';
+            const sorted = [...subs].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            sorted.forEach((item) => {
+                const statusClass = item.status === 'pending' ? 'pending' :
+                    item.status === 'approved' ? 'approved' : 'rejected';
+                const statusLabel = item.status === 'pending' ? '⏳ Pending' :
+                    item.status === 'approved' ? '✅ Approved' : '❌ Rejected';
+                const skinLabel = SKIN_LABELS[item.skinType] || item.skinType;
+                const reqLabel = SKIN_LABELS[item.requestedSkin] || item.requestedSkin || 'Basic';
+                const price = SKIN_PRICES[item.skinType] || 0;
 
-            function generateHistory(skinType, days = 12) {
-                const basePrice = SKIN_PRICES[skinType] || 1000;
-                const history = [];
-                let price = basePrice;
-                for (let i = 0; i < days; i++) {
-                    const change = (Math.random() * 0.24) - 0.14;
-                    price = price * (1 + change);
-                    price = Math.min(Math.max(price, 500), 10000);
-                    price = Math.round(price / 100) * 100;
-                    history.push(price);
+                let actions = '';
+                if (item.status === 'pending') {
+                    actions = `
+                        <div class="action-group">
+                            <select class="skin-select-admin" data-id="${item.id}">
+                                ${Object.entries(SKIN_LABELS).map(([val, label]) => 
+                                    `<option value="${val}" ${val===item.skinType?'selected':''}>${label}</option>`
+                                ).join('')}
+                            </select>
+                            <button class="action-btn approve" data-id="${item.id}" data-action="approve"><i class="fas fa-check"></i> ACC</button>
+                            <button class="action-btn reject" data-id="${item.id}" data-action="reject"><i class="fas fa-times"></i></button>
+                            <button class="action-btn delete-btn" data-id="${item.id}" data-action="delete"><i class="fas fa-trash"></i></button>
+                        </div>
+                    `;
+                } else {
+                    actions = `
+                        <span style="color:rgba(255,255,255,0.3); font-size:13px;">${statusLabel}</span>
+                        <button class="action-btn delete-btn" data-id="${item.id}" data-action="delete"><i class="fas fa-trash"></i></button>
+                    `;
                 }
-                return history;
+
+                const userInfo = item.username ? `@${escapeHtml(item.username)}` : '';
+                const imgSrc = item.image && item.image.startsWith('data:image') ?
+                    item.image :
+                    'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="70" height="70"%3E%3Crect fill="%231a1a2e" width="70" height="70"/%3E%3Ctext x="35" y="40" font-size="12" fill="%23666" text-anchor="middle"%3ENo Image%3C/text%3E%3C/svg%3E';
+
+                html += `
+                    <div class="submission-item" data-id="${item.id}">
+                        <img class="photo-thumb" src="${imgSrc}" alt="Kartu" onclick="window.open('${imgSrc}','_blank')" />
+                        <div class="info">
+                            <div class="name">${escapeHtml(item.name)} <span style="font-size:13px; color:#aaa;">${userInfo}</span></div>
+                            <div class="dana">
+                                <i class="fas fa-phone"></i> Dana: ${escapeHtml(item.dana)} 
+                                · Request: <span style="color:#ffd700;">${reqLabel}</span>
+                                · ACC: <strong style="color:#66ff99;">${skinLabel}</strong> (${formatRupiah(price)})
+                            </div>
+                            <div class="time">${new Date(item.timestamp).toLocaleString('id-ID')}</div>
+                        </div>
+                        <span class="status-badge ${statusClass}">${statusLabel}</span>
+                        ${actions}
+                    </div>
+                `;
+            });
+            submissionsList.innerHTML = html;
+
+            // Event listeners
+            document.querySelectorAll('#submissionsList .action-btn[data-action="approve"]').forEach(btn => {
+                btn.addEventListener('click', async function() {
+                    const id = this.dataset.id;
+                    const container = this.closest('.submission-item');
+                    const select = container.querySelector('.skin-select-admin');
+                    const newSkin = select ? select.value : 'basic';
+                    try {
+                        const snapshot = await submissionsRef.once('value');
+                        const data = snapshot.val();
+                        const key = Object.keys(data).find(k => data[k].id === id);
+                        if (key) {
+                            const sub = data[key];
+                            if (sub.status === 'pending') {
+                                await submissionsRef.child(key).update({
+                                    skinType: newSkin,
+                                    status: 'approved'
+                                });
+                            }
+                        }
+                    } catch (err) {
+                        alert('Error: ' + err.message);
+                    }
+                });
+            });
+
+            document.querySelectorAll('#submissionsList .action-btn[data-action="reject"]').forEach(btn => {
+                btn.addEventListener('click', async function() {
+                    const id = this.dataset.id;
+                    try {
+                        const snapshot = await submissionsRef.once('value');
+                        const data = snapshot.val();
+                        const key = Object.keys(data).find(k => data[k].id === id);
+                        if (key) {
+                            const sub = data[key];
+                            if (sub.status === 'pending') {
+                                await submissionsRef.child(key).update({ status: 'rejected' });
+                            }
+                        }
+                    } catch (err) {
+                        alert('Error: ' + err.message);
+                    }
+                });
+            });
+
+            document.querySelectorAll('#submissionsList .action-btn[data-action="delete"]').forEach(btn => {
+                btn.addEventListener('click', async function() {
+                    const id = this.dataset.id;
+                    if (!confirm('Hapus kiriman ini permanen?')) return;
+                    try {
+                        const snapshot = await submissionsRef.once('value');
+                        const data = snapshot.val();
+                        const key = Object.keys(data).find(k => data[k].id === id);
+                        if (key) {
+                            await submissionsRef.child(key).remove();
+                        }
+                    } catch (err) {
+                        alert('Error: ' + err.message);
+                    }
+                });
+            });
+        }
+
+        function renderAdminWD() {
+            const wds = allWithdrawals;
+            totalWD.textContent = wds.length;
+
+            if (wds.length === 0) {
+                wdList.innerHTML = `<div class="empty-state">Belum ada permintaan WD.</div>`;
+                return;
             }
 
-            let historyData = {};
-            skinKeys.forEach(key => { historyData[key] = generateHistory(key, 12); });
-            let prevKolektorPrice = historyData['kolektor'][historyData['kolektor'].length - 1] || 5000;
+            let html = '';
+            const sorted = [...wds].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            sorted.forEach(item => {
+                const statusClass = item.status === 'pending' ? 'pending' :
+                    item.status === 'approved' ? 'approved' : 'rejected';
+                const statusLabel = item.status === 'pending' ? '⏳ Pending' :
+                    item.status === 'approved' ? '✅ Approved' : '❌ Rejected';
+                let actions = '';
+                if (item.status === 'pending') {
+                    actions = `
+                        <button class="action-btn approve" data-id="${item.id}" data-action="approve"><i class="fas fa-check"></i> Approve</button>
+                        <button class="action-btn reject" data-id="${item.id}" data-action="reject"><i class="fas fa-times"></i></button>
+                    `;
+                } else {
+                    actions = `<span style="color:rgba(255,255,255,0.2);">${statusLabel}</span>`;
+                }
+                const methodIcon = item.method === 'dana' ? 'fab fa-google-pay' :
+                    item.method === 'ovo' ? 'fas fa-mobile-alt' : 'fas fa-money-bill-wave';
+                const userInfo = item.username ? `@${escapeHtml(item.username)}` : '';
+                html += `
+                    <div class="wd-item" data-id="${item.id}">
+                        <div class="info">
+                            <div class="name">${escapeHtml(item.name)} ${userInfo} <i class="${methodIcon}" style="color:#ffd700;"></i></div>
+                            <div class="detail">${escapeHtml(item.account)} · ${formatRupiah(item.amount)}</div>
+                            <div class="time">${new Date(item.timestamp).toLocaleString('id-ID')}</div>
+                        </div>
+                        <span class="status-badge ${statusClass}">${statusLabel}</span>
+                        ${actions}
+                    </div>
+                `;
+            });
+            wdList.innerHTML = html;
 
-            function drawChart(canvas, data, color, showPoints = true) {
-                const ctx = canvas.getContext('2d');
-                const w = canvas.width;
-                const h = canvas.height;
-                ctx.clearRect(0, 0, w, h);
-                if (!data || data.length < 2) return;
-                const max = Math.min(Math.max(...data) * 1.1, 11000);
-                const min = Math.max(Math.min(...data) * 0.9, 400);
-                const range = max - min || 1;
-                const padding = 20;
+            document.querySelectorAll('#wdList .action-btn').forEach(btn => {
+                btn.addEventListener('click', async function() {
+                    const id = this.dataset.id;
+                    const action = this.dataset.action;
+                    try {
+                        const snapshot = await withdrawalsRef.once('value');
+                        const data = snapshot.val();
+                        const key = Object.keys(data).find(k => data[k].id === id);
+                        if (!key) return;
+                        const wd = data[key];
+                        if (action === 'approve') {
+                            const saldo = getSaldo(wd.username);
+                            if (wd.amount > saldo) {
+                                alert('Saldo tidak cukup!');
+                                return;
+                            }
+                            await withdrawalsRef.child(key).update({ status: 'approved' });
+                        } else if (action === 'reject') {
+                            await withdrawalsRef.child(key).update({ status: 'rejected' });
+                        }
+                    } catch (err) {
+                        alert('Error: ' + err.message);
+                    }
+                });
+            });
+        }
 
-                ctx.strokeStyle = 'rgba(255,255,255,0.05)';
-                ctx.lineWidth = 1;
-                ctx.beginPath();
-                ctx.moveTo(padding, padding);
-                ctx.lineTo(padding, h - padding);
-                ctx.lineTo(w - padding, h - padding);
-                ctx.stroke();
+        // ============================================================
+        // CHART
+        // ============================================================
+        const skinKeys = ['basic', 'epik', 'legend', 'kolektor', 'amoy-pacito', 'amoy-klasik'];
+        const skinColors = {
+            'basic': '#8a8a8a',
+            'epik': '#3b9eff',
+            'legend': '#b44eff',
+            'kolektor': '#ff7b00',
+            'amoy-pacito': '#ffd700',
+            'amoy-klasik': '#66ff99'
+        };
 
-                ctx.beginPath();
-                ctx.strokeStyle = color;
-                ctx.lineWidth = 3;
-                ctx.shadowColor = color;
-                ctx.shadowBlur = 10;
-                const stepX = (w - padding * 2) / (data.length - 1);
+        function generateHistory(skinType, days = 12) {
+            const basePrice = SKIN_PRICES[skinType] || 1000;
+            const history = [];
+            let price = basePrice;
+            for (let i = 0; i < days; i++) {
+                const change = (Math.random() * 0.24) - 0.14;
+                price = price * (1 + change);
+                price = Math.min(Math.max(price, 500), 10000);
+                price = Math.round(price / 100) * 100;
+                history.push(price);
+            }
+            return history;
+        }
+
+        let historyData = {};
+        skinKeys.forEach(key => { historyData[key] = generateHistory(key, 12); });
+        let prevKolektorPrice = historyData['kolektor'][historyData['kolektor'].length - 1] || 5000;
+
+        function drawChart(canvas, data, color, showPoints = true) {
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width;
+            const h = canvas.height;
+            ctx.clearRect(0, 0, w, h);
+            if (!data || data.length < 2) return;
+            const max = Math.min(Math.max(...data) * 1.1, 11000);
+            const min = Math.max(Math.min(...data) * 0.9, 400);
+            const range = max - min || 1;
+            const padding = 20;
+
+            ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(padding, padding);
+            ctx.lineTo(padding, h - padding);
+            ctx.lineTo(w - padding, h - padding);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 3;
+            ctx.shadowColor = color;
+            ctx.shadowBlur = 10;
+            const stepX = (w - padding * 2) / (data.length - 1);
+            for (let i = 0; i < data.length; i++) {
+                const x = padding + i * stepX;
+                const y = h - padding - ((data[i] - min) / range) * (h - padding * 2);
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+            ctx.shadowBlur = 0;
+
+            if (showPoints) {
                 for (let i = 0; i < data.length; i++) {
                     const x = padding + i * stepX;
                     const y = h - padding - ((data[i] - min) / range) * (h - padding * 2);
+                    ctx.beginPath();
+                    ctx.arc(x, y, 5, 0, 2 * Math.PI);
+                    ctx.fillStyle = color;
+                    ctx.shadowColor = color;
+                    ctx.shadowBlur = 15;
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                }
+            }
+            const last = data[data.length - 1];
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold 12px Poppins';
+            ctx.textAlign = 'right';
+            ctx.fillText(formatRupiah(last), w - padding, padding + 14);
+        }
+
+        function renderCharts() {
+            const ctx = priceChartCanvas.getContext('2d');
+            const w = priceChartCanvas.width;
+            const h = priceChartCanvas.height;
+            ctx.clearRect(0, 0, w, h);
+
+            const allData = {};
+            skinKeys.forEach(key => { allData[key] = historyData[key] || generateHistory(key, 12); });
+
+            let globalMin = 500,
+                globalMax = 10000;
+            skinKeys.forEach(key => {
+                const d = allData[key];
+                d.forEach(v => {
+                    if (v < globalMin) globalMin = Math.min(globalMin, v);
+                    if (v > globalMax) globalMax = Math.max(globalMax, v);
+                });
+            });
+            globalMin = Math.max(globalMin - 200, 400);
+            globalMax = Math.min(globalMax + 200, 10500);
+            const range = globalMax - globalMin || 1;
+            const padding = 20;
+
+            skinKeys.forEach((key) => {
+                const data = allData[key];
+                const color = skinColors[key];
+                ctx.beginPath();
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 2;
+                ctx.globalAlpha = 0.7;
+                const stepX = (w - padding * 2) / (data.length - 1);
+                for (let i = 0; i < data.length; i++) {
+                    const x = padding + i * stepX;
+                    const y = h - padding - ((data[i] - globalMin) / range) * (h - padding * 2);
                     if (i === 0) ctx.moveTo(x, y);
                     else ctx.lineTo(x, y);
                 }
                 ctx.stroke();
-                ctx.shadowBlur = 0;
-
-                if (showPoints) {
-                    for (let i = 0; i < data.length; i++) {
-                        const x = padding + i * stepX;
-                        const y = h - padding - ((data[i] - min) / range) * (h - padding * 2);
-                        ctx.beginPath();
-                        ctx.arc(x, y, 5, 0, 2 * Math.PI);
-                        ctx.fillStyle = color;
-                        ctx.shadowColor = color;
-                        ctx.shadowBlur = 15;
-                        ctx.fill();
-                        ctx.shadowBlur = 0;
-                    }
-                }
-                const last = data[data.length - 1];
-                ctx.fillStyle = '#fff';
-                ctx.font = 'bold 12px Poppins';
-                ctx.textAlign = 'right';
-                ctx.fillText(formatRupiah(last), w - padding, padding + 14);
-            }
-
-            function renderCharts() {
-                const ctx = priceChartCanvas.getContext('2d');
-                const w = priceChartCanvas.width;
-                const h = priceChartCanvas.height;
-                ctx.clearRect(0, 0, w, h);
-
-                const allData = {};
-                skinKeys.forEach(key => { allData[key] = historyData[key] || generateHistory(key, 12); });
-
-                let globalMin = 500,
-                    globalMax = 10000;
-                skinKeys.forEach(key => {
-                    const d = allData[key];
-                    d.forEach(v => {
-                        if (v < globalMin) globalMin = Math.min(globalMin, v);
-                        if (v > globalMax) globalMax = Math.max(globalMax, v);
-                    });
-                });
-                globalMin = Math.max(globalMin - 200, 400);
-                globalMax = Math.min(globalMax + 200, 10500);
-                const range = globalMax - globalMin || 1;
-                const padding = 20;
-
-                skinKeys.forEach((key) => {
-                    const data = allData[key];
-                    const color = skinColors[key];
-                    ctx.beginPath();
-                    ctx.strokeStyle = color;
-                    ctx.lineWidth = 2;
-                    ctx.globalAlpha = 0.7;
-                    const stepX = (w - padding * 2) / (data.length - 1);
-                    for (let i = 0; i < data.length; i++) {
-                        const x = padding + i * stepX;
-                        const y = h - padding - ((data[i] - globalMin) / range) * (h - padding * 2);
-                        if (i === 0) ctx.moveTo(x, y);
-                        else ctx.lineTo(x, y);
-                    }
-                    ctx.stroke();
-                    ctx.globalAlpha = 1;
-                });
-
-                const legendContainer = document.getElementById('chartLegend');
-                legendContainer.innerHTML = skinKeys.map(key =>
-                    `<span class="legend-item"><span class="dot" style="background:${skinColors[key]};"></span> ${SKIN_LABELS[key]}</span>`
-                ).join('');
-
-                const monData = allData['kolektor'] || generateHistory('kolektor', 12);
-                drawChart(monitorChartCanvas, monData, '#ff7b00', true);
-                const lastPrice = monData[monData.length - 1] || 5000;
-                monitorPrice.textContent = formatRupiah(lastPrice);
-
-                const change = ((lastPrice - prevKolektorPrice) / prevKolektorPrice * 100);
-                const changeText = change >= 0 ? `▲ +${change.toFixed(1)}%` : `▼ ${change.toFixed(1)}%`;
-                priceChange.textContent = changeText;
-                priceChange.className = 'price-change ' + (change >= 0 ? 'trending-up' : 'trending-down');
-                prevKolektorPrice = lastPrice;
-            }
-
-            function updatePrices() {
-                skinKeys.forEach(key => {
-                    const hist = historyData[key];
-                    if (hist && hist.length > 0) {
-                        const last = hist[hist.length - 1];
-                        const change = (Math.random() * 0.24) - 0.16;
-                        let newPrice = last * (1 + change);
-                        newPrice = Math.min(Math.max(newPrice, 500), 10000);
-                        newPrice = Math.round(newPrice / 100) * 100;
-                        hist.push(newPrice);
-                        if (hist.length > 12) hist.shift();
-                    }
-                });
-                renderCharts();
-            }
-
-            // ======== TABS ========
-            tabBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    tabBtns.forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                    const target = this.dataset.tab;
-                    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-                    document.getElementById(target).classList.add('active');
-                    if (target === 'dashboardTab') {
-                        renderCharts();
-                        if (currentUser) updateSaldo();
-                    }
-                    if (target === 'adminTab') {
-                        if (adminDashboard.style.display === 'block') renderAdmin();
-                        updatePendingBadge();
-                    }
-                });
+                ctx.globalAlpha = 1;
             });
 
-            // ======== INIT ========
-            const restored = restoreSession();
+            const legendContainer = document.getElementById('chartLegend');
+            legendContainer.innerHTML = skinKeys.map(key =>
+                `<span class="legend-item"><span class="dot" style="background:${skinColors[key]};"></span> ${SKIN_LABELS[key]}</span>`
+            ).join('');
+
+            const monData = allData['kolektor'] || generateHistory('kolektor', 12);
+            drawChart(monitorChartCanvas, monData, '#ff7b00', true);
+            const lastPrice = monData[monData.length - 1] || 5000;
+            monitorPrice.textContent = formatRupiah(lastPrice);
+
+            const change = ((lastPrice - prevKolektorPrice) / prevKolektorPrice * 100);
+            const changeText = change >= 0 ? `▲ +${change.toFixed(1)}%` : `▼ ${change.toFixed(1)}%`;
+            priceChange.textContent = changeText;
+            priceChange.className = 'price-change ' + (change >= 0 ? 'trending-up' : 'trending-down');
+            prevKolektorPrice = lastPrice;
+        }
+
+        function updatePrices() {
+            skinKeys.forEach(key => {
+                const hist = historyData[key];
+                if (hist && hist.length > 0) {
+                    const last = hist[hist.length - 1];
+                    const change = (Math.random() * 0.24) - 0.16;
+                    let newPrice = last * (1 + change);
+                    newPrice = Math.min(Math.max(newPrice, 500), 10000);
+                    newPrice = Math.round(newPrice / 100) * 100;
+                    hist.push(newPrice);
+                    if (hist.length > 12) hist.shift();
+                }
+            });
+            renderCharts();
+        }
+
+        // ============================================================
+        // TABS
+        // ============================================================
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                tabBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                const target = this.dataset.tab;
+                document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+                document.getElementById(target).classList.add('active');
+                if (target === 'dashboardTab') {
+                    renderCharts();
+                    if (currentUser) updateSaldo();
+                }
+                if (target === 'adminTab') {
+                    if (adminDashboard.style.display === 'block') {
+                        renderAdminSubmissions();
+                        renderAdminWD();
+                    }
+                    updatePendingBadge();
+                }
+            });
+        });
+
+        // ============================================================
+        // INIT
+        // ============================================================
+        async function init() {
+            const restored = await restoreSession();
             if (!restored) {
                 authContainer.style.display = 'block';
                 mainApp.style.display = 'none';
                 loginBox.style.display = 'block';
                 registerBox.style.display = 'none';
-            }
-
-            document.querySelector('.tab-btn[data-tab="userTab"]').classList.add('active');
-            if (!restored) userTab.classList.add('active');
-
-            if (restored) {
-                setTimeout(renderCharts, 300);
-                setTimeout(() => { if (currentUser) updateSaldo(); }, 500);
+                document.querySelector('.tab-btn[data-tab="userTab"]').classList.add('active');
+                userTab.classList.add('active');
             }
 
             setInterval(updatePrices, 5000);
-            setInterval(() => {
-                if (currentUser) {
-                    updateSaldo();
-                    updatePendingBadge();
-                }
-            }, 3000);
 
             document.querySelector('.tab-btn[data-tab="dashboardTab"]').addEventListener('click', function() {
                 setTimeout(renderCharts, 200);
             });
 
-            console.log('🔥 AMOY GACHA KELOTER v3.1 - FIX BUG');
-            console.log('✅ Semua foto sekarang tampil di admin!');
+            console.log('🔥 AMOY GACHA KELOTER v4.0 - FIREBASE');
+            console.log('✅ Semua user terdeteksi admin real-time!');
             console.log('🔑 Admin password: admin123');
-            console.log('🗑️ Admin bisa hapus kiriman');
+            console.log('⚠️ Jangan lupa ganti firebaseConfig dengan punya kamu!');
+        }
 
-        })();
+        init();
     </script>
 </body>
 </html>
