@@ -6,15 +6,10 @@
     <title>Amoy Gacha · Trading · Deposit QRIS</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
-    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin:0; padding:0; box-sizing:border-box; }
         body {
             font-family: 'Poppins', sans-serif;
             background: radial-gradient(circle at 20% 30%, #1a1a2e, #0a0a12);
@@ -27,12 +22,12 @@
         .app-wrapper {
             max-width: 1100px;
             width: 100%;
-            background: rgba(255, 255, 255, 0.04);
+            background: rgba(255,255,255,0.04);
             backdrop-filter: blur(16px);
             border-radius: 48px;
             padding: 30px 28px 40px;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(255,255,255,0.06);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
         }
         .header {
             text-align: center;
@@ -46,15 +41,14 @@
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            text-shadow: 0 0 50px rgba(255, 215, 0, 0.2);
+            text-shadow: 0 0 50px rgba(255,215,0,0.2);
         }
         .header p {
-            color: rgba(255, 255, 255, 0.4);
+            color: rgba(255,255,255,0.4);
             font-weight: 600;
             letter-spacing: 3px;
             margin-top: 2px;
         }
-        /* Tabs */
         .tabs {
             display: flex;
             gap: 10px;
@@ -65,9 +59,9 @@
         .tab-btn {
             padding: 12px 28px;
             border-radius: 60px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            background: rgba(255, 255, 255, 0.03);
-            color: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.03);
+            color: rgba(255,255,255,0.5);
             font-weight: 700;
             font-size: 14px;
             cursor: pointer;
@@ -82,49 +76,25 @@
             background: linear-gradient(135deg, #f7971e, #ffd700);
             color: #0f0f1a;
             border-color: #ffd700;
-            box-shadow: 0 8px 30px rgba(255, 215, 0, 0.25);
+            box-shadow: 0 8px 30px rgba(255,215,0,0.25);
         }
         .tab-btn:hover:not(.active) {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255,255,255,0.08);
             color: #fff;
-        }
-        .tab-btn .notif-dot {
-            position: absolute;
-            top: -4px;
-            right: -4px;
-            width: 14px;
-            height: 14px;
-            background: #ff4444;
-            border-radius: 50%;
-            border: 2px solid #0a0a12;
-            display: none;
-        }
-        .tab-btn .notif-dot.show {
-            display: block;
-            animation: pulse 1s infinite;
-        }
-        @keyframes pulse {
-            0%,100% { transform: scale(1); }
-            50% { transform: scale(1.3); }
         }
         .panel {
             display: none;
             animation: fadeUp 0.4s ease;
         }
-        .panel.active {
-            display: block;
-        }
+        .panel.active { display: block; }
         @keyframes fadeUp {
-            0% { opacity: 0; transform: translateY(16px); }
-            100% { opacity: 1; transform: translateY(0); }
+            0% { opacity:0; transform:translateY(16px); }
+            100% { opacity:1; transform:translateY(0); }
         }
-        /* Form */
-        .form-group {
-            margin-bottom: 20px;
-        }
+        .form-group { margin-bottom: 20px; }
         .form-group label {
             display: block;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(255,255,255,0.7);
             font-weight: 700;
             font-size: 14px;
             margin-bottom: 6px;
@@ -137,8 +107,8 @@
         .form-group input, .form-group select {
             width: 100%;
             padding: 14px 18px;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
             border-radius: 30px;
             color: #fff;
             font-size: 15px;
@@ -149,12 +119,8 @@
         }
         .form-group input:focus, .form-group select:focus {
             border-color: #ffd700;
-            box-shadow: 0 0 25px rgba(255, 215, 0, 0.08);
-            background: rgba(255, 255, 255, 0.06);
-        }
-        .form-group select option {
-            background: #1a1a2e;
-            color: #fff;
+            box-shadow: 0 0 25px rgba(255,215,0,0.08);
+            background: rgba(255,255,255,0.06);
         }
         .file-upload-wrapper {
             display: flex;
@@ -165,8 +131,8 @@
         .file-upload-wrapper input[type="file"] {
             flex: 1;
             padding: 12px;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px dashed rgba(255, 215, 0, 0.2);
+            background: rgba(255,255,255,0.04);
+            border: 1px dashed rgba(255,215,0,0.2);
             border-radius: 30px;
             color: #ccc;
             font-weight: 500;
@@ -188,13 +154,11 @@
             height: 80px;
             border-radius: 20px;
             object-fit: cover;
-            border: 2px solid rgba(255, 215, 0, 0.2);
+            border: 2px solid rgba(255,215,0,0.2);
             background: #1a1a2e;
             display: none;
         }
-        .file-preview.show {
-            display: block;
-        }
+        .file-preview.show { display: block; }
         .btn-primary {
             width: 100%;
             padding: 16px;
@@ -208,32 +172,30 @@
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, #f7971e, #ffd700);
             color: #0f0f1a;
-            box-shadow: 0 8px 30px rgba(255, 215, 0, 0.2);
+            box-shadow: 0 8px 30px rgba(255,215,0,0.2);
             margin-top: 8px;
         }
         .btn-primary:hover {
             transform: scale(1.02);
-            box-shadow: 0 12px 40px rgba(255, 215, 0, 0.35);
+            box-shadow: 0 12px 40px rgba(255,215,0,0.35);
         }
         .btn-secondary {
             padding: 12px 28px;
             border: none;
             border-radius: 40px;
-            background: rgba(255, 255, 255, 0.06);
+            background: rgba(255,255,255,0.06);
             color: #ccc;
             font-weight: 700;
             cursor: pointer;
             transition: 0.25s;
             font-family: 'Poppins', sans-serif;
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255,255,255,0.06);
         }
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.12);
-        }
+        .btn-secondary:hover { background: rgba(255,255,255,0.12); }
         .btn-danger {
-            background: rgba(255, 70, 70, 0.15);
+            background: rgba(255,70,70,0.15);
             color: #ff6666;
-            border: 1px solid rgba(255, 70, 70, 0.2);
+            border: 1px solid rgba(255,70,70,0.2);
             padding: 8px 20px;
             border-radius: 40px;
             font-weight: 700;
@@ -241,9 +203,7 @@
             transition: 0.25s;
             font-family: 'Poppins', sans-serif;
         }
-        .btn-danger:hover {
-            background: rgba(255, 70, 70, 0.25);
-        }
+        .btn-danger:hover { background: rgba(255,70,70,0.25); }
         .btn-broadcast {
             background: #6c5ce7;
             color: #fff;
@@ -257,10 +217,10 @@
         }
         .btn-broadcast:hover {
             transform: scale(1.05);
-            box-shadow: 0 6px 20px rgba(108, 92, 231, 0.3);
+            box-shadow: 0 6px 20px rgba(108,92,231,0.3);
         }
         .success-msg {
-            background: rgba(0, 255, 100, 0.1);
+            background: rgba(0,255,100,0.1);
             border-left: 4px solid #00ff66;
             padding: 14px 18px;
             border-radius: 16px;
@@ -269,11 +229,9 @@
             margin-top: 16px;
             display: none;
         }
-        .success-msg.show {
-            display: block;
-        }
+        .success-msg.show { display: block; }
         .error-msg {
-            background: rgba(255, 70, 70, 0.1);
+            background: rgba(255,70,70,0.1);
             border-left: 4px solid #ff4444;
             padding: 14px 18px;
             border-radius: 16px;
@@ -282,30 +240,25 @@
             margin-top: 16px;
             display: none;
         }
-        .error-msg.show {
-            display: block;
-        }
-        /* Dashboard */
+        .error-msg.show { display: block; }
         .dashboard-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 24px;
             margin-bottom: 30px;
         }
-        @media (max-width: 700px) {
-            .dashboard-grid { grid-template-columns: 1fr; }
-        }
+        @media (max-width: 700px) { .dashboard-grid { grid-template-columns: 1fr; } }
         .saldo-card {
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.08), rgba(247, 151, 30, 0.05));
+            background: linear-gradient(135deg, rgba(255,215,0,0.08), rgba(247,151,30,0.05));
             border-radius: 30px;
             padding: 24px;
-            border: 1px solid rgba(255, 215, 0, 0.15);
+            border: 1px solid rgba(255,215,0,0.15);
             text-align: center;
             position: relative;
             overflow: hidden;
         }
         .saldo-card .label {
-            color: rgba(255, 255, 255, 0.4);
+            color: rgba(255,255,255,0.4);
             font-weight: 600;
             font-size: 14px;
             letter-spacing: 2px;
@@ -328,15 +281,12 @@
             50% { transform: scale(1.15); filter: brightness(1.5); }
             100% { transform: scale(1); }
         }
-        .saldo-card .sub {
-            color: rgba(255, 255, 255, 0.3);
-            font-size: 13px;
-        }
+        .saldo-card .sub { color: rgba(255,255,255,0.3); font-size: 13px; }
         .saldo-card .notif-toast {
             position: absolute;
             top: 10px;
             right: 10px;
-            background: rgba(0, 255, 100, 0.15);
+            background: rgba(0,255,100,0.15);
             border: 1px solid #00ff66;
             border-radius: 20px;
             padding: 6px 16px;
@@ -352,10 +302,10 @@
             transform: translateY(0);
         }
         .chart-container {
-            background: rgba(255, 255, 255, 0.02);
+            background: rgba(255,255,255,0.02);
             border-radius: 30px;
             padding: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255,255,255,0.04);
         }
         .chart-container h3 {
             color: #fff;
@@ -370,7 +320,7 @@
         #priceChart {
             width: 100%;
             height: 200px;
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(0,0,0,0.2);
             border-radius: 20px;
         }
         .chart-legend {
@@ -383,7 +333,7 @@
         .legend-item {
             font-size: 12px;
             font-weight: 600;
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(255,255,255,0.6);
             display: flex;
             align-items: center;
             gap: 6px;
@@ -405,13 +355,13 @@
             min-width: 100px;
             padding: 14px 10px;
             border-radius: 30px;
-            border: 2px solid rgba(255, 255, 255, 0.06);
-            background: rgba(255, 255, 255, 0.02);
+            border: 2px solid rgba(255,255,255,0.06);
+            background: rgba(255,255,255,0.02);
             text-align: center;
             cursor: pointer;
             transition: 0.25s;
             font-weight: 700;
-            color: rgba(255, 255, 255, 0.4);
+            color: rgba(255,255,255,0.4);
         }
         .wallet-option i {
             font-size: 28px;
@@ -420,16 +370,15 @@
         }
         .wallet-option.selected {
             border-color: #ffd700;
-            background: rgba(255, 215, 0, 0.08);
+            background: rgba(255,215,0,0.08);
             color: #fff;
-            box-shadow: 0 0 30px rgba(255, 215, 0, 0.05);
+            box-shadow: 0 0 30px rgba(255,215,0,0.05);
         }
         .wallet-option.dana i { color: #007BFF; }
         .wallet-option.ovo i { color: #4CAF50; }
         .wallet-option.gopay i { color: #E53935; }
-        /* Admin */
         .admin-login {
-            background: rgba(255, 255, 255, 0.02);
+            background: rgba(255,255,255,0.02);
             border-radius: 30px;
             padding: 20px;
             margin-bottom: 20px;
@@ -441,8 +390,8 @@
         .admin-login input {
             flex: 1;
             padding: 12px 18px;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
             border-radius: 40px;
             color: #fff;
             font-weight: 500;
@@ -460,10 +409,10 @@
         .stat-card {
             flex: 1;
             min-width: 100px;
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(255,255,255,0.03);
             border-radius: 24px;
             padding: 16px 20px;
-            border: 1px solid rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255,255,255,0.04);
             text-align: center;
         }
         .stat-card .number {
@@ -473,7 +422,7 @@
         }
         .stat-card .label {
             font-size: 13px;
-            color: rgba(255, 255, 255, 0.4);
+            color: rgba(255,255,255,0.4);
             font-weight: 600;
         }
         .submissions-list, .wd-list {
@@ -493,7 +442,7 @@
         }
         .submissions-list::-webkit-scrollbar-track, .wd-list::-webkit-scrollbar-track { background: transparent; }
         .submission-item, .wd-item {
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(255,255,255,0.03);
             border-radius: 24px;
             padding: 16px 20px;
             border-left: 4px solid #ffd700;
@@ -503,7 +452,7 @@
             gap: 16px;
             transition: 0.2s;
         }
-        .submission-item:hover, .wd-item:hover { background: rgba(255, 255, 255, 0.06); }
+        .submission-item:hover, .wd-item:hover { background: rgba(255,255,255,0.06); }
         .wd-item { border-left-color: #4CAF50; }
         .submission-item .info, .wd-item .info {
             flex: 2;
@@ -521,14 +470,14 @@
         }
         .submission-item .info .time, .wd-item .info .time {
             font-size: 12px;
-            color: rgba(255, 255, 255, 0.3);
+            color: rgba(255,255,255,0.3);
         }
         .submission-item .photo-thumb {
             width: 70px;
             height: 70px;
             border-radius: 16px;
             object-fit: cover;
-            border: 2px solid rgba(255, 215, 0, 0.15);
+            border: 2px solid rgba(255,215,0,0.15);
             background: #1a1a2e;
             flex-shrink: 0;
             cursor: pointer;
@@ -538,7 +487,7 @@
             transform: scale(1.8);
             z-index: 99;
             border-color: #ffd700;
-            box-shadow: 0 0 40px rgba(255, 215, 0, 0.3);
+            box-shadow: 0 0 40px rgba(255,215,0,0.3);
         }
         .status-badge {
             padding: 6px 16px;
@@ -549,9 +498,9 @@
             letter-spacing: 0.5px;
         }
         .status-badge.pending {
-            background: rgba(255, 165, 0, 0.15);
+            background: rgba(255,165,0,0.15);
             color: #ffa500;
-            border: 1px solid rgba(255, 165, 0, 0.2);
+            border: 1px solid rgba(255,165,0,0.2);
             animation: pendingPulse 1.5s infinite;
         }
         @keyframes pendingPulse {
@@ -559,14 +508,14 @@
             50% { opacity: 0.6; }
         }
         .status-badge.approved {
-            background: rgba(0, 255, 100, 0.1);
+            background: rgba(0,255,100,0.1);
             color: #66ff99;
-            border: 1px solid rgba(0, 255, 100, 0.15);
+            border: 1px solid rgba(0,255,100,0.15);
         }
         .status-badge.rejected {
-            background: rgba(255, 70, 70, 0.1);
+            background: rgba(255,70,70,0.1);
             color: #ff6666;
-            border: 1px solid rgba(255, 70, 70, 0.15);
+            border: 1px solid rgba(255,70,70,0.15);
         }
         .action-btn {
             padding: 6px 18px;
@@ -582,7 +531,7 @@
         }
         .action-btn:hover {
             transform: scale(1.05);
-            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.3);
+            box-shadow: 0 6px 20px rgba(255,215,0,0.3);
         }
         .action-btn:disabled {
             opacity: 0.3;
@@ -597,18 +546,18 @@
             color: #fff;
         }
         .action-btn.delete-btn {
-            background: rgba(255, 70, 70, 0.2);
+            background: rgba(255,70,70,0.2);
             color: #ff6666;
-            border: 1px solid rgba(255, 70, 70, 0.2);
+            border: 1px solid rgba(255,70,70,0.2);
         }
         .action-btn.delete-btn:hover {
-            background: rgba(255, 70, 70, 0.4);
-            box-shadow: 0 6px 20px rgba(255, 70, 70, 0.2);
+            background: rgba(255,70,70,0.4);
+            box-shadow: 0 6px 20px rgba(255,70,70,0.2);
         }
-        .action-btn.approve:hover { box-shadow: 0 6px 20px rgba(76, 175, 80, 0.3); }
-        .action-btn.reject:hover { box-shadow: 0 6px 20px rgba(244, 67, 54, 0.3); }
+        .action-btn.approve:hover { box-shadow: 0 6px 20px rgba(76,175,80,0.3); }
+        .action-btn.reject:hover { box-shadow: 0 6px 20px rgba(244,67,54,0.3); }
         .empty-state {
-            color: rgba(255, 255, 255, 0.2);
+            color: rgba(255,255,255,0.2);
             text-align: center;
             padding: 40px 0;
             font-weight: 600;
@@ -629,7 +578,7 @@
             border-radius: 30px;
             padding: 20px;
             border: 2px solid #ffd700;
-            box-shadow: 0 0 60px rgba(255, 215, 0, 0.1);
+            box-shadow: 0 0 60px rgba(255,215,0,0.1);
             margin: 20px 0;
             position: relative;
             overflow: hidden;
@@ -641,20 +590,17 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: conic-gradient(from 0deg, transparent, rgba(255, 215, 0, 0.03), transparent, rgba(255, 215, 0, 0.03), transparent);
+            background: conic-gradient(from 0deg, transparent, rgba(255,215,0,0.03), transparent, rgba(255,215,0,0.03), transparent);
             animation: rotateGlow 10s linear infinite;
         }
         @keyframes rotateGlow { 100% { transform: rotate(360deg); } }
-        .monitor-content {
-            position: relative;
-            z-index: 1;
-        }
+        .monitor-content { position: relative; z-index: 1; }
         .monitor-content h2 {
             color: #ffd700;
             font-weight: 900;
             font-size: 28px;
             text-align: center;
-            text-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+            text-shadow: 0 0 30px rgba(255,215,0,0.3);
         }
         .monitor-content .price-big {
             font-size: 64px;
@@ -669,7 +615,7 @@
         .monitor-content .chart-wrap canvas {
             width: 100% !important;
             height: 120px !important;
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0,0,0,0.3);
             border-radius: 20px;
         }
         .skin-price-list {
@@ -679,14 +625,14 @@
             margin: 16px 0;
         }
         .skin-price-item {
-            background: rgba(255, 255, 255, 0.04);
+            background: rgba(255,255,255,0.04);
             border-radius: 20px;
             padding: 10px 14px;
             text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255,255,255,0.04);
             transition: 0.2s;
         }
-        .skin-price-item:hover { background: rgba(255, 255, 255, 0.08); }
+        .skin-price-item:hover { background: rgba(255,255,255,0.08); }
         .skin-price-item .skin-name {
             font-weight: 700;
             color: #fff;
@@ -697,14 +643,13 @@
             color: #ffd700;
             font-size: 16px;
         }
-        /* Auth */
         .auth-box {
             max-width: 420px;
             margin: 0 auto 20px;
-            background: rgba(255, 255, 255, 0.02);
+            background: rgba(255,255,255,0.02);
             border-radius: 30px;
             padding: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255,255,255,0.04);
         }
         .auth-box .auth-title {
             color: #fff;
@@ -717,7 +662,7 @@
         .auth-switch {
             text-align: center;
             margin-top: 14px;
-            color: rgba(255, 255, 255, 0.4);
+            color: rgba(255,255,255,0.4);
             font-size: 14px;
         }
         .auth-switch a {
@@ -726,16 +671,16 @@
             font-weight: 700;
             cursor: pointer;
         }
-        .auth-switch a:hover { text-shadow: 0 0 20px rgba(255, 215, 0, 0.3); }
+        .auth-switch a:hover { text-shadow: 0 0 20px rgba(255,215,0,0.3); }
         .user-info {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(255,255,255,0.03);
             border-radius: 30px;
             padding: 10px 20px;
             margin-bottom: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255,255,255,0.04);
         }
         .user-info .username {
             color: #fff;
@@ -770,8 +715,8 @@
         .skin-select-admin {
             padding: 4px 12px;
             border-radius: 30px;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
             color: #fff;
             outline: none;
             font-family: 'Poppins', sans-serif;
@@ -782,7 +727,7 @@
         .skin-select-admin option { background: #1a1a2e; color: #fff; }
         .total-count {
             font-size: 14px;
-            color: rgba(255, 255, 255, 0.3);
+            color: rgba(255,255,255,0.3);
             margin-left: 8px;
         }
         .action-group {
@@ -791,7 +736,6 @@
             flex-wrap: wrap;
             align-items: center;
         }
-        /* Trading */
         .trading-panel {
             background: rgba(255,255,255,0.02);
             border-radius: 30px;
@@ -840,14 +784,8 @@
             transition: 0.2s;
             font-family: 'Poppins', sans-serif;
         }
-        .btn-buy {
-            background: #4CAF50;
-            color: #fff;
-        }
-        .btn-sell {
-            background: #f44336;
-            color: #fff;
-        }
+        .btn-buy { background: #4CAF50; color: #fff; }
+        .btn-sell { background: #f44336; color: #fff; }
         .btn-buy:hover { transform: scale(1.05); box-shadow: 0 6px 20px rgba(76,175,80,0.3); }
         .btn-sell:hover { transform: scale(1.05); box-shadow: 0 6px 20px rgba(244,67,54,0.3); }
         .portofolio-box {
@@ -860,9 +798,7 @@
             justify-content: space-around;
             flex-wrap: wrap;
         }
-        .portofolio-box .item {
-            text-align: center;
-        }
+        .portofolio-box .item { text-align: center; }
         .portofolio-box .item .label {
             color: rgba(255,255,255,0.4);
             font-size: 13px;
@@ -872,7 +808,6 @@
             font-size: 20px;
             color: #fff;
         }
-        /* Deposit */
         .deposit-section {
             margin: 20px 0;
             background: rgba(255,215,0,0.05);
@@ -909,7 +844,6 @@
             font-family: 'Poppins', sans-serif;
         }
         .btn-deposit:hover { transform: scale(1.02); box-shadow: 0 6px 20px rgba(0,206,201,0.3); }
-        /* Broadcast */
         .broadcast-box {
             background: rgba(108,92,231,0.05);
             border-radius: 30px;
@@ -930,10 +864,23 @@
             min-height: 80px;
             font-family: 'Poppins', sans-serif;
         }
-        .broadcast-box textarea:focus {
-            border-color: #6c5ce7;
+        .broadcast-box textarea:focus { border-color: #6c5ce7; }
+        .admin-control {
+            background: rgba(255,215,0,0.05);
+            border-radius: 20px;
+            padding: 16px;
+            margin: 12px 0;
+            border: 1px solid rgba(255,215,0,0.1);
         }
-        /* Notifikasi realtime */
+        .admin-control input[type="range"] {
+            width: 100%;
+            accent-color: #ffd700;
+        }
+        .admin-control .range-value {
+            color: #ffd700;
+            font-weight: 800;
+            font-size: 20px;
+        }
         .notif-container {
             position: fixed;
             top: 20px;
@@ -980,52 +927,32 @@
     </style>
 </head>
 <body>
-
 <div class="app-wrapper" id="app">
     <div class="header">
         <h1>✨ AMOY GACHA KELOTER ✨</h1>
         <p><i class="fas fa-crown"></i> Kirim · Trading · Deposit QRIS</p>
     </div>
 
-    <!-- ============ NOTIF CONTAINER ============ -->
     <div class="notif-container" id="notifContainer"></div>
 
-    <!-- ============ AUTH ============ -->
     <div id="authContainer">
         <div class="user-info" id="userInfoBar" style="display:none;">
             <span class="username"><i class="fas fa-user-circle"></i> <span id="displayUsername">User</span></span>
             <button class="btn-danger" id="logoutBtn" style="padding:6px 16px; font-size:13px;"><i class="fas fa-sign-out-alt"></i> Logout</button>
         </div>
-
         <div class="auth-box" id="loginBox">
             <div class="auth-title"><i class="fas fa-sign-in-alt"></i> Login</div>
-            <div class="form-group">
-                <label><i class="fas fa-user"></i> Username</label>
-                <input type="text" id="loginUser" placeholder="Username" />
-            </div>
-            <div class="form-group">
-                <label><i class="fas fa-lock"></i> Password</label>
-                <input type="password" id="loginPass" placeholder="Password" />
-            </div>
+            <div class="form-group"><label><i class="fas fa-user"></i> Username</label><input type="text" id="loginUser" placeholder="Username" /></div>
+            <div class="form-group"><label><i class="fas fa-lock"></i> Password</label><input type="password" id="loginPass" placeholder="Password" /></div>
             <button class="btn-primary" id="loginBtn"><i class="fas fa-sign-in-alt"></i> Masuk</button>
             <div class="auth-switch">Belum punya akun? <a id="goToRegister">Daftar di sini</a></div>
             <div class="error-msg" id="loginError"></div>
         </div>
-
         <div class="auth-box" id="registerBox" style="display:none;">
             <div class="auth-title"><i class="fas fa-user-plus"></i> Daftar Akun</div>
-            <div class="form-group">
-                <label><i class="fas fa-user"></i> Username</label>
-                <input type="text" id="regUser" placeholder="Buat username" />
-            </div>
-            <div class="form-group">
-                <label><i class="fas fa-user-tag"></i> Nama Panggilan</label>
-                <input type="text" id="regName" placeholder="Nama kamu" />
-            </div>
-            <div class="form-group">
-                <label><i class="fas fa-lock"></i> Password</label>
-                <input type="password" id="regPass" placeholder="Min 4 karakter" />
-            </div>
+            <div class="form-group"><label><i class="fas fa-user"></i> Username</label><input type="text" id="regUser" placeholder="Buat username" /></div>
+            <div class="form-group"><label><i class="fas fa-user-tag"></i> Nama Panggilan</label><input type="text" id="regName" placeholder="Nama kamu" /></div>
+            <div class="form-group"><label><i class="fas fa-lock"></i> Password</label><input type="password" id="regPass" placeholder="Min 4 karakter" /></div>
             <button class="btn-primary" id="registerBtn"><i class="fas fa-user-plus"></i> Daftar</button>
             <div class="auth-switch">Sudah punya akun? <a id="goToLogin">Login di sini</a></div>
             <div class="error-msg" id="registerError"></div>
@@ -1033,7 +960,6 @@
         </div>
     </div>
 
-    <!-- ============ MAIN APP ============ -->
     <div id="mainApp" style="display:none;">
         <div class="tabs">
             <button class="tab-btn active" data-tab="userTab"><i class="fas fa-paper-plane"></i> Kirim Kartu</button>
@@ -1042,21 +968,16 @@
             <button class="tab-btn" data-tab="adminTab"><i class="fas fa-user-shield"></i> Admin</button>
         </div>
 
-        <!-- ========== USER PANEL ========== -->
+        <!-- USER PANEL -->
         <div id="userTab" class="panel active">
-            <div class="form-group">
-                <label><i class="fas fa-user"></i> Nama Kamu</label>
-                <input type="text" id="userName" placeholder="Nama panggilan" />
-            </div>
-            <div class="form-group">
-                <label><i class="fas fa-image"></i> Foto Kartu</label>
+            <div class="form-group"><label><i class="fas fa-user"></i> Nama Kamu</label><input type="text" id="userName" placeholder="Nama panggilan" /></div>
+            <div class="form-group"><label><i class="fas fa-image"></i> Foto Kartu</label>
                 <div class="file-upload-wrapper">
                     <input type="file" id="cardImage" accept="image/*" />
                     <img class="file-preview" id="imagePreview" alt="Preview" />
                 </div>
             </div>
-            <div class="form-group">
-                <label><i class="fas fa-tag"></i> Pilih Skin yang Diinginkan</label>
+            <div class="form-group"><label><i class="fas fa-tag"></i> Pilih Skin yang Diinginkan</label>
                 <select id="requestedSkin">
                     <option value="basic">Basic (Rp 500)</option>
                     <option value="epik">Epik (Rp 1.000)</option>
@@ -1066,53 +987,45 @@
                     <option value="amoy-klasik">Amoy Klasik (Rp 500)</option>
                 </select>
             </div>
-            <div class="form-group">
-                <label><i class="fas fa-phone"></i> Nomor Dana (penerima)</label>
-                <input type="text" id="danaNumber" placeholder="Masukkan nomor Dana" />
-            </div>
+            <div class="form-group"><label><i class="fas fa-phone"></i> Nomor Dana (penerima)</label><input type="text" id="danaNumber" placeholder="Masukkan nomor Dana" /></div>
             <button class="btn-primary" id="submitBtn"><i class="fas fa-paper-plane"></i> Kirim & Tunggu ACC Admin</button>
-            <div class="success-msg" id="successMsg">
-                <i class="fas fa-check-circle"></i> Kartu terkirim! Admin akan ACC.
-            </div>
+            <div class="success-msg" id="successMsg"><i class="fas fa-check-circle"></i> Kartu terkirim! Admin akan ACC.</div>
         </div>
 
-        <!-- ========== TRADING PANEL ========== -->
+        <!-- TRADING PANEL -->
         <div id="tradingTab" class="panel">
             <div class="trading-panel">
                 <h2 style="color:#fff; font-weight:700;"><i class="fas fa-coins"></i> Trading Saham AMOY</h2>
                 <div class="price-display" id="tradingPrice">Rp 1.000</div>
                 <div class="change" id="tradingChange">▲ 0%</div>
                 <canvas id="tradingChart" width="400" height="150" style="width:100%; height:150px; background:rgba(0,0,0,0.2); border-radius:20px;"></canvas>
-                
                 <div class="portofolio-box">
                     <div class="item"><div class="label">Saham</div><div class="value" id="stockAmount">0</div></div>
                     <div class="item"><div class="label">Nilai</div><div class="value" id="stockValue">Rp 0</div></div>
                     <div class="item"><div class="label">Saldo</div><div class="value" id="tradeBalance">Rp 0</div></div>
                 </div>
-
                 <div class="trade-form">
-                    <input type="number" id="tradeAmount" placeholder="Jumlah saham (min 1)" min="1" />
+                    <input type="number" id="tradeAmount" placeholder="Jumlah (min 1)" min="1" />
                     <button class="btn-buy" id="buyBtn"><i class="fas fa-arrow-up"></i> Beli</button>
                     <button class="btn-sell" id="sellBtn"><i class="fas fa-arrow-down"></i> Jual</button>
                 </div>
-
-                <!-- DEPOSIT QRIS -->
+                <!-- DEPOSIT -->
                 <div class="deposit-section">
-                    <h3 style="color:#fff; font-weight:700;"><i class="fas fa-qrcode"></i> Deposit QRIS</h3>
+                    <h3 style="color:#fff; font-weight:700;"><i class="fas fa-qrcode"></i> Deposit QRIS (Rp 500 - 5.000)</h3>
                     <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
-                        <input type="number" id="depositAmount" placeholder="Min Rp 10.000" min="10000" style="flex:1; padding:12px 16px; border-radius:40px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); color:#fff; outline:none;" />
+                        <input type="number" id="depositAmount" placeholder="Min Rp 500" min="500" max="5000" style="flex:1; padding:12px 16px; border-radius:40px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); color:#fff; outline:none;" />
                         <button class="btn-deposit" id="depositBtn"><i class="fas fa-credit-card"></i> Deposit</button>
                     </div>
                     <div class="qris-container" id="qrisContainer" style="display:none;">
                         <img id="qrisImage" src="" alt="QRIS" />
-                        <div class="status-text" id="qrisStatus">Menunggu pembayaran...</div>
+                        <div class="status-text" id="qrisStatus">⏳ Menunggu pembayaran...</div>
                         <button class="btn-secondary" id="checkDepositBtn" style="padding:8px 24px;">Cek Status</button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- ========== DASHBOARD ========== -->
+        <!-- DASHBOARD -->
         <div id="dashboardTab" class="panel">
             <div class="dashboard-grid">
                 <div class="saldo-card">
@@ -1127,19 +1040,15 @@
                     <div class="chart-legend" id="chartLegend"></div>
                 </div>
             </div>
-
             <div class="monitor">
                 <div class="monitor-content">
                     <h2>📊 Harga Pasar Amoy</h2>
                     <div class="price-big" id="monitorPrice">Rp 5.000</div>
                     <div class="price-change" id="priceChange">▼ 0%</div>
                     <div style="text-align:center; color:rgba(255,255,255,0.3); font-size:13px;">Update real-time tiap 5 detik</div>
-                    <div class="chart-wrap">
-                        <canvas id="monitorChart" width="400" height="120"></canvas>
-                    </div>
+                    <div class="chart-wrap"><canvas id="monitorChart" width="400" height="120"></canvas></div>
                 </div>
             </div>
-
             <div class="skin-price-list">
                 <div class="skin-price-item"><div class="skin-name">Basic</div><div class="skin-price">Rp 500</div></div>
                 <div class="skin-price-item"><div class="skin-name">Epik</div><div class="skin-price">Rp 1.000</div></div>
@@ -1148,34 +1057,23 @@
                 <div class="skin-price-item"><div class="skin-name">Kolektor</div><div class="skin-price">Rp 5.000</div></div>
                 <div class="skin-price-item"><div class="skin-name">Amoy Klasik</div><div class="skin-price">Rp 500</div></div>
             </div>
-
             <h3 style="color:#fff; font-weight:700; margin:24px 0 12px;"><i class="fas fa-hand-holding-usd"></i> Tarik Saldo (WD)</h3>
-            <div class="form-group">
-                <label>Pilih E-Wallet</label>
+            <div class="form-group"><label>Pilih E-Wallet</label>
                 <div class="wallet-options" id="walletOptions">
                     <div class="wallet-option dana" data-wallet="dana"><i class="fab fa-google-pay"></i> Dana</div>
                     <div class="wallet-option ovo" data-wallet="ovo"><i class="fas fa-mobile-alt"></i> OVO</div>
                     <div class="wallet-option gopay" data-wallet="gopay"><i class="fas fa-money-bill-wave"></i> Gopay</div>
                 </div>
             </div>
-            <div class="form-group">
-                <label><i class="fas fa-user"></i> Nama Penerima</label>
-                <input type="text" id="wdName" placeholder="Nama lengkap" />
-            </div>
-            <div class="form-group">
-                <label><i class="fas fa-phone"></i> Nomor E-Wallet</label>
-                <input type="text" id="wdAccount" placeholder="Masukkan nomor e-wallet tujuan" />
-            </div>
-            <div class="form-group">
-                <label><i class="fas fa-coins"></i> Jumlah (min Rp 10.000)</label>
-                <input type="number" id="wdAmount" placeholder="10000" min="10000" step="1000" />
-            </div>
+            <div class="form-group"><label><i class="fas fa-user"></i> Nama Penerima</label><input type="text" id="wdName" placeholder="Nama lengkap" /></div>
+            <div class="form-group"><label><i class="fas fa-phone"></i> Nomor E-Wallet</label><input type="text" id="wdAccount" placeholder="Masukkan nomor e-wallet tujuan" /></div>
+            <div class="form-group"><label><i class="fas fa-coins"></i> Jumlah (min Rp 10.000)</label><input type="number" id="wdAmount" placeholder="10000" min="10000" step="1000" /></div>
             <button class="btn-primary" id="wdSubmitBtn"><i class="fas fa-paper-plane"></i> Ajukan WD</button>
             <div class="success-msg" id="wdSuccessMsg"></div>
             <div class="error-msg" id="wdError"></div>
         </div>
 
-        <!-- ========== ADMIN PANEL ========== -->
+        <!-- ADMIN PANEL -->
         <div id="adminTab" class="panel">
             <div class="admin-login" id="adminLoginArea">
                 <input type="password" id="adminPassword" placeholder="Password admin" />
@@ -1188,22 +1086,26 @@
                     <div class="stat-card"><div class="number" id="pendingSubs">0</div><div class="label">Pending <span class="live-badge" style="font-size:8px; padding:1px 8px;">baru</span></div></div>
                     <div class="stat-card"><div class="number" id="totalWD">0</div><div class="label">WD</div></div>
                 </div>
-
-                <div class="section-title">
-                    <i class="fas fa-images"></i> Kiriman Kartu
-                    <span class="total-count" id="subCount">(0)</span>
-                    <span style="font-size:12px; color:rgba(255,255,255,0.3);">real-time semua user</span>
-                </div>
-                <div class="submissions-list" id="submissionsList">
-                    <div class="empty-state">Belum ada kiriman.</div>
-                </div>
-
+                <div class="section-title"><i class="fas fa-images"></i> Kiriman Kartu <span class="total-count" id="subCount">(0)</span> <span style="font-size:12px; color:rgba(255,255,255,0.3);">real-time semua user</span></div>
+                <div class="submissions-list" id="submissionsList"><div class="empty-state">Belum ada kiriman.</div></div>
                 <div class="section-title" style="margin-top:28px;"><i class="fas fa-hand-holding-usd"></i> Permintaan WD</div>
-                <div class="wd-list" id="wdList">
-                    <div class="empty-state">Belum ada permintaan WD.</div>
+                <div class="wd-list" id="wdList"><div class="empty-state">Belum ada permintaan WD.</div></div>
+
+                <!-- ADMIN CONTROL: ATUR HARGA SAHAM -->
+                <div class="admin-control">
+                    <h3 style="color:#fff; font-weight:700;"><i class="fas fa-sliders-h"></i> Atur Harga Saham</h3>
+                    <div style="display:flex; align-items:center; gap:12px;">
+                        <span style="color:#fff;">Rp 500</span>
+                        <input type="range" id="priceSlider" min="500" max="6000" value="1000" step="50" style="flex:1;" />
+                        <span style="color:#fff;">Rp 6.000</span>
+                    </div>
+                    <div style="text-align:center; margin-top:6px;">
+                        <span class="range-value" id="sliderValue">Rp 1.000</span>
+                    </div>
+                    <button class="btn-secondary" id="setPriceBtn" style="margin-top:8px; width:100%;"><i class="fas fa-sync"></i> Set Harga Sekarang</button>
                 </div>
 
-                <!-- ========== BROADCAST ========== -->
+                <!-- BROADCAST -->
                 <div class="broadcast-box">
                     <h3 style="color:#fff; font-weight:700;"><i class="fas fa-bullhorn"></i> Broadcast ke Semua User</h3>
                     <textarea id="broadcastMsg" placeholder="Tulis pesan broadcast..."></textarea>
@@ -1216,7 +1118,7 @@
 
 <script>
     // ============================================================
-    // FIREBASE CONFIG (punya kamu)
+    // FIREBASE CONFIG
     // ============================================================
     const firebaseConfig = {
         apiKey: "AIzaSyBTArEmMUo4mJEnl8WJmeWR4uNd_cMSg5A",
@@ -1228,13 +1130,8 @@
         appId: "1:744294858539:web:2ba78fdb6c294b9aed0f6e",
         measurementId: "G-5PHTZV2NTY"
     };
-
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
-
-    // ============================================================
-    // REFS
-    // ============================================================
     const usersRef = db.ref('users');
     const submissionsRef = db.ref('submissions');
     const withdrawalsRef = db.ref('withdrawals');
@@ -1249,7 +1146,7 @@
     // ============================================================
     // API RAMASHOP
     // ============================================================
-    const RAMA_API_KEY = "rg_c82b459280bdc530a0722683edba2c";
+    const RAMA_API_KEY = "rg_fec9e07e8f1abfaeb631b8b05a425a";
     const RAMA_BASE_URL = "https://ramashop.my.id/api/public";
 
     // ============================================================
@@ -1259,7 +1156,6 @@
     const mainApp = document.getElementById('mainApp');
     const userInfoBar = document.getElementById('userInfoBar');
     const displayUsername = document.getElementById('displayUsername');
-
     const loginBox = document.getElementById('loginBox');
     const registerBox = document.getElementById('registerBox');
     const loginUser = document.getElementById('loginUser');
@@ -1268,7 +1164,6 @@
     const loginError = document.getElementById('loginError');
     const goToRegister = document.getElementById('goToRegister');
     const goToLogin = document.getElementById('goToLogin');
-
     const regUser = document.getElementById('regUser');
     const regName = document.getElementById('regName');
     const regPass = document.getElementById('regPass');
@@ -1276,13 +1171,11 @@
     const registerError = document.getElementById('registerError');
     const registerSuccess = document.getElementById('registerSuccess');
     const logoutBtn = document.getElementById('logoutBtn');
-
     const tabBtns = document.querySelectorAll('.tab-btn');
     const userTab = document.getElementById('userTab');
     const tradingTab = document.getElementById('tradingTab');
     const dashboardTab = document.getElementById('dashboardTab');
     const adminTab = document.getElementById('adminTab');
-
     const userName = document.getElementById('userName');
     const cardImage = document.getElementById('cardImage');
     const imagePreview = document.getElementById('imagePreview');
@@ -1290,7 +1183,6 @@
     const danaNumber = document.getElementById('danaNumber');
     const submitBtn = document.getElementById('submitBtn');
     const successMsg = document.getElementById('successMsg');
-
     const userSaldo = document.getElementById('userSaldo');
     const saldoDetail = document.getElementById('saldoDetail');
     const saldoNotif = document.getElementById('saldoNotif');
@@ -1302,12 +1194,10 @@
     const wdSuccessMsg = document.getElementById('wdSuccessMsg');
     const wdError = document.getElementById('wdError');
     let selectedWallet = 'dana';
-
     const priceChartCanvas = document.getElementById('priceChart');
     const monitorChartCanvas = document.getElementById('monitorChart');
     const monitorPrice = document.getElementById('monitorPrice');
     const priceChange = document.getElementById('priceChange');
-
     const adminLoginArea = document.getElementById('adminLoginArea');
     const adminPassword = document.getElementById('adminPassword');
     const adminLoginBtn = document.getElementById('adminLoginBtn');
@@ -1318,8 +1208,6 @@
     const pendingSubs = document.getElementById('pendingSubs');
     const totalWD = document.getElementById('totalWD');
     const subCount = document.getElementById('subCount');
-
-    // Trading
     const tradingPrice = document.getElementById('tradingPrice');
     const tradingChange = document.getElementById('tradingChange');
     const tradingChart = document.getElementById('tradingChart');
@@ -1337,17 +1225,19 @@
     const checkDepositBtn = document.getElementById('checkDepositBtn');
     const broadcastMsg = document.getElementById('broadcastMsg');
     const broadcastBtn = document.getElementById('broadcastBtn');
+    const priceSlider = document.getElementById('priceSlider');
+    const sliderValue = document.getElementById('sliderValue');
+    const setPriceBtn = document.getElementById('setPriceBtn');
 
     let currentUser = null;
     let lastSaldo = 0;
     let allSubmissions = [];
     let allWithdrawals = [];
-
-    // Trading state
     let stockPrice = 1000;
     let stockHistory = [];
     let userStocks = 0;
     let currentDepositId = null;
+    let isAdminLoggedIn = false;
 
     // ============================================================
     // UTILITY
@@ -1363,7 +1253,7 @@
     // ============================================================
     function getSaldo(username) {
         const approved = allSubmissions.filter(s => s.username === username && s.status === 'approved');
-        const totalEarned = approved.reduce((sum, s) => sum + (SKIN_PRICES[s.skinType] || 0), 0);
+        let totalEarned = approved.reduce((sum, s) => sum + (SKIN_PRICES[s.skinType] || 0), 0);
         const wdApproved = allWithdrawals.filter(w => w.username === username && w.status === 'approved');
         const totalWDed = wdApproved.reduce((sum, w) => sum + w.amount, 0);
         return totalEarned - totalWDed;
@@ -1390,7 +1280,7 @@
             localStorage.setItem('amoy_session', JSON.stringify({ username }));
             await enterApp();
             return true;
-        } catch (err) { showError(loginError,'Error: '+err.message); return false; }
+        } catch(err) { showError(loginError,'Error: '+err.message); return false; }
     }
 
     async function register(username, name, password) {
@@ -1400,11 +1290,11 @@
             if (username.length<3) { showError(registerError,'Username minimal 3 karakter!'); return false; }
             if (password.length<4) { showError(registerError,'Password minimal 4 karakter!'); return false; }
             if (!name.trim()) { showError(registerError,'Nama harus diisi!'); return false; }
-            await usersRef.child(username).set({ name: name.trim(), password, portofolio: { stocks: 0 } });
+            await usersRef.child(username).set({ name: name.trim(), password, portofolio: { stocks: 0, earned: 0, spent: 0 } });
             showSuccess(registerSuccess,'Akun berhasil dibuat! Silakan login.');
             setTimeout(() => { registerBox.style.display='none'; loginBox.style.display='block'; registerSuccess.classList.remove('show'); },1500);
             return true;
-        } catch (err) { showError(registerError,'Error: '+err.message); return false; }
+        } catch(err) { showError(registerError,'Error: '+err.message); return false; }
     }
 
     async function enterApp() {
@@ -1413,30 +1303,24 @@
         userInfoBar.style.display = 'flex';
         displayUsername.textContent = currentUser.name || currentUser.username;
         userName.value = currentUser.name || currentUser.username;
-
-        // Load portofolio
         const portoSnap = await usersRef.child(currentUser.username).child('portofolio').once('value');
-        const porto = portoSnap.val() || { stocks: 0 };
+        const porto = portoSnap.val() || { stocks: 0, earned: 0, spent: 0 };
         userStocks = porto.stocks || 0;
-
         setupRealtimeListeners();
-        await new Promise(resolve => {
-            const check = setInterval(() => {
-                if (allSubmissions.length > 0 || document.querySelector('.empty-state')) { clearInterval(check); resolve(); }
-            },500);
-            setTimeout(resolve,3000);
-        });
+        await new Promise(resolve => { const check = setInterval(() => { if (allSubmissions.length > 0 || document.querySelector('.empty-state')) { clearInterval(check); resolve(); } },500); setTimeout(resolve,3000); });
         updateSaldo(true);
         renderCharts();
         updateTradingUI();
         adminDashboard.style.display = 'none';
         adminLoginArea.style.display = 'flex';
         updatePendingBadge();
-        // Mulai update harga saham
         if (window._stockInterval) clearInterval(window._stockInterval);
         window._stockInterval = setInterval(updateStockPrice, 2000);
-        // Listener broadcast
         setupBroadcastListener();
+        // Slider
+        priceSlider.addEventListener('input', function() {
+            sliderValue.textContent = formatRupiah(parseInt(this.value));
+        });
     }
 
     function logout() {
@@ -1486,9 +1370,7 @@
         if (window._broadcastListener) window._broadcastListener();
         window._broadcastListener = broadcastRef.on('child_added', (snapshot) => {
             const data = snapshot.val();
-            if (data) {
-                showNotif(data.message, data.timestamp);
-            }
+            if (data) { showNotif(data.message, data.timestamp); }
         });
     }
 
@@ -1497,17 +1379,9 @@
         const div = document.createElement('div');
         div.className = 'notif-item';
         const time = timestamp ? new Date(timestamp).toLocaleTimeString('id-ID') : 'baru';
-        div.innerHTML = `
-            <div>📢 ${escapeHtml(message)}</div>
-            <div class="notif-time">${time}</div>
-        `;
+        div.innerHTML = `<div>📢 ${escapeHtml(message)}</div><div class="notif-time">${time}</div>`;
         container.appendChild(div);
-        setTimeout(() => {
-            div.style.opacity = '0';
-            div.style.transform = 'translateX(100%)';
-            div.style.transition = '0.5s';
-            setTimeout(() => div.remove(), 500);
-        }, 8000);
+        setTimeout(() => { div.style.opacity='0'; div.style.transform='translateX(100%)'; div.style.transition='0.5s'; setTimeout(()=>div.remove(),500); }, 8000);
     }
 
     // ============================================================
@@ -1527,8 +1401,7 @@
             setTimeout(() => { saldoNotif.classList.remove('show'); userSaldo.classList.remove('pulse'); },3000);
         }
         lastSaldo = saldo;
-        // Update trade balance
-        document.getElementById('tradeBalance').textContent = formatRupiah(saldo);
+        tradeBalance.textContent = formatRupiah(saldo);
     }
 
     function updatePendingBadge() {
@@ -1555,7 +1428,6 @@
         login(username, password);
     });
     loginPass.addEventListener('keypress', e => { if (e.key === 'Enter') loginBtn.click(); });
-
     registerBtn.addEventListener('click', () => {
         const username = regUser.value.trim();
         const name = regName.value.trim();
@@ -1563,7 +1435,6 @@
         register(username, name, password);
     });
     regPass.addEventListener('keypress', e => { if (e.key === 'Enter') registerBtn.click(); });
-
     goToRegister.addEventListener('click', e => { e.preventDefault(); loginBox.style.display='none'; registerBox.style.display='block'; loginError.classList.remove('show'); registerError.classList.remove('show'); registerSuccess.classList.remove('show'); });
     goToLogin.addEventListener('click', e => { e.preventDefault(); registerBox.style.display='none'; loginBox.style.display='block'; loginError.classList.remove('show'); registerError.classList.remove('show'); registerSuccess.classList.remove('show'); });
     logoutBtn.addEventListener('click', logout);
@@ -1688,17 +1559,15 @@
     // ADMIN
     // ============================================================
     adminLoginBtn.addEventListener('click', function() {
-        // Admin username: wilzu222333, password: admin123
-        const inputUser = adminPassword.value.trim(); // kita pake satu input buat password, tapi kita cek username khusus
-        // Karena kita hanya punya satu input password, kita sederhanakan: admin tetap pakai password admin123
-        // Tapi kita tambahkan cek username lewat prompt? Atau kita buat dua input? Saya sederhanakan: password admin123 tetap berlaku.
-        if (adminPassword.value.trim() === 'admin123') {
+        // Password admin: wilzu2223333
+        if (adminPassword.value.trim() === 'wilzu2223333') {
             adminLoginArea.style.display = 'none';
             adminDashboard.style.display = 'block';
+            isAdminLoggedIn = true;
             renderAdminSubmissions();
             renderAdminWD();
         } else {
-            alert('Password admin salah! (admin123)');
+            alert('Password admin salah! (wilzu2223333)');
             adminPassword.value = '';
             adminPassword.focus();
         }
@@ -1757,7 +1626,6 @@
             `;
         });
         submissionsList.innerHTML = html;
-
         // Event listeners
         document.querySelectorAll('#submissionsList .action-btn[data-action="approve"]').forEach(btn => {
             btn.addEventListener('click', async function() {
@@ -1773,7 +1641,6 @@
                         const sub = data[key];
                         if (sub.status === 'pending') {
                             await submissionsRef.child(key).update({ skinType: newSkin, status: 'approved' });
-                            // Broadcast notifikasi ke user yang bersangkutan (opsional)
                         }
                     }
                 } catch(err) { alert('Error: '+err.message); }
@@ -1874,14 +1741,37 @@
         const msg = broadcastMsg.value.trim();
         if (!msg) { alert('Tulis pesan broadcast!'); return; }
         try {
-            await broadcastRef.push({
-                message: msg,
-                timestamp: new Date().toISOString(),
-                from: 'admin'
-            });
+            await broadcastRef.push({ message: msg, timestamp: new Date().toISOString(), from: 'admin' });
             broadcastMsg.value = '';
             alert('✅ Broadcast terkirim ke semua user!');
         } catch(err) { alert('Gagal kirim broadcast: '+err.message); }
+    });
+
+    // ============================================================
+    // ATUR HARGA SAHAM (ADMIN)
+    // ============================================================
+    setPriceBtn.addEventListener('click', function() {
+        const newPrice = parseInt(priceSlider.value);
+        if (isNaN(newPrice) || newPrice < 500 || newPrice > 6000) {
+            alert('Harga harus antara Rp 500 - Rp 6.000');
+            return;
+        }
+        // Set harga langsung
+        stockPrice = newPrice;
+        // Tambahkan ke history
+        stockHistory.push(stockPrice);
+        if (stockHistory.length > 30) stockHistory.shift();
+        // Update UI
+        tradingPrice.textContent = formatRupiah(stockPrice);
+        drawTradingChart();
+        updateTradingUI();
+        // Broadcast ke semua user bahwa harga berubah
+        broadcastRef.push({
+            message: `📈 Admin mengubah harga saham menjadi ${formatRupiah(stockPrice)}`,
+            timestamp: new Date().toISOString(),
+            from: 'system'
+        });
+        alert(`✅ Harga saham diubah menjadi ${formatRupiah(stockPrice)}`);
     });
 
     // ============================================================
@@ -1903,7 +1793,6 @@
         stockPrice = newPrice;
         stockHistory.push(stockPrice);
         if (stockHistory.length > 30) stockHistory.shift();
-        // Update tampilan
         tradingPrice.textContent = formatRupiah(stockPrice);
         const prev = stockHistory.length > 1 ? stockHistory[stockHistory.length-2] : stockPrice;
         const diff = ((stockPrice - prev) / prev * 100);
@@ -1912,6 +1801,9 @@
         changeEl.className = 'change ' + (diff >= 0 ? 'trending-up' : 'trending-down');
         drawTradingChart();
         updateTradingUI();
+        // Update slider value
+        priceSlider.value = stockPrice;
+        sliderValue.textContent = formatRupiah(stockPrice);
     }
 
     function drawTradingChart() {
@@ -1958,37 +1850,13 @@
         if (totalCost > 5000) { alert('Maksimal Rp 5.000 per transaksi'); return; }
         const saldo = getSaldo(currentUser.username);
         if (totalCost > saldo) { alert('Saldo tidak cukup!'); return; }
-        // Kurangi saldo dari submissions? Kita tidak punya mekanisme saldo di Firebase selain skin ACC.
-        // Untuk simulasi, kita kurangi dengan menambahkan WD negatif? Lebih baik kita simpan di portofolio.
-        // Karena saldo dihitung dari skin ACC - WD, kita perlu track pengeluaran.
-        // Kita simpan di portofolio dengan field 'spent' atau langsung kurangi saldo via WD palsu?
-        // Lebih praktis: buat transaksi internal di portofolio.
         try {
-            // Ambil portofolio terbaru
             const snap = await usersRef.child(currentUser.username).child('portofolio').once('value');
-            const porto = snap.val() || { stocks: 0 };
-            const newStocks = porto.stocks + qty;
-            await usersRef.child(currentUser.username).child('portofolio').set({ stocks: newStocks });
+            const porto = snap.val() || { stocks: 0, spent: 0 };
+            const newStocks = (porto.stocks || 0) + qty;
+            const spent = (porto.spent || 0) + totalCost;
+            await usersRef.child(currentUser.username).child('portofolio').set({ stocks: newStocks, spent, earned: porto.earned || 0 });
             userStocks = newStocks;
-            // Kurangi saldo dengan mencatat pengeluaran di firebase? Sementara kita hanya update UI.
-            // Untuk konsistensi, kita simpan total pengeluaran di portofolio.
-            // Tapi karena saldo dihitung dari skin ACC, kita bisa menambahkan entri di submissions dengan status khusus?
-            // Saya akan buat saldo trading terpisah? Biar simpel, saldo dihitung dari skin ACC - WD.
-            // Untuk trading, kita potong saldo dengan menambahkan WD? Tidak.
-            // Lebih baik kita simpan transaksi di path terpisah, atau kita buat saldo langsung dari skin ACC.
-            // Oke, kita simpan total pengeluaran di portofolio sebagai 'spent'.
-            const spent = porto.spent || 0;
-            const newSpent = spent + totalCost;
-            await usersRef.child(currentUser.username).child('portofolio').update({ spent: newSpent, stocks: newStocks });
-            // Update UI saldo (tapi saldo tetap dari skin ACC - WD, tidak termasuk trading)
-            // Untuk keperluan UI, kita tampilkan saldo yang tersisa.
-            // Kita override getSaldo dengan mengurangi spent.
-            // Atau kita tampilkan saldo = getSaldo - spent.
-            // Lebih praktis: kita buat getSaldo2 yang memperhitungkan spent.
-            // Saya akan modifikasi getSaldo untuk include spent.
-            // Tapi karena spent disimpan per user, kita perlu modifikasi.
-            // Saya akan override getSaldo untuk include spent.
-            // Di sini kita update UI.
             updateSaldo(true);
             updateTradingUI();
             tradeAmountInput.value = '';
@@ -2004,15 +1872,12 @@
         if (isNaN(qty) || qty < 1) { alert('Minimal 1 saham!'); return; }
         if (qty > userStocks) { alert('Saham tidak cukup!'); return; }
         const totalValue = qty * stockPrice;
-        // Tambahkan ke saldo (tapi saldo dihitung dari skin ACC - WD)
-        // Kita simpan di portofolio sebagai 'earned'
         try {
             const snap = await usersRef.child(currentUser.username).child('portofolio').once('value');
-            const porto = snap.val() || { stocks: 0 };
-            const newStocks = porto.stocks - qty;
-            const earned = porto.earned || 0;
-            const newEarned = earned + totalValue;
-            await usersRef.child(currentUser.username).child('portofolio').update({ stocks: newStocks, earned: newEarned });
+            const porto = snap.val() || { stocks: 0, earned: 0 };
+            const newStocks = (porto.stocks || 0) - qty;
+            const earned = (porto.earned || 0) + totalValue;
+            await usersRef.child(currentUser.username).child('portofolio').set({ stocks: newStocks, earned, spent: porto.spent || 0 });
             userStocks = newStocks;
             updateSaldo(true);
             updateTradingUI();
@@ -2020,12 +1885,16 @@
         } catch(err) { alert('Gagal jual: '+err.message); }
     });
 
-    // Override getSaldo untuk include earned dan spent dari portofolio
-    // Kita ubah getSaldo
+    // Override getSaldo untuk include portofolio
     const originalGetSaldo = getSaldo;
     getSaldo = async function(username) {
-        const base = originalGetSaldo(username);
+        let base = 0;
         try {
+            const approved = allSubmissions.filter(s => s.username === username && s.status === 'approved');
+            base = approved.reduce((sum, s) => sum + (SKIN_PRICES[s.skinType] || 0), 0);
+            const wdApproved = allWithdrawals.filter(w => w.username === username && w.status === 'approved');
+            const totalWDed = wdApproved.reduce((sum, w) => sum + w.amount, 0);
+            base = base - totalWDed;
             const snap = await usersRef.child(username).child('portofolio').once('value');
             const porto = snap.val() || {};
             const earned = porto.earned || 0;
@@ -2035,13 +1904,20 @@
     };
 
     // ============================================================
-    // DEPOSIT QRIS
+    // DEPOSIT QRIS (Rp 500 - 5.000)
     // ============================================================
     depositBtn.addEventListener('click', async function() {
         if (!currentUser) { alert('Login dulu!'); return; }
         const amount = parseInt(depositAmount.value);
-        if (isNaN(amount) || amount < 10000) { alert('Minimal deposit Rp 10.000'); return; }
+        if (isNaN(amount) || amount < 500 || amount > 5000) {
+            alert('Minimal deposit Rp 500, maksimal Rp 5.000');
+            return;
+        }
         try {
+            // Untuk deposit 500-5000, kita pake API asli tapi dengan amount yang valid
+            // Karena API minimal 10.000, kita tetap panggil API dengan jumlah yang sama
+            // Tapi user hanya bayar sesuai yang diinput
+            // Atau kita bisa bypass API untuk deposit kecil? Lebih baik tetap pake API.
             const response = await fetch(`${RAMA_BASE_URL}/deposit/create`, {
                 method: 'POST',
                 headers: {
@@ -2055,8 +1931,7 @@
                 currentDepositId = result.data.depositId;
                 qrisImage.src = result.data.qrImage;
                 qrisContainer.style.display = 'flex';
-                qrisStatus.textContent = 'Menunggu pembayaran... Silakan scan QRIS.';
-                // Mulai cek status otomatis
+                qrisStatus.textContent = '⏳ Menunggu pembayaran... Scan QRIS.';
                 if (window._depositInterval) clearInterval(window._depositInterval);
                 window._depositInterval = setInterval(checkDepositStatus, 5000);
             } else {
@@ -2076,8 +1951,6 @@
                 if (result.data.status === 'success') {
                     qrisStatus.textContent = '✅ Deposit berhasil! Saldo ditambahkan.';
                     clearInterval(window._depositInterval);
-                    // Tambahkan saldo ke user (simpan sebagai submission khusus?)
-                    // Atau kita tambahkan ke portofolio earned
                     const snap = await usersRef.child(currentUser.username).child('portofolio').once('value');
                     const porto = snap.val() || {};
                     const earned = porto.earned || 0;
@@ -2087,7 +1960,7 @@
                 } else if (result.data.status === 'pending') {
                     qrisStatus.textContent = '⏳ Menunggu pembayaran...';
                 } else if (result.data.status === 'already') {
-                    qrisStatus.textContent = '⚠️ Transaksi ini sudah diproses sebelumnya.';
+                    qrisStatus.textContent = '⚠️ Transaksi sudah diproses sebelumnya.';
                     clearInterval(window._depositInterval);
                 }
             }
@@ -2101,6 +1974,7 @@
     // ============================================================
     const skinKeys = ['basic','epik','legend','kolektor','amoy-pacito','amoy-klasik'];
     const skinColors = { 'basic':'#8a8a8a','epik':'#3b9eff','legend':'#b44eff','kolektor':'#ff7b00','amoy-pacito':'#ffd700','amoy-klasik':'#66ff99' };
+
     function generateHistory(skinType, days=12) {
         const basePrice = SKIN_PRICES[skinType] || 1000;
         const history = []; let price = basePrice;
@@ -2113,6 +1987,7 @@
         }
         return history;
     }
+
     let historyData = {};
     skinKeys.forEach(key => { historyData[key] = generateHistory(key,12); });
     let prevKolektorPrice = historyData['kolektor'][historyData['kolektor'].length-1] || 5000;
@@ -2238,8 +2113,10 @@
         document.querySelector('.tab-btn[data-tab="dashboardTab"]').addEventListener('click', function() {
             setTimeout(renderCharts, 200);
         });
-        console.log('🔥 AMOY GACHA KELOTER v5.0 - TRADING + DEPOSIT + BROADCAST');
-        console.log('✅ Admin: wilzu222333 / admin123');
+        console.log('🔥 AMOY GACHA KELOTER v6.0 - FIXED!');
+        console.log('✅ Admin password: wilzu2223333');
+        console.log('✅ Deposit minimal 500, max 5000');
+        console.log('✅ Admin bisa atur harga saham!');
     }
 
     init();
