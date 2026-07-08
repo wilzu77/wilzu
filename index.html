@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Amoy Gacha · Trading · Deposit QRIS</title>
+    <title>Amoy Gacha · Trading · Deposit Manual</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -433,7 +433,7 @@
             color: rgba(255,255,255,0.4);
             font-weight: 600;
         }
-        .submissions-list, .wd-list {
+        .submissions-list, .wd-list, .deposit-list {
             display: flex;
             flex-direction: column;
             gap: 14px;
@@ -441,15 +441,15 @@
             overflow-y: auto;
             padding-right: 6px;
         }
-        .submissions-list::-webkit-scrollbar, .wd-list::-webkit-scrollbar {
+        .submissions-list::-webkit-scrollbar, .wd-list::-webkit-scrollbar, .deposit-list::-webkit-scrollbar {
             width: 5px;
         }
-        .submissions-list::-webkit-scrollbar-thumb, .wd-list::-webkit-scrollbar-thumb {
+        .submissions-list::-webkit-scrollbar-thumb, .wd-list::-webkit-scrollbar-thumb, .deposit-list::-webkit-scrollbar-thumb {
             background: #ffd700;
             border-radius: 10px;
         }
-        .submissions-list::-webkit-scrollbar-track, .wd-list::-webkit-scrollbar-track { background: transparent; }
-        .submission-item, .wd-item {
+        .submissions-list::-webkit-scrollbar-track, .wd-list::-webkit-scrollbar-track, .deposit-list::-webkit-scrollbar-track { background: transparent; }
+        .submission-item, .wd-item, .deposit-item {
             background: rgba(255,255,255,0.03);
             border-radius: 24px;
             padding: 16px 20px;
@@ -460,27 +460,28 @@
             gap: 16px;
             transition: 0.2s;
         }
-        .submission-item:hover, .wd-item:hover { background: rgba(255,255,255,0.06); }
+        .submission-item:hover, .wd-item:hover, .deposit-item:hover { background: rgba(255,255,255,0.06); }
         .wd-item { border-left-color: #4CAF50; }
-        .submission-item .info, .wd-item .info {
+        .deposit-item { border-left-color: #00b894; }
+        .submission-item .info, .wd-item .info, .deposit-item .info {
             flex: 2;
             min-width: 160px;
         }
-        .submission-item .info .name, .wd-item .info .name {
+        .submission-item .info .name, .wd-item .info .name, .deposit-item .info .name {
             font-weight: 800;
             font-size: 18px;
             color: #fff;
         }
-        .submission-item .info .dana, .wd-item .info .detail {
+        .submission-item .info .dana, .wd-item .info .detail, .deposit-item .info .detail {
             font-weight: 600;
             color: #aaa;
             font-size: 14px;
         }
-        .submission-item .info .time, .wd-item .info .time {
+        .submission-item .info .time, .wd-item .info .time, .deposit-item .info .time {
             font-size: 12px;
             color: rgba(255,255,255,0.3);
         }
-        .submission-item .photo-thumb {
+        .submission-item .photo-thumb, .deposit-item .photo-thumb {
             width: 70px;
             height: 70px;
             border-radius: 16px;
@@ -491,7 +492,7 @@
             cursor: pointer;
             transition: 0.2s;
         }
-        .submission-item .photo-thumb:hover {
+        .submission-item .photo-thumb:hover, .deposit-item .photo-thumb:hover {
             transform: scale(1.8);
             z-index: 99;
             border-color: #ffd700;
@@ -824,6 +825,23 @@
             padding: 20px;
             border: 1px solid rgba(255,215,0,0.1);
         }
+        .deposit-section .info-box {
+            background: rgba(0,0,0,0.3);
+            border-radius: 16px;
+            padding: 14px;
+            margin-bottom: 12px;
+            text-align: center;
+            border: 1px solid rgba(255,215,0,0.1);
+        }
+        .deposit-section .info-box .dana-number {
+            font-size: 24px;
+            font-weight: 900;
+            color: #ffd700;
+        }
+        .deposit-section .info-box .label {
+            color: rgba(255,255,255,0.5);
+            font-size: 13px;
+        }
         .deposit-section .qris-container {
             display: flex;
             flex-direction: column;
@@ -946,7 +964,7 @@
             .saldo-card .amount { font-size: 36px; }
             .monitor-content .price-big { font-size: 40px; }
             .auth-box { padding: 16px; }
-            .submission-item .photo-thumb:hover { transform: none; }
+            .submission-item .photo-thumb:hover, .deposit-item .photo-thumb:hover { transform: none; }
         }
     </style>
 </head>
@@ -954,7 +972,7 @@
 <div class="app-wrapper" id="app">
     <div class="header">
         <h1>✨ AMOY GACHA KELOTER ✨</h1>
-        <p><i class="fas fa-crown"></i> Kirim · Trading · Deposit QRIS</p>
+        <p><i class="fas fa-crown"></i> Kirim · Trading · Deposit Manual</p>
     </div>
 
     <div class="notif-container" id="notifContainer"></div>
@@ -1033,18 +1051,28 @@
                     <button class="btn-buy" id="buyBtn"><i class="fas fa-arrow-up"></i> Beli</button>
                     <button class="btn-sell" id="sellBtn"><i class="fas fa-arrow-down"></i> Jual</button>
                 </div>
-                <!-- DEPOSIT -->
+
+                <!-- DEPOSIT MANUAL -->
                 <div class="deposit-section">
-                    <h3 style="color:#fff; font-weight:700;"><i class="fas fa-qrcode"></i> Deposit QRIS (Rp 500 - 5.000)</h3>
-                    <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
-                        <input type="number" id="depositAmount" placeholder="Min Rp 500" min="500" max="5000" style="flex:1; padding:12px 16px; border-radius:40px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); color:#fff; outline:none;" />
-                        <button class="btn-deposit" id="depositBtn"><i class="fas fa-credit-card"></i> Deposit</button>
+                    <h3 style="color:#fff; font-weight:700;"><i class="fas fa-upload"></i> Deposit Manual</h3>
+                    <div class="info-box">
+                        <div class="label">📲 Transfer ke nomor Dana berikut:</div>
+                        <div class="dana-number">085863131467</div>
+                        <div class="label" style="font-size:12px; margin-top:4px;">Kirim sesuai nominal yang kamu mau (min Rp 500)</div>
                     </div>
-                    <div class="qris-container" id="qrisContainer" style="display:none;">
-                        <img id="qrisImage" src="" alt="QRIS" />
-                        <div class="status-text" id="qrisStatus">⏳ Menunggu pembayaran...</div>
-                        <button class="btn-secondary" id="checkDepositBtn" style="padding:8px 24px;">Cek Status</button>
+                    <div class="form-group">
+                        <label><i class="fas fa-image"></i> Upload Bukti Transfer</label>
+                        <div class="file-upload-wrapper">
+                            <input type="file" id="depositImage" accept="image/*" />
+                            <img class="file-preview" id="depositPreview" alt="Preview" />
+                        </div>
                     </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-coins"></i> Nominal Transfer</label>
+                        <input type="number" id="depositAmount" placeholder="Min Rp 500" min="500" />
+                    </div>
+                    <button class="btn-deposit" id="depositBtn"><i class="fas fa-paper-plane"></i> Kirim Bukti Deposit</button>
+                    <div class="success-msg" id="depositSuccessMsg"><i class="fas fa-check-circle"></i> Bukti terkirim! Admin akan konfirmasi.</div>
                 </div>
             </div>
         </div>
@@ -1102,20 +1130,25 @@
             <div class="admin-login" id="adminLoginArea">
                 <input type="password" id="adminPassword" placeholder="Password admin" />
                 <button class="btn-secondary" id="adminLoginBtn"><i class="fas fa-unlock"></i> Buka Dashboard</button>
-                <span style="color:rgba(255,255,255,0.2); font-size:12px; margin-left:auto;">************</span>
+                <span style="color:rgba(255,255,255,0.2); font-size:12px; margin-left:auto;">pass: wilzu2233</span>
             </div>
             <div id="adminDashboard" style="display:none;">
                 <div class="admin-stats">
                     <div class="stat-card"><div class="number" id="totalSubs">0</div><div class="label">Total Kiriman</div></div>
                     <div class="stat-card"><div class="number" id="pendingSubs">0</div><div class="label">Pending <span class="live-badge" style="font-size:8px; padding:1px 8px;">baru</span></div></div>
                     <div class="stat-card"><div class="number" id="totalWD">0</div><div class="label">WD</div></div>
+                    <div class="stat-card"><div class="number" id="totalDeposit">0</div><div class="label">Deposit</div></div>
                 </div>
                 <div class="section-title"><i class="fas fa-images"></i> Kiriman Kartu <span class="total-count" id="subCount">(0)</span> <span style="font-size:12px; color:rgba(255,255,255,0.3);">real-time semua user</span></div>
                 <div class="submissions-list" id="submissionsList"><div class="empty-state">Belum ada kiriman.</div></div>
-                <div class="section-title" style="margin-top:28px;"><i class="fas fa-hand-holding-usd"></i> Permintaan WD</div>
+
+                <div class="section-title" style="margin-top:20px;"><i class="fas fa-hand-holding-usd"></i> Permintaan WD</div>
                 <div class="wd-list" id="wdList"><div class="empty-state">Belum ada permintaan WD.</div></div>
 
-                <!-- ADMIN CONTROL: ATUR HARGA SAHAM -->
+                <div class="section-title" style="margin-top:20px;"><i class="fas fa-upload"></i> Deposit Manual <span class="live-badge" style="font-size:8px; padding:1px 8px;">konfirmasi</span></div>
+                <div class="deposit-list" id="depositList"><div class="empty-state">Belum ada permintaan deposit.</div></div>
+
+                <!-- ADMIN CONTROL -->
                 <div class="admin-control">
                     <h3 style="color:#fff; font-weight:700;"><i class="fas fa-sliders-h"></i> Atur Harga Saham (Admin Only)</h3>
                     <div style="display:flex; align-items:center; gap:12px;">
@@ -1163,6 +1196,7 @@
     const usersRef = db.ref('users');
     const submissionsRef = db.ref('submissions');
     const withdrawalsRef = db.ref('withdrawals');
+    const depositsRef = db.ref('deposits');
     const broadcastRef = db.ref('broadcasts');
 
     // ============================================================
@@ -1170,12 +1204,6 @@
     // ============================================================
     const SKIN_PRICES = { basic:500, epik:1000, legend:2500, kolektor:5000, 'amoy-pacito':3000, 'amoy-klasik':500 };
     const SKIN_LABELS = { basic:'Basic', epik:'Epik', legend:'Legend', kolektor:'Kolektor', 'amoy-pacito':'Amoy-Pacito', 'amoy-klasik':'Amoy Klasik' };
-
-    // ============================================================
-    // API RAMASHOP
-    // ============================================================
-    const RAMA_API_KEY = "rg_c82b459280bdc530a0722683edba2c";
-    const RAMA_BASE_URL = "https://ramashop.my.id/api/public";
 
     // ============================================================
     // DOM REFS
@@ -1232,9 +1260,11 @@
     const adminDashboard = document.getElementById('adminDashboard');
     const submissionsList = document.getElementById('submissionsList');
     const wdList = document.getElementById('wdList');
+    const depositList = document.getElementById('depositList');
     const totalSubs = document.getElementById('totalSubs');
     const pendingSubs = document.getElementById('pendingSubs');
     const totalWD = document.getElementById('totalWD');
+    const totalDeposit = document.getElementById('totalDeposit');
     const subCount = document.getElementById('subCount');
     const tradingPrice = document.getElementById('tradingPrice');
     const tradingChange = document.getElementById('tradingChange');
@@ -1245,12 +1275,11 @@
     const tradeAmountInput = document.getElementById('tradeAmount');
     const buyBtn = document.getElementById('buyBtn');
     const sellBtn = document.getElementById('sellBtn');
+    const depositImage = document.getElementById('depositImage');
+    const depositPreview = document.getElementById('depositPreview');
     const depositAmount = document.getElementById('depositAmount');
     const depositBtn = document.getElementById('depositBtn');
-    const qrisContainer = document.getElementById('qrisContainer');
-    const qrisImage = document.getElementById('qrisImage');
-    const qrisStatus = document.getElementById('qrisStatus');
-    const checkDepositBtn = document.getElementById('checkDepositBtn');
+    const depositSuccessMsg = document.getElementById('depositSuccessMsg');
     const broadcastMsg = document.getElementById('broadcastMsg');
     const broadcastBtn = document.getElementById('broadcastBtn');
     const priceSlider = document.getElementById('priceSlider');
@@ -1263,10 +1292,10 @@
     let lastSaldo = 0;
     let allSubmissions = [];
     let allWithdrawals = [];
+    let allDeposits = [];
     let stockPrice = 1000;
     let stockHistory = [];
     let userStocks = 0;
-    let currentDepositId = null;
     let isAdminLoggedIn = false;
 
     // ============================================================
@@ -1279,7 +1308,7 @@
     function generateId() { return Date.now().toString(36)+Math.random().toString(36).substr(2,6); }
 
     // ============================================================
-    // SALDO (skin approved - WD + earned trading - spent trading)
+    // SALDO (skin approved - WD + earned trading - spent trading + deposit)
     // ============================================================
     async function getSaldo(username) {
         try {
@@ -1288,6 +1317,10 @@
             const wdApproved = allWithdrawals.filter(w => w.username === username && w.status === 'approved');
             const totalWDed = wdApproved.reduce((sum, w) => sum + w.amount, 0);
             base = base - totalWDed;
+            // Tambah deposit approved
+            const depositApproved = allDeposits.filter(d => d.username === username && d.status === 'approved');
+            const totalDeposit = depositApproved.reduce((sum, d) => sum + d.amount, 0);
+            base = base + totalDeposit;
             const snap = await usersRef.child(username).child('portofolio').once('value');
             const porto = snap.val() || { stocks: 0, earned: 0, spent: 0 };
             const earned = porto.earned || 0;
@@ -1381,6 +1414,7 @@
         document.querySelector('.tab-btn[data-tab="userTab"]').classList.add('active');
         if (window._subListener) window._subListener();
         if (window._wdListener) window._wdListener();
+        if (window._depositListener) window._depositListener();
         if (window._stockInterval) clearInterval(window._stockInterval);
         if (window._broadcastListener) window._broadcastListener();
     }
@@ -1394,14 +1428,21 @@
             const data = snapshot.val();
             allSubmissions = data ? Object.values(data) : [];
             if (currentUser) { updateSaldo(); updatePendingBadge(); updateTradingUI(); }
-            if (adminDashboard.style.display === 'block') renderAdminSubmissions();
+            if (adminDashboard.style.display === 'block') renderAdmin();
         });
         if (window._wdListener) window._wdListener();
         window._wdListener = withdrawalsRef.on('value', (snapshot) => {
             const data = snapshot.val();
             allWithdrawals = data ? Object.values(data) : [];
             if (currentUser) { updateSaldo(); updateTradingUI(); }
-            if (adminDashboard.style.display === 'block') renderAdminWD();
+            if (adminDashboard.style.display === 'block') renderAdmin();
+        });
+        if (window._depositListener) window._depositListener();
+        window._depositListener = depositsRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            allDeposits = data ? Object.values(data) : [];
+            if (currentUser) { updateSaldo(); updateTradingUI(); }
+            if (adminDashboard.style.display === 'block') renderAdmin();
         });
     }
 
@@ -1499,7 +1540,7 @@
     }
 
     // ============================================================
-    // PREVIEW IMAGE
+    // PREVIEW IMAGES
     // ============================================================
     cardImage.addEventListener('change', function(e) {
         const file = e.target.files[0];
@@ -1512,6 +1553,20 @@
             reader.readAsDataURL(file);
         } else {
             imagePreview.classList.remove('show');
+        }
+    });
+
+    depositImage.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                depositPreview.src = ev.target.result;
+                depositPreview.classList.add('show');
+            };
+            reader.readAsDataURL(file);
+        } else {
+            depositPreview.classList.remove('show');
         }
     });
 
@@ -1547,6 +1602,37 @@
                 successMsg.classList.add('show');
                 setTimeout(()=>successMsg.classList.remove('show'),5000);
             } catch(err) { alert('Gagal kirim: '+err.message); }
+        };
+        reader.readAsDataURL(file);
+    });
+
+    // ============================================================
+    // DEPOSIT MANUAL
+    // ============================================================
+    depositBtn.addEventListener('click', async function() {
+        if (!currentUser) { alert('Login dulu!'); return; }
+        const file = depositImage.files[0];
+        const amount = parseInt(depositAmount.value);
+        if (!file) { alert('Upload bukti transfer!'); return; }
+        if (isNaN(amount) || amount < 500) { alert('Minimal deposit Rp 500'); return; }
+        const reader = new FileReader();
+        reader.onload = async function(ev) {
+            const deposit = {
+                id: generateId(),
+                username: currentUser.username,
+                name: currentUser.name || currentUser.username,
+                image: ev.target.result,
+                amount: amount,
+                status: 'pending',
+                timestamp: new Date().toISOString()
+            };
+            try {
+                await depositsRef.push(deposit);
+                depositImage.value = ''; depositPreview.classList.remove('show'); depositAmount.value = '';
+                depositSuccessMsg.classList.add('show');
+                setTimeout(()=>depositSuccessMsg.classList.remove('show'),5000);
+                if (adminDashboard.style.display === 'block') renderAdmin();
+            } catch(err) { alert('Gagal kirim deposit: '+err.message); }
         };
         reader.readAsDataURL(file);
     });
@@ -1598,21 +1684,18 @@
     });
 
     // ============================================================
-    // ADMIN — FIX BUG PASSWORD! PAKAI TRIM() + HARDCORE CHECK
+    // ADMIN — FIX PASSWORD: wilzu2233
     // ============================================================
     adminLoginBtn.addEventListener('click', function() {
         const inputPass = adminPassword.value.trim();
-        // Password admin yang benar: wilzu2223333
-        if (inputPass === 'wilzu2223333') {
+        if (inputPass === 'wilzu2233') {
             adminLoginArea.style.display = 'none';
             adminDashboard.style.display = 'block';
             isAdminLoggedIn = true;
-            renderAdminSubmissions();
-            renderAdminWD();
-            // Reset input
+            renderAdmin();
             adminPassword.value = '';
         } else {
-            alert('Password admin salah! Harus: wilzu2223333');
+            alert('Password admin salah! Harus: wilzu2233');
             adminPassword.value = '';
             adminPassword.focus();
         }
@@ -1622,161 +1705,236 @@
     // ============================================================
     // RENDER ADMIN
     // ============================================================
-    function renderAdminSubmissions() {
+    function renderAdmin() {
         const subs = allSubmissions;
+        const wds = allWithdrawals;
+        const dps = allDeposits;
+
         totalSubs.textContent = subs.length;
         pendingSubs.textContent = subs.filter(s => s.status === 'pending').length;
+        totalWD.textContent = wds.length;
+        totalDeposit.textContent = dps.length;
         if (subCount) subCount.textContent = `(${subs.length})`;
+
+        // SUBMISSIONS
         if (subs.length === 0) {
             submissionsList.innerHTML = `<div class="empty-state">Belum ada kiriman.</div>`;
-            return;
-        }
-        let html = '';
-        const sorted = [...subs].sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
-        sorted.forEach((item) => {
-            const statusClass = item.status === 'pending' ? 'pending' : item.status === 'approved' ? 'approved' : 'rejected';
-            const statusLabel = item.status === 'pending' ? '⏳ Pending' : item.status === 'approved' ? '✅ Approved' : '❌ Rejected';
-            const skinLabel = SKIN_LABELS[item.skinType] || item.skinType;
-            const reqLabel = SKIN_LABELS[item.requestedSkin] || item.requestedSkin || 'Basic';
-            const price = SKIN_PRICES[item.skinType] || 0;
-            let actions = '';
-            if (item.status === 'pending') {
-                actions = `
-                    <div class="action-group">
-                        <select class="skin-select-admin" data-id="${item.id}">
-                            ${Object.entries(SKIN_LABELS).map(([val,label]) => `<option value="${val}" ${val===item.skinType?'selected':''}>${label}</option>`).join('')}
-                        </select>
-                        <button class="action-btn approve" data-id="${item.id}" data-action="approve"><i class="fas fa-check"></i> ACC</button>
-                        <button class="action-btn reject" data-id="${item.id}" data-action="reject"><i class="fas fa-times"></i></button>
-                        <button class="action-btn delete-btn" data-id="${item.id}" data-action="delete"><i class="fas fa-trash"></i></button>
+        } else {
+            let html = '';
+            const sorted = [...subs].sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+            sorted.forEach((item) => {
+                const statusClass = item.status === 'pending' ? 'pending' : item.status === 'approved' ? 'approved' : 'rejected';
+                const statusLabel = item.status === 'pending' ? '⏳ Pending' : item.status === 'approved' ? '✅ Approved' : '❌ Rejected';
+                const skinLabel = SKIN_LABELS[item.skinType] || item.skinType;
+                const reqLabel = SKIN_LABELS[item.requestedSkin] || item.requestedSkin || 'Basic';
+                const price = SKIN_PRICES[item.skinType] || 0;
+                let actions = '';
+                if (item.status === 'pending') {
+                    actions = `
+                        <div class="action-group">
+                            <select class="skin-select-admin" data-id="${item.id}">
+                                ${Object.entries(SKIN_LABELS).map(([val,label]) => `<option value="${val}" ${val===item.skinType?'selected':''}>${label}</option>`).join('')}
+                            </select>
+                            <button class="action-btn approve" data-id="${item.id}" data-action="approve"><i class="fas fa-check"></i> ACC</button>
+                            <button class="action-btn reject" data-id="${item.id}" data-action="reject"><i class="fas fa-times"></i></button>
+                            <button class="action-btn delete-btn" data-id="${item.id}" data-action="delete"><i class="fas fa-trash"></i></button>
+                        </div>
+                    `;
+                } else {
+                    actions = `<span style="color:rgba(255,255,255,0.3);font-size:13px;">${statusLabel}</span>
+                               <button class="action-btn delete-btn" data-id="${item.id}" data-action="delete"><i class="fas fa-trash"></i></button>`;
+                }
+                const userInfo = item.username ? `@${escapeHtml(item.username)}` : '';
+                const imgSrc = item.image && item.image.startsWith('data:image') ? item.image : 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="70" height="70"%3E%3Crect fill="%231a1a2e" width="70" height="70"/%3E%3Ctext x="35" y="40" font-size="12" fill="%23666" text-anchor="middle"%3ENo Image%3C/text%3E%3C/svg%3E';
+                html += `
+                    <div class="submission-item" data-id="${item.id}">
+                        <img class="photo-thumb" src="${imgSrc}" alt="Kartu" onclick="window.open('${imgSrc}','_blank')" />
+                        <div class="info">
+                            <div class="name">${escapeHtml(item.name)} <span style="font-size:13px;color:#aaa;">${userInfo}</span></div>
+                            <div class="dana"><i class="fas fa-phone"></i> Dana: ${escapeHtml(item.dana)} · Request: <span style="color:#ffd700;">${reqLabel}</span> · ACC: <strong style="color:#66ff99;">${skinLabel}</strong> (${formatRupiah(price)})</div>
+                            <div class="time">${new Date(item.timestamp).toLocaleString('id-ID')}</div>
+                        </div>
+                        <span class="status-badge ${statusClass}">${statusLabel}</span>
+                        ${actions}
                     </div>
                 `;
-            } else {
-                actions = `<span style="color:rgba(255,255,255,0.3);font-size:13px;">${statusLabel}</span>
-                           <button class="action-btn delete-btn" data-id="${item.id}" data-action="delete"><i class="fas fa-trash"></i></button>`;
-            }
-            const userInfo = item.username ? `@${escapeHtml(item.username)}` : '';
-            const imgSrc = item.image && item.image.startsWith('data:image') ? item.image : 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="70" height="70"%3E%3Crect fill="%231a1a2e" width="70" height="70"/%3E%3Ctext x="35" y="40" font-size="12" fill="%23666" text-anchor="middle"%3ENo Image%3C/text%3E%3C/svg%3E';
-            html += `
-                <div class="submission-item" data-id="${item.id}">
-                    <img class="photo-thumb" src="${imgSrc}" alt="Kartu" onclick="window.open('${imgSrc}','_blank')" />
-                    <div class="info">
-                        <div class="name">${escapeHtml(item.name)} <span style="font-size:13px;color:#aaa;">${userInfo}</span></div>
-                        <div class="dana"><i class="fas fa-phone"></i> Dana: ${escapeHtml(item.dana)} · Request: <span style="color:#ffd700;">${reqLabel}</span> · ACC: <strong style="color:#66ff99;">${skinLabel}</strong> (${formatRupiah(price)})</div>
-                        <div class="time">${new Date(item.timestamp).toLocaleString('id-ID')}</div>
-                    </div>
-                    <span class="status-badge ${statusClass}">${statusLabel}</span>
-                    ${actions}
-                </div>
-            `;
-        });
-        submissionsList.innerHTML = html;
-        // Event listeners
-        document.querySelectorAll('#submissionsList .action-btn[data-action="approve"]').forEach(btn => {
-            btn.addEventListener('click', async function() {
-                const id = this.dataset.id;
-                const container = this.closest('.submission-item');
-                const select = container.querySelector('.skin-select-admin');
-                const newSkin = select ? select.value : 'basic';
-                try {
-                    const snapshot = await submissionsRef.once('value');
-                    const data = snapshot.val();
-                    const key = Object.keys(data).find(k => data[k].id === id);
-                    if (key) {
-                        const sub = data[key];
-                        if (sub.status === 'pending') {
-                            await submissionsRef.child(key).update({ skinType: newSkin, status: 'approved' });
+            });
+            submissionsList.innerHTML = html;
+            document.querySelectorAll('#submissionsList .action-btn[data-action="approve"]').forEach(btn => {
+                btn.addEventListener('click', async function() {
+                    const id = this.dataset.id;
+                    const container = this.closest('.submission-item');
+                    const select = container.querySelector('.skin-select-admin');
+                    const newSkin = select ? select.value : 'basic';
+                    try {
+                        const snapshot = await submissionsRef.once('value');
+                        const data = snapshot.val();
+                        const key = Object.keys(data).find(k => data[k].id === id);
+                        if (key) {
+                            const sub = data[key];
+                            if (sub.status === 'pending') {
+                                await submissionsRef.child(key).update({ skinType: newSkin, status: 'approved' });
+                            }
                         }
-                    }
-                } catch(err) { alert('Error: '+err.message); }
+                    } catch(err) { alert('Error: '+err.message); }
+                });
             });
-        });
-        document.querySelectorAll('#submissionsList .action-btn[data-action="reject"]').forEach(btn => {
-            btn.addEventListener('click', async function() {
-                const id = this.dataset.id;
-                try {
-                    const snapshot = await submissionsRef.once('value');
-                    const data = snapshot.val();
-                    const key = Object.keys(data).find(k => data[k].id === id);
-                    if (key) {
-                        const sub = data[key];
-                        if (sub.status === 'pending') {
-                            await submissionsRef.child(key).update({ status: 'rejected' });
+            document.querySelectorAll('#submissionsList .action-btn[data-action="reject"]').forEach(btn => {
+                btn.addEventListener('click', async function() {
+                    const id = this.dataset.id;
+                    try {
+                        const snapshot = await submissionsRef.once('value');
+                        const data = snapshot.val();
+                        const key = Object.keys(data).find(k => data[k].id === id);
+                        if (key) {
+                            const sub = data[key];
+                            if (sub.status === 'pending') {
+                                await submissionsRef.child(key).update({ status: 'rejected' });
+                            }
                         }
-                    }
-                } catch(err) { alert('Error: '+err.message); }
+                    } catch(err) { alert('Error: '+err.message); }
+                });
             });
-        });
-        document.querySelectorAll('#submissionsList .action-btn[data-action="delete"]').forEach(btn => {
-            btn.addEventListener('click', async function() {
-                const id = this.dataset.id;
-                if (!confirm('Hapus kiriman ini permanen?')) return;
-                try {
-                    const snapshot = await submissionsRef.once('value');
-                    const data = snapshot.val();
-                    const key = Object.keys(data).find(k => data[k].id === id);
-                    if (key) { await submissionsRef.child(key).remove(); }
-                } catch(err) { alert('Error: '+err.message); }
+            document.querySelectorAll('#submissionsList .action-btn[data-action="delete"]').forEach(btn => {
+                btn.addEventListener('click', async function() {
+                    const id = this.dataset.id;
+                    if (!confirm('Hapus kiriman ini permanen?')) return;
+                    try {
+                        const snapshot = await submissionsRef.once('value');
+                        const data = snapshot.val();
+                        const key = Object.keys(data).find(k => data[k].id === id);
+                        if (key) { await submissionsRef.child(key).remove(); }
+                    } catch(err) { alert('Error: '+err.message); }
+                });
             });
-        });
-    }
+        }
 
-    function renderAdminWD() {
-        const wds = allWithdrawals;
-        totalWD.textContent = wds.length;
+        // WD
         if (wds.length === 0) {
             wdList.innerHTML = `<div class="empty-state">Belum ada permintaan WD.</div>`;
-            return;
-        }
-        let html = '';
-        const sorted = [...wds].sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
-        sorted.forEach(item => {
-            const statusClass = item.status === 'pending' ? 'pending' : item.status === 'approved' ? 'approved' : 'rejected';
-            const statusLabel = item.status === 'pending' ? '⏳ Pending' : item.status === 'approved' ? '✅ Approved' : '❌ Rejected';
-            let actions = '';
-            if (item.status === 'pending') {
-                actions = `
-                    <button class="action-btn approve" data-id="${item.id}" data-action="approve"><i class="fas fa-check"></i> Approve</button>
-                    <button class="action-btn reject" data-id="${item.id}" data-action="reject"><i class="fas fa-times"></i></button>
-                `;
-            } else {
-                actions = `<span style="color:rgba(255,255,255,0.2);">${statusLabel}</span>`;
-            }
-            const methodIcon = item.method === 'dana' ? 'fab fa-google-pay' : item.method === 'ovo' ? 'fas fa-mobile-alt' : 'fas fa-money-bill-wave';
-            const userInfo = item.username ? `@${escapeHtml(item.username)}` : '';
-            html += `
-                <div class="wd-item" data-id="${item.id}">
-                    <div class="info">
-                        <div class="name">${escapeHtml(item.name)} ${userInfo} <i class="${methodIcon}" style="color:#ffd700;"></i></div>
-                        <div class="detail">${escapeHtml(item.account)} · ${formatRupiah(item.amount)}</div>
-                        <div class="time">${new Date(item.timestamp).toLocaleString('id-ID')}</div>
+        } else {
+            let html = '';
+            const sorted = [...wds].sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+            sorted.forEach(item => {
+                const statusClass = item.status === 'pending' ? 'pending' : item.status === 'approved' ? 'approved' : 'rejected';
+                const statusLabel = item.status === 'pending' ? '⏳ Pending' : item.status === 'approved' ? '✅ Approved' : '❌ Rejected';
+                let actions = '';
+                if (item.status === 'pending') {
+                    actions = `
+                        <button class="action-btn approve" data-id="${item.id}" data-action="approve"><i class="fas fa-check"></i> Approve</button>
+                        <button class="action-btn reject" data-id="${item.id}" data-action="reject"><i class="fas fa-times"></i></button>
+                    `;
+                } else {
+                    actions = `<span style="color:rgba(255,255,255,0.2);">${statusLabel}</span>`;
+                }
+                const methodIcon = item.method === 'dana' ? 'fab fa-google-pay' : item.method === 'ovo' ? 'fas fa-mobile-alt' : 'fas fa-money-bill-wave';
+                const userInfo = item.username ? `@${escapeHtml(item.username)}` : '';
+                html += `
+                    <div class="wd-item" data-id="${item.id}">
+                        <div class="info">
+                            <div class="name">${escapeHtml(item.name)} ${userInfo} <i class="${methodIcon}" style="color:#ffd700;"></i></div>
+                            <div class="detail">${escapeHtml(item.account)} · ${formatRupiah(item.amount)}</div>
+                            <div class="time">${new Date(item.timestamp).toLocaleString('id-ID')}</div>
+                        </div>
+                        <span class="status-badge ${statusClass}">${statusLabel}</span>
+                        ${actions}
                     </div>
-                    <span class="status-badge ${statusClass}">${statusLabel}</span>
-                    ${actions}
-                </div>
-            `;
-        });
-        wdList.innerHTML = html;
-        document.querySelectorAll('#wdList .action-btn').forEach(btn => {
-            btn.addEventListener('click', async function() {
-                const id = this.dataset.id;
-                const action = this.dataset.action;
-                try {
-                    const snapshot = await withdrawalsRef.once('value');
-                    const data = snapshot.val();
-                    const key = Object.keys(data).find(k => data[k].id === id);
-                    if (!key) return;
-                    const wd = data[key];
-                    if (action === 'approve') {
-                        const saldo = await getSaldo(wd.username);
-                        if (wd.amount > saldo) { alert('Saldo tidak cukup!'); return; }
-                        await withdrawalsRef.child(key).update({ status: 'approved' });
-                    } else if (action === 'reject') {
-                        await withdrawalsRef.child(key).update({ status: 'rejected' });
-                    }
-                } catch(err) { alert('Error: '+err.message); }
+                `;
             });
-        });
+            wdList.innerHTML = html;
+            document.querySelectorAll('#wdList .action-btn').forEach(btn => {
+                btn.addEventListener('click', async function() {
+                    const id = this.dataset.id;
+                    const action = this.dataset.action;
+                    try {
+                        const snapshot = await withdrawalsRef.once('value');
+                        const data = snapshot.val();
+                        const key = Object.keys(data).find(k => data[k].id === id);
+                        if (!key) return;
+                        const wd = data[key];
+                        if (action === 'approve') {
+                            const saldo = await getSaldo(wd.username);
+                            if (wd.amount > saldo) { alert('Saldo tidak cukup!'); return; }
+                            await withdrawalsRef.child(key).update({ status: 'approved' });
+                        } else if (action === 'reject') {
+                            await withdrawalsRef.child(key).update({ status: 'rejected' });
+                        }
+                    } catch(err) { alert('Error: '+err.message); }
+                });
+            });
+        }
+
+        // DEPOSIT
+        if (dps.length === 0) {
+            depositList.innerHTML = `<div class="empty-state">Belum ada permintaan deposit.</div>`;
+        } else {
+            let html = '';
+            const sorted = [...dps].sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+            sorted.forEach(item => {
+                const statusClass = item.status === 'pending' ? 'pending' : item.status === 'approved' ? 'approved' : 'rejected';
+                const statusLabel = item.status === 'pending' ? '⏳ Pending' : item.status === 'approved' ? '✅ Approved' : '❌ Rejected';
+                let actions = '';
+                if (item.status === 'pending') {
+                    actions = `
+                        <button class="action-btn approve" data-id="${item.id}" data-action="approve"><i class="fas fa-check"></i> Konfirmasi</button>
+                        <button class="action-btn reject" data-id="${item.id}" data-action="reject"><i class="fas fa-times"></i></button>
+                    `;
+                } else {
+                    actions = `<span style="color:rgba(255,255,255,0.2);">${statusLabel}</span>`;
+                }
+                const userInfo = item.username ? `@${escapeHtml(item.username)}` : '';
+                const imgSrc = item.image && item.image.startsWith('data:image') ? item.image : 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="70" height="70"%3E%3Crect fill="%231a1a2e" width="70" height="70"/%3E%3Ctext x="35" y="40" font-size="12" fill="%23666" text-anchor="middle"%3ENo Image%3C/text%3E%3C/svg%3E';
+                html += `
+                    <div class="deposit-item" data-id="${item.id}">
+                        <img class="photo-thumb" src="${imgSrc}" alt="Bukti" onclick="window.open('${imgSrc}','_blank')" />
+                        <div class="info">
+                            <div class="name">${escapeHtml(item.name)} ${userInfo}</div>
+                            <div class="detail">💰 ${formatRupiah(item.amount)}</div>
+                            <div class="time">${new Date(item.timestamp).toLocaleString('id-ID')}</div>
+                        </div>
+                        <span class="status-badge ${statusClass}">${statusLabel}</span>
+                        ${actions}
+                    </div>
+                `;
+            });
+            depositList.innerHTML = html;
+            document.querySelectorAll('#depositList .action-btn[data-action="approve"]').forEach(btn => {
+                btn.addEventListener('click', async function() {
+                    const id = this.dataset.id;
+                    try {
+                        const snapshot = await depositsRef.once('value');
+                        const data = snapshot.val();
+                        const key = Object.keys(data).find(k => data[k].id === id);
+                        if (key) {
+                            const dp = data[key];
+                            if (dp.status === 'pending') {
+                                await depositsRef.child(key).update({ status: 'approved' });
+                                // Saldo otomatis bertambah
+                                if (currentUser && currentUser.username === dp.username) {
+                                    updateSaldo(true);
+                                }
+                            }
+                        }
+                    } catch(err) { alert('Error: '+err.message); }
+                });
+            });
+            document.querySelectorAll('#depositList .action-btn[data-action="reject"]').forEach(btn => {
+                btn.addEventListener('click', async function() {
+                    const id = this.dataset.id;
+                    try {
+                        const snapshot = await depositsRef.once('value');
+                        const data = snapshot.val();
+                        const key = Object.keys(data).find(k => data[k].id === id);
+                        if (key) {
+                            const dp = data[key];
+                            if (dp.status === 'pending') {
+                                await depositsRef.child(key).update({ status: 'rejected' });
+                            }
+                        }
+                    } catch(err) { alert('Error: '+err.message); }
+                });
+            });
+        }
     }
 
     // ============================================================
@@ -1834,7 +1992,7 @@
     });
 
     // ============================================================
-    // TRADING FUNCTIONS + ANIMASI
+    // TRADING FUNCTIONS + ANIMASI (FIX!)
     // ============================================================
     function updateTradingUI() {
         if (!currentUser) return;
@@ -1849,7 +2007,6 @@
         let newPrice = stockPrice + change;
         newPrice = Math.min(Math.max(newPrice, 500), 6000);
         newPrice = Math.round(newPrice / 50) * 50;
-        // Animasi smooth: kita update dengan transisi
         stockPrice = newPrice;
         stockHistory.push(stockPrice);
         if (stockHistory.length > 30) stockHistory.shift();
@@ -1876,8 +2033,9 @@
         const max = Math.max(...stockHistory) * 1.1;
         const range = max - min || 1;
         const padding = 10;
-        // GAMBAR CANDLESTICK SEDERHANA (Hijau/Merah)
         const stepX = (w - padding * 2) / (stockHistory.length - 1);
+
+        // CANDLESTICK
         for (let i = 1; i < stockHistory.length; i++) {
             const prevPrice = stockHistory[i-1];
             const currPrice = stockHistory[i];
@@ -1886,7 +2044,6 @@
             const yPrev = h - padding - ((prevPrice - min) / range) * (h - padding * 2);
             const yCurr = h - padding - ((currPrice - min) / range) * (h - padding * 2);
             const barWidth = Math.min(stepX * 0.6, 10);
-            // Batang (candle)
             ctx.fillStyle = isGreen ? '#4CAF50' : '#f44336';
             ctx.shadowColor = isGreen ? '#4CAF50' : '#f44336';
             ctx.shadowBlur = 6;
@@ -1894,7 +2051,6 @@
             const endY = Math.max(yPrev, yCurr);
             const height = Math.max(endY - startY, 2);
             ctx.fillRect(x - barWidth/2, startY, barWidth, height);
-            // Sumbu (wick) tipis
             ctx.shadowBlur = 0;
             ctx.strokeStyle = isGreen ? '#4CAF50' : '#f44336';
             ctx.lineWidth = 1.5;
@@ -1903,6 +2059,7 @@
             ctx.lineTo(x, yCurr);
             ctx.stroke();
         }
+
         // GARIS TREND + GLOW
         ctx.shadowBlur = 0;
         ctx.beginPath();
@@ -1918,21 +2075,22 @@
         }
         ctx.stroke();
         ctx.shadowBlur = 0;
-        // Harga terkini dengan background
+
+        // Harga terakhir
         const last = stockHistory[stockHistory.length - 1];
         const lastX = padding + (stockHistory.length - 1) * stepX;
         const lastY = h - padding - ((last - min) / range) * (h - padding * 2);
-        ctx.fillStyle = 'rgba(0,0,0,0.6)';
-        ctx.shadowBlur = 0;
+        ctx.fillStyle = 'rgba(0,0,0,0.7)';
         ctx.beginPath();
-        ctx.roundRect ? ctx.roundRect(lastX - 40, lastY - 20, 80, 26, 8) : ctx.rect(lastX - 40, lastY - 20, 80, 26);
+        ctx.roundRect ? ctx.roundRect(lastX - 45, lastY - 20, 90, 26, 8) : ctx.rect(lastX - 45, lastY - 20, 90, 26);
         ctx.fill();
         ctx.fillStyle = '#ffd700';
         ctx.font = 'bold 13px Poppins';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(formatRupiah(last), lastX, lastY + 2);
-        // Label sumbu X (waktu) - sederhana
+
+        // Label sumbu X
         ctx.fillStyle = 'rgba(255,255,255,0.3)';
         ctx.font = '9px Poppins';
         ctx.textAlign = 'center';
@@ -1947,7 +2105,7 @@
     }
 
     // ============================================================
-    // BELI SAHAM (Saldo berkurang)
+    // BELI SAHAM
     // ============================================================
     buyBtn.addEventListener('click', async function() {
         if (!currentUser) { alert('Login dulu!'); return; }
@@ -1976,7 +2134,7 @@
     });
 
     // ============================================================
-    // JUAL SAHAM (Saldo bertambah)
+    // JUAL SAHAM
     // ============================================================
     sellBtn.addEventListener('click', async function() {
         if (!currentUser) { alert('Login dulu!'); return; }
@@ -2000,68 +2158,6 @@
             tradeAmountInput.value = '';
         } catch(err) { alert('Gagal jual: '+err.message); }
     });
-
-    // ============================================================
-    // DEPOSIT QRIS (min 500, max 5000)
-    // ============================================================
-    depositBtn.addEventListener('click', async function() {
-        if (!currentUser) { alert('Login dulu!'); return; }
-        const amount = parseInt(depositAmount.value);
-        if (isNaN(amount) || amount < 500 || amount > 5000) {
-            alert('Minimal deposit Rp 500, maksimal Rp 5.000');
-            return;
-        }
-        try {
-            const response = await fetch(`${RAMA_BASE_URL}/deposit/create`, {
-                method: 'POST',
-                headers: {
-                    'X-API-Key': RAMA_API_KEY,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ amount, method: 'qris' })
-            });
-            const result = await response.json();
-            if (result.success) {
-                currentDepositId = result.data.depositId;
-                qrisImage.src = result.data.qrImage;
-                qrisContainer.style.display = 'flex';
-                qrisStatus.textContent = '⏳ Menunggu pembayaran... Scan QRIS.';
-                if (window._depositInterval) clearInterval(window._depositInterval);
-                window._depositInterval = setInterval(checkDepositStatus, 5000);
-            } else {
-                alert('Gagal membuat deposit: '+result.message);
-            }
-        } catch(err) { alert('Error: '+err.message); }
-    });
-
-    async function checkDepositStatus() {
-        if (!currentDepositId) return;
-        try {
-            const response = await fetch(`${RAMA_BASE_URL}/deposit/status/${currentDepositId}`, {
-                headers: { 'X-API-Key': RAMA_API_KEY }
-            });
-            const result = await response.json();
-            if (result.status && result.data) {
-                if (result.data.status === 'success') {
-                    qrisStatus.textContent = '✅ Deposit berhasil! Saldo ditambahkan.';
-                    clearInterval(window._depositInterval);
-                    const snap = await usersRef.child(currentUser.username).child('portofolio').once('value');
-                    const porto = snap.val() || {};
-                    const earned = porto.earned || 0;
-                    await usersRef.child(currentUser.username).child('portofolio').update({ earned: earned + result.data.paidAmount });
-                    await updateSaldo(true);
-                    updateTradingUI();
-                } else if (result.data.status === 'pending') {
-                    qrisStatus.textContent = '⏳ Menunggu pembayaran...';
-                } else if (result.data.status === 'already') {
-                    qrisStatus.textContent = '⚠️ Transaksi sudah diproses sebelumnya.';
-                    clearInterval(window._depositInterval);
-                }
-            }
-        } catch(err) { console.log('Cek deposit error:', err); }
-    }
-
-    checkDepositBtn.addEventListener('click', checkDepositStatus);
 
     // ============================================================
     // CHART (Skin Harga)
@@ -2184,7 +2280,7 @@
             if (target === 'dashboardTab') { renderCharts(); if (currentUser) updateSaldo(); }
             if (target === 'tradingTab') { drawTradingChart(); updateTradingUI(); }
             if (target === 'adminTab') {
-                if (adminDashboard.style.display === 'block') { renderAdminSubmissions(); renderAdminWD(); }
+                if (adminDashboard.style.display === 'block') { renderAdmin(); }
                 updatePendingBadge();
             }
         });
@@ -2207,9 +2303,10 @@
         document.querySelector('.tab-btn[data-tab="dashboardTab"]').addEventListener('click', function() {
             setTimeout(renderCharts, 200);
         });
-        console.log('🔥 AMOY GACHA KELOTER v7.0 - ANIMASI GRAFIK + FIX ADMIN');
-        console.log('✅ Admin password: wilzu2223333');
-        console.log('✅ Grafik trading pakai candlestick + animasi smooth');
+        console.log('🔥 AMOY GACHA KELOTER v8.0 - DEPOSIT MANUAL + GRAFIK TRADING FIX');
+        console.log('✅ Admin password: wilzu2233');
+        console.log('✅ Deposit via transfer ke 085863131467');
+        console.log('✅ Grafik trading JALAN kayak dashboard!');
     }
 
     init();
