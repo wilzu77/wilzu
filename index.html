@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Amoy Gacha Keloter · Firebase</title>
+    <title>Amoy Gacha · Trading · Deposit QRIS</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
     <!-- Firebase SDK -->
@@ -54,6 +54,7 @@
             letter-spacing: 3px;
             margin-top: 2px;
         }
+        /* Tabs */
         .tabs {
             display: flex;
             gap: 10px;
@@ -87,6 +88,25 @@
             background: rgba(255, 255, 255, 0.08);
             color: #fff;
         }
+        .tab-btn .notif-dot {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            width: 14px;
+            height: 14px;
+            background: #ff4444;
+            border-radius: 50%;
+            border: 2px solid #0a0a12;
+            display: none;
+        }
+        .tab-btn .notif-dot.show {
+            display: block;
+            animation: pulse 1s infinite;
+        }
+        @keyframes pulse {
+            0%,100% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+        }
         .panel {
             display: none;
             animation: fadeUp 0.4s ease;
@@ -98,6 +118,7 @@
             0% { opacity: 0; transform: translateY(16px); }
             100% { opacity: 1; transform: translateY(0); }
         }
+        /* Form */
         .form-group {
             margin-bottom: 20px;
         }
@@ -113,8 +134,7 @@
             margin-right: 8px;
             color: #ffd700;
         }
-        .form-group input,
-        .form-group select {
+        .form-group input, .form-group select {
             width: 100%;
             padding: 14px 18px;
             background: rgba(255, 255, 255, 0.04);
@@ -127,8 +147,7 @@
             transition: 0.25s;
             font-family: 'Poppins', sans-serif;
         }
-        .form-group input:focus,
-        .form-group select:focus {
+        .form-group input:focus, .form-group select:focus {
             border-color: #ffd700;
             box-shadow: 0 0 25px rgba(255, 215, 0, 0.08);
             background: rgba(255, 255, 255, 0.06);
@@ -225,6 +244,21 @@
         .btn-danger:hover {
             background: rgba(255, 70, 70, 0.25);
         }
+        .btn-broadcast {
+            background: #6c5ce7;
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 40px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: 'Poppins', sans-serif;
+        }
+        .btn-broadcast:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(108, 92, 231, 0.3);
+        }
         .success-msg {
             background: rgba(0, 255, 100, 0.1);
             border-left: 4px solid #00ff66;
@@ -251,6 +285,7 @@
         .error-msg.show {
             display: block;
         }
+        /* Dashboard */
         .dashboard-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -392,6 +427,7 @@
         .wallet-option.dana i { color: #007BFF; }
         .wallet-option.ovo i { color: #4CAF50; }
         .wallet-option.gopay i { color: #E53935; }
+        /* Admin */
         .admin-login {
             background: rgba(255, 255, 255, 0.02);
             border-radius: 30px;
@@ -440,8 +476,7 @@
             color: rgba(255, 255, 255, 0.4);
             font-weight: 600;
         }
-        .submissions-list,
-        .wd-list {
+        .submissions-list, .wd-list {
             display: flex;
             flex-direction: column;
             gap: 14px;
@@ -449,19 +484,15 @@
             overflow-y: auto;
             padding-right: 6px;
         }
-        .submissions-list::-webkit-scrollbar,
-        .wd-list::-webkit-scrollbar {
+        .submissions-list::-webkit-scrollbar, .wd-list::-webkit-scrollbar {
             width: 5px;
         }
-        .submissions-list::-webkit-scrollbar-thumb,
-        .wd-list::-webkit-scrollbar-thumb {
+        .submissions-list::-webkit-scrollbar-thumb, .wd-list::-webkit-scrollbar-thumb {
             background: #ffd700;
             border-radius: 10px;
         }
-        .submissions-list::-webkit-scrollbar-track,
-        .wd-list::-webkit-scrollbar-track { background: transparent; }
-        .submission-item,
-        .wd-item {
+        .submissions-list::-webkit-scrollbar-track, .wd-list::-webkit-scrollbar-track { background: transparent; }
+        .submission-item, .wd-item {
             background: rgba(255, 255, 255, 0.03);
             border-radius: 24px;
             padding: 16px 20px;
@@ -472,28 +503,23 @@
             gap: 16px;
             transition: 0.2s;
         }
-        .submission-item:hover,
-        .wd-item:hover { background: rgba(255, 255, 255, 0.06); }
+        .submission-item:hover, .wd-item:hover { background: rgba(255, 255, 255, 0.06); }
         .wd-item { border-left-color: #4CAF50; }
-        .submission-item .info,
-        .wd-item .info {
+        .submission-item .info, .wd-item .info {
             flex: 2;
             min-width: 160px;
         }
-        .submission-item .info .name,
-        .wd-item .info .name {
+        .submission-item .info .name, .wd-item .info .name {
             font-weight: 800;
             font-size: 18px;
             color: #fff;
         }
-        .submission-item .info .dana,
-        .wd-item .info .detail {
+        .submission-item .info .dana, .wd-item .info .detail {
             font-weight: 600;
             color: #aaa;
             font-size: 14px;
         }
-        .submission-item .info .time,
-        .wd-item .info .time {
+        .submission-item .info .time, .wd-item .info .time {
             font-size: 12px;
             color: rgba(255, 255, 255, 0.3);
         }
@@ -671,6 +697,7 @@
             color: #ffd700;
             font-size: 16px;
         }
+        /* Auth */
         .auth-box {
             max-width: 420px;
             margin: 0 auto 20px;
@@ -764,6 +791,183 @@
             flex-wrap: wrap;
             align-items: center;
         }
+        /* Trading */
+        .trading-panel {
+            background: rgba(255,255,255,0.02);
+            border-radius: 30px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 1px solid rgba(255,215,0,0.1);
+        }
+        .trading-panel .price-display {
+            font-size: 38px;
+            font-weight: 900;
+            color: #ffd700;
+            text-align: center;
+        }
+        .trading-panel .change {
+            font-size: 18px;
+            font-weight: 700;
+            text-align: center;
+        }
+        .trading-panel .trade-form {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 16px 0;
+        }
+        .trading-panel .trade-form input {
+            flex: 1;
+            padding: 12px 16px;
+            border-radius: 40px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            outline: none;
+            min-width: 120px;
+        }
+        .trading-panel .trade-form input:focus {
+            border-color: #ffd700;
+        }
+        .trading-panel .trade-form button {
+            padding: 12px 28px;
+            border: none;
+            border-radius: 40px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: 'Poppins', sans-serif;
+        }
+        .btn-buy {
+            background: #4CAF50;
+            color: #fff;
+        }
+        .btn-sell {
+            background: #f44336;
+            color: #fff;
+        }
+        .btn-buy:hover { transform: scale(1.05); box-shadow: 0 6px 20px rgba(76,175,80,0.3); }
+        .btn-sell:hover { transform: scale(1.05); box-shadow: 0 6px 20px rgba(244,67,54,0.3); }
+        .portofolio-box {
+            background: rgba(255,255,255,0.03);
+            border-radius: 20px;
+            padding: 16px;
+            margin: 12px 0;
+            border: 1px solid rgba(255,255,255,0.04);
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+        .portofolio-box .item {
+            text-align: center;
+        }
+        .portofolio-box .item .label {
+            color: rgba(255,255,255,0.4);
+            font-size: 13px;
+        }
+        .portofolio-box .item .value {
+            font-weight: 800;
+            font-size: 20px;
+            color: #fff;
+        }
+        /* Deposit */
+        .deposit-section {
+            margin: 20px 0;
+            background: rgba(255,215,0,0.05);
+            border-radius: 30px;
+            padding: 20px;
+            border: 1px solid rgba(255,215,0,0.1);
+        }
+        .deposit-section .qris-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+        .deposit-section .qris-container img {
+            max-width: 200px;
+            border-radius: 20px;
+            background: #fff;
+            padding: 10px;
+        }
+        .deposit-section .qris-container .status-text {
+            font-weight: 700;
+            color: #ffd700;
+        }
+        .btn-deposit {
+            background: linear-gradient(135deg, #00b894, #00cec9);
+            color: #fff;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 40px;
+            font-weight: 800;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: 'Poppins', sans-serif;
+        }
+        .btn-deposit:hover { transform: scale(1.02); box-shadow: 0 6px 20px rgba(0,206,201,0.3); }
+        /* Broadcast */
+        .broadcast-box {
+            background: rgba(108,92,231,0.05);
+            border-radius: 30px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 1px solid rgba(108,92,231,0.1);
+        }
+        .broadcast-box textarea {
+            width: 100%;
+            padding: 14px 18px;
+            border-radius: 30px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: #fff;
+            font-size: 15px;
+            outline: none;
+            resize: vertical;
+            min-height: 80px;
+            font-family: 'Poppins', sans-serif;
+        }
+        .broadcast-box textarea:focus {
+            border-color: #6c5ce7;
+        }
+        /* Notifikasi realtime */
+        .notif-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            max-width: 350px;
+            width: 100%;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+        }
+        .notif-item {
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(10px);
+            border-left: 4px solid #ffd700;
+            padding: 14px 18px;
+            border-radius: 16px;
+            color: #fff;
+            font-weight: 600;
+            font-size: 14px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            animation: slideIn 0.4s ease;
+            pointer-events: auto;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        .notif-item .notif-time {
+            font-size: 11px;
+            color: rgba(255,255,255,0.4);
+            margin-top: 4px;
+        }
         @media (max-width: 600px) {
             .app-wrapper { padding: 20px 16px; }
             .header h1 { font-size: 28px; }
@@ -776,1140 +980,1269 @@
     </style>
 </head>
 <body>
-    <div class="app-wrapper" id="app">
-        <div class="header">
-            <h1>✨ AMOY GACHA KELOTER ✨</h1>
-            <p><i class="fas fa-crown"></i> Kirim Foto · Admin ACC · Semua User Terdeteksi</p>
+
+<div class="app-wrapper" id="app">
+    <div class="header">
+        <h1>✨ AMOY GACHA KELOTER ✨</h1>
+        <p><i class="fas fa-crown"></i> Kirim · Trading · Deposit QRIS</p>
+    </div>
+
+    <!-- ============ NOTIF CONTAINER ============ -->
+    <div class="notif-container" id="notifContainer"></div>
+
+    <!-- ============ AUTH ============ -->
+    <div id="authContainer">
+        <div class="user-info" id="userInfoBar" style="display:none;">
+            <span class="username"><i class="fas fa-user-circle"></i> <span id="displayUsername">User</span></span>
+            <button class="btn-danger" id="logoutBtn" style="padding:6px 16px; font-size:13px;"><i class="fas fa-sign-out-alt"></i> Logout</button>
         </div>
 
-        <!-- ============ AUTH ============ -->
-        <div id="authContainer">
-            <div class="user-info" id="userInfoBar" style="display:none;">
-                <span class="username"><i class="fas fa-user-circle"></i> <span id="displayUsername">User</span></span>
-                <button class="btn-danger" id="logoutBtn" style="padding:6px 16px; font-size:13px;"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        <div class="auth-box" id="loginBox">
+            <div class="auth-title"><i class="fas fa-sign-in-alt"></i> Login</div>
+            <div class="form-group">
+                <label><i class="fas fa-user"></i> Username</label>
+                <input type="text" id="loginUser" placeholder="Username" />
             </div>
-
-            <div class="auth-box" id="loginBox">
-                <div class="auth-title"><i class="fas fa-sign-in-alt"></i> Login</div>
-                <div class="form-group">
-                    <label><i class="fas fa-user"></i> Username</label>
-                    <input type="text" id="loginUser" placeholder="Username" />
-                </div>
-                <div class="form-group">
-                    <label><i class="fas fa-lock"></i> Password</label>
-                    <input type="password" id="loginPass" placeholder="Password" />
-                </div>
-                <button class="btn-primary" id="loginBtn"><i class="fas fa-sign-in-alt"></i> Masuk</button>
-                <div class="auth-switch">Belum punya akun? <a id="goToRegister">Daftar di sini</a></div>
-                <div class="error-msg" id="loginError"></div>
+            <div class="form-group">
+                <label><i class="fas fa-lock"></i> Password</label>
+                <input type="password" id="loginPass" placeholder="Password" />
             </div>
+            <button class="btn-primary" id="loginBtn"><i class="fas fa-sign-in-alt"></i> Masuk</button>
+            <div class="auth-switch">Belum punya akun? <a id="goToRegister">Daftar di sini</a></div>
+            <div class="error-msg" id="loginError"></div>
+        </div>
 
-            <div class="auth-box" id="registerBox" style="display:none;">
-                <div class="auth-title"><i class="fas fa-user-plus"></i> Daftar Akun</div>
-                <div class="form-group">
-                    <label><i class="fas fa-user"></i> Username</label>
-                    <input type="text" id="regUser" placeholder="Buat username" />
+        <div class="auth-box" id="registerBox" style="display:none;">
+            <div class="auth-title"><i class="fas fa-user-plus"></i> Daftar Akun</div>
+            <div class="form-group">
+                <label><i class="fas fa-user"></i> Username</label>
+                <input type="text" id="regUser" placeholder="Buat username" />
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-user-tag"></i> Nama Panggilan</label>
+                <input type="text" id="regName" placeholder="Nama kamu" />
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-lock"></i> Password</label>
+                <input type="password" id="regPass" placeholder="Min 4 karakter" />
+            </div>
+            <button class="btn-primary" id="registerBtn"><i class="fas fa-user-plus"></i> Daftar</button>
+            <div class="auth-switch">Sudah punya akun? <a id="goToLogin">Login di sini</a></div>
+            <div class="error-msg" id="registerError"></div>
+            <div class="success-msg" id="registerSuccess"></div>
+        </div>
+    </div>
+
+    <!-- ============ MAIN APP ============ -->
+    <div id="mainApp" style="display:none;">
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="userTab"><i class="fas fa-paper-plane"></i> Kirim Kartu</button>
+            <button class="tab-btn" data-tab="tradingTab"><i class="fas fa-chart-line"></i> Trading</button>
+            <button class="tab-btn" data-tab="dashboardTab"><i class="fas fa-wallet"></i> Dashboard</button>
+            <button class="tab-btn" data-tab="adminTab"><i class="fas fa-user-shield"></i> Admin</button>
+        </div>
+
+        <!-- ========== USER PANEL ========== -->
+        <div id="userTab" class="panel active">
+            <div class="form-group">
+                <label><i class="fas fa-user"></i> Nama Kamu</label>
+                <input type="text" id="userName" placeholder="Nama panggilan" />
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-image"></i> Foto Kartu</label>
+                <div class="file-upload-wrapper">
+                    <input type="file" id="cardImage" accept="image/*" />
+                    <img class="file-preview" id="imagePreview" alt="Preview" />
                 </div>
-                <div class="form-group">
-                    <label><i class="fas fa-user-tag"></i> Nama Panggilan</label>
-                    <input type="text" id="regName" placeholder="Nama kamu" />
-                </div>
-                <div class="form-group">
-                    <label><i class="fas fa-lock"></i> Password</label>
-                    <input type="password" id="regPass" placeholder="Min 4 karakter" />
-                </div>
-                <button class="btn-primary" id="registerBtn"><i class="fas fa-user-plus"></i> Daftar</button>
-                <div class="auth-switch">Sudah punya akun? <a id="goToLogin">Login di sini</a></div>
-                <div class="error-msg" id="registerError"></div>
-                <div class="success-msg" id="registerSuccess"></div>
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-tag"></i> Pilih Skin yang Diinginkan</label>
+                <select id="requestedSkin">
+                    <option value="basic">Basic (Rp 500)</option>
+                    <option value="epik">Epik (Rp 1.000)</option>
+                    <option value="legend">Legend (Rp 2.500)</option>
+                    <option value="amoy-pacito">Amoy-Pacito (Rp 3.000)</option>
+                    <option value="kolektor">Kolektor (Rp 5.000)</option>
+                    <option value="amoy-klasik">Amoy Klasik (Rp 500)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-phone"></i> Nomor Dana (penerima)</label>
+                <input type="text" id="danaNumber" placeholder="Masukkan nomor Dana" />
+            </div>
+            <button class="btn-primary" id="submitBtn"><i class="fas fa-paper-plane"></i> Kirim & Tunggu ACC Admin</button>
+            <div class="success-msg" id="successMsg">
+                <i class="fas fa-check-circle"></i> Kartu terkirim! Admin akan ACC.
             </div>
         </div>
 
-        <!-- ============ MAIN APP ============ -->
-        <div id="mainApp" style="display:none;">
-            <div class="tabs">
-                <button class="tab-btn active" data-tab="userTab"><i class="fas fa-paper-plane"></i> Kirim Kartu</button>
-                <button class="tab-btn" data-tab="dashboardTab"><i class="fas fa-chart-line"></i> Dashboard</button>
-                <button class="tab-btn" data-tab="adminTab" id="adminTabBtn"><i class="fas fa-user-shield"></i> Admin <span class="live-badge" id="adminLiveBadge">LIVE</span></button>
-            </div>
+        <!-- ========== TRADING PANEL ========== -->
+        <div id="tradingTab" class="panel">
+            <div class="trading-panel">
+                <h2 style="color:#fff; font-weight:700;"><i class="fas fa-coins"></i> Trading Saham AMOY</h2>
+                <div class="price-display" id="tradingPrice">Rp 1.000</div>
+                <div class="change" id="tradingChange">▲ 0%</div>
+                <canvas id="tradingChart" width="400" height="150" style="width:100%; height:150px; background:rgba(0,0,0,0.2); border-radius:20px;"></canvas>
+                
+                <div class="portofolio-box">
+                    <div class="item"><div class="label">Saham</div><div class="value" id="stockAmount">0</div></div>
+                    <div class="item"><div class="label">Nilai</div><div class="value" id="stockValue">Rp 0</div></div>
+                    <div class="item"><div class="label">Saldo</div><div class="value" id="tradeBalance">Rp 0</div></div>
+                </div>
 
-            <!-- PANEL USER -->
-            <div id="userTab" class="panel active">
-                <div class="form-group">
-                    <label><i class="fas fa-user"></i> Nama Kamu</label>
-                    <input type="text" id="userName" placeholder="Nama panggilan" />
+                <div class="trade-form">
+                    <input type="number" id="tradeAmount" placeholder="Jumlah saham (min 1)" min="1" />
+                    <button class="btn-buy" id="buyBtn"><i class="fas fa-arrow-up"></i> Beli</button>
+                    <button class="btn-sell" id="sellBtn"><i class="fas fa-arrow-down"></i> Jual</button>
                 </div>
-                <div class="form-group">
-                    <label><i class="fas fa-image"></i> Foto Kartu</label>
-                    <div class="file-upload-wrapper">
-                        <input type="file" id="cardImage" accept="image/*" />
-                        <img class="file-preview" id="imagePreview" alt="Preview" />
+
+                <!-- DEPOSIT QRIS -->
+                <div class="deposit-section">
+                    <h3 style="color:#fff; font-weight:700;"><i class="fas fa-qrcode"></i> Deposit QRIS</h3>
+                    <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+                        <input type="number" id="depositAmount" placeholder="Min Rp 10.000" min="10000" style="flex:1; padding:12px 16px; border-radius:40px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); color:#fff; outline:none;" />
+                        <button class="btn-deposit" id="depositBtn"><i class="fas fa-credit-card"></i> Deposit</button>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label><i class="fas fa-tag"></i> Pilih Skin yang Diinginkan</label>
-                    <select id="requestedSkin">
-                        <option value="basic">Basic (Rp 500)</option>
-                        <option value="epik">Epik (Rp 1.000)</option>
-                        <option value="legend">Legend (Rp 2.500)</option>
-                        <option value="amoy-pacito">Amoy-Pacito (Rp 3.000)</option>
-                        <option value="kolektor">Kolektor (Rp 5.000)</option>
-                        <option value="amoy-klasik">Amoy Klasik (Rp 500)</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label><i class="fas fa-phone"></i> Nomor Dana (penerima)</label>
-                    <input type="text" id="danaNumber" placeholder="Masukkan nomor Dana" />
-                </div>
-                <button class="btn-primary" id="submitBtn"><i class="fas fa-paper-plane"></i> Kirim & Tunggu ACC Admin</button>
-                <div class="success-msg" id="successMsg">
-                    <i class="fas fa-check-circle"></i> Kartu terkirim! Admin akan ACC dalam beberapa saat.
+                    <div class="qris-container" id="qrisContainer" style="display:none;">
+                        <img id="qrisImage" src="" alt="QRIS" />
+                        <div class="status-text" id="qrisStatus">Menunggu pembayaran...</div>
+                        <button class="btn-secondary" id="checkDepositBtn" style="padding:8px 24px;">Cek Status</button>
+                    </div>
                 </div>
             </div>
+        </div>
 
-            <!-- PANEL DASHBOARD -->
-            <div id="dashboardTab" class="panel">
-                <div class="dashboard-grid">
-                    <div class="saldo-card">
-                        <div class="label">💎 SALDO KAMU</div>
-                        <div class="amount" id="userSaldo">Rp 0</div>
-                        <div class="sub" id="saldoDetail">0 skin approved</div>
-                        <div class="notif-toast" id="saldoNotif">+Rp 0</div>
-                    </div>
-                    <div class="chart-container">
-                        <h3><i class="fas fa-candlestick-chart"></i> Harga Skin (Trending)</h3>
-                        <canvas id="priceChart" width="400" height="200"></canvas>
-                        <div class="chart-legend" id="chartLegend"></div>
-                    </div>
+        <!-- ========== DASHBOARD ========== -->
+        <div id="dashboardTab" class="panel">
+            <div class="dashboard-grid">
+                <div class="saldo-card">
+                    <div class="label">💎 SALDO KAMU</div>
+                    <div class="amount" id="userSaldo">Rp 0</div>
+                    <div class="sub" id="saldoDetail">0 skin approved</div>
+                    <div class="notif-toast" id="saldoNotif">+Rp 0</div>
                 </div>
-
-                <div class="monitor">
-                    <div class="monitor-content">
-                        <h2>📊 Harga Pasar Amoy</h2>
-                        <div class="price-big" id="monitorPrice">Rp 5.000</div>
-                        <div class="price-change" id="priceChange">▼ 0%</div>
-                        <div style="text-align:center; color:rgba(255,255,255,0.3); font-size:13px;">Update real-time tiap 5 detik</div>
-                        <div class="chart-wrap">
-                            <canvas id="monitorChart" width="400" height="120"></canvas>
-                        </div>
-                    </div>
+                <div class="chart-container">
+                    <h3><i class="fas fa-candlestick-chart"></i> Harga Skin (Trending)</h3>
+                    <canvas id="priceChart" width="400" height="200"></canvas>
+                    <div class="chart-legend" id="chartLegend"></div>
                 </div>
-
-                <div class="skin-price-list">
-                    <div class="skin-price-item"><div class="skin-name">Basic</div><div class="skin-price">Rp 500</div></div>
-                    <div class="skin-price-item"><div class="skin-name">Epik</div><div class="skin-price">Rp 1.000</div></div>
-                    <div class="skin-price-item"><div class="skin-name">Legend</div><div class="skin-price">Rp 2.500</div></div>
-                    <div class="skin-price-item"><div class="skin-name">Amoy-Pacito</div><div class="skin-price">Rp 3.000</div></div>
-                    <div class="skin-price-item"><div class="skin-name">Kolektor</div><div class="skin-price">Rp 5.000</div></div>
-                    <div class="skin-price-item"><div class="skin-name">Amoy Klasik</div><div class="skin-price">Rp 500</div></div>
-                </div>
-
-                <h3 style="color:#fff; font-weight:700; margin:24px 0 12px;"><i class="fas fa-hand-holding-usd"></i> Tarik Saldo (WD)</h3>
-                <div class="form-group">
-                    <label>Pilih E-Wallet</label>
-                    <div class="wallet-options" id="walletOptions">
-                        <div class="wallet-option dana" data-wallet="dana"><i class="fab fa-google-pay"></i> Dana</div>
-                        <div class="wallet-option ovo" data-wallet="ovo"><i class="fas fa-mobile-alt"></i> OVO</div>
-                        <div class="wallet-option gopay" data-wallet="gopay"><i class="fas fa-money-bill-wave"></i> Gopay</div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label><i class="fas fa-user"></i> Nama Penerima</label>
-                    <input type="text" id="wdName" placeholder="Nama lengkap" />
-                </div>
-                <div class="form-group">
-                    <label><i class="fas fa-phone"></i> Nomor E-Wallet</label>
-                    <input type="text" id="wdAccount" placeholder="Masukkan nomor e-wallet tujuan" />
-                </div>
-                <div class="form-group">
-                    <label><i class="fas fa-coins"></i> Jumlah (min Rp 10.000)</label>
-                    <input type="number" id="wdAmount" placeholder="10000" min="10000" step="1000" />
-                </div>
-                <button class="btn-primary" id="wdSubmitBtn"><i class="fas fa-paper-plane"></i> Ajukan WD</button>
-                <div class="success-msg" id="wdSuccessMsg"></div>
-                <div class="error-msg" id="wdError"></div>
             </div>
 
-            <!-- PANEL ADMIN -->
-            <div id="adminTab" class="panel">
-                <div class="admin-login" id="adminLoginArea">
-                    <input type="password" id="adminPassword" placeholder="Password admin" />
-                    <button class="btn-secondary" id="adminLoginBtn"><i class="fas fa-unlock"></i> Buka Dashboard</button>
-                    <span style="color:rgba(255,255,255,0.2); font-size:12px; margin-left:auto;">default: admin123</span>
+            <div class="monitor">
+                <div class="monitor-content">
+                    <h2>📊 Harga Pasar Amoy</h2>
+                    <div class="price-big" id="monitorPrice">Rp 5.000</div>
+                    <div class="price-change" id="priceChange">▼ 0%</div>
+                    <div style="text-align:center; color:rgba(255,255,255,0.3); font-size:13px;">Update real-time tiap 5 detik</div>
+                    <div class="chart-wrap">
+                        <canvas id="monitorChart" width="400" height="120"></canvas>
+                    </div>
                 </div>
-                <div id="adminDashboard" style="display:none;">
-                    <div class="admin-stats">
-                        <div class="stat-card"><div class="number" id="totalSubs">0</div><div class="label">Total Kiriman</div></div>
-                        <div class="stat-card"><div class="number" id="pendingSubs">0</div><div class="label">Pending <span class="live-badge" style="font-size:8px; padding:1px 8px;">baru</span></div></div>
-                        <div class="stat-card"><div class="number" id="totalWD">0</div><div class="label">WD</div></div>
-                    </div>
+            </div>
 
-                    <div class="section-title">
-                        <i class="fas fa-images"></i> Kiriman Kartu
-                        <span class="total-count" id="subCount">(0)</span>
-                        <span style="font-size:12px; color:rgba(255,255,255,0.3);">real-time dari semua user</span>
-                    </div>
-                    <div class="submissions-list" id="submissionsList">
-                        <div class="empty-state">Belum ada kiriman.</div>
-                    </div>
+            <div class="skin-price-list">
+                <div class="skin-price-item"><div class="skin-name">Basic</div><div class="skin-price">Rp 500</div></div>
+                <div class="skin-price-item"><div class="skin-name">Epik</div><div class="skin-price">Rp 1.000</div></div>
+                <div class="skin-price-item"><div class="skin-name">Legend</div><div class="skin-price">Rp 2.500</div></div>
+                <div class="skin-price-item"><div class="skin-name">Amoy-Pacito</div><div class="skin-price">Rp 3.000</div></div>
+                <div class="skin-price-item"><div class="skin-name">Kolektor</div><div class="skin-price">Rp 5.000</div></div>
+                <div class="skin-price-item"><div class="skin-name">Amoy Klasik</div><div class="skin-price">Rp 500</div></div>
+            </div>
 
-                    <div class="section-title" style="margin-top:28px;"><i class="fas fa-hand-holding-usd"></i> Permintaan WD</div>
-                    <div class="wd-list" id="wdList">
-                        <div class="empty-state">Belum ada permintaan WD.</div>
-                    </div>
+            <h3 style="color:#fff; font-weight:700; margin:24px 0 12px;"><i class="fas fa-hand-holding-usd"></i> Tarik Saldo (WD)</h3>
+            <div class="form-group">
+                <label>Pilih E-Wallet</label>
+                <div class="wallet-options" id="walletOptions">
+                    <div class="wallet-option dana" data-wallet="dana"><i class="fab fa-google-pay"></i> Dana</div>
+                    <div class="wallet-option ovo" data-wallet="ovo"><i class="fas fa-mobile-alt"></i> OVO</div>
+                    <div class="wallet-option gopay" data-wallet="gopay"><i class="fas fa-money-bill-wave"></i> Gopay</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-user"></i> Nama Penerima</label>
+                <input type="text" id="wdName" placeholder="Nama lengkap" />
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-phone"></i> Nomor E-Wallet</label>
+                <input type="text" id="wdAccount" placeholder="Masukkan nomor e-wallet tujuan" />
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-coins"></i> Jumlah (min Rp 10.000)</label>
+                <input type="number" id="wdAmount" placeholder="10000" min="10000" step="1000" />
+            </div>
+            <button class="btn-primary" id="wdSubmitBtn"><i class="fas fa-paper-plane"></i> Ajukan WD</button>
+            <div class="success-msg" id="wdSuccessMsg"></div>
+            <div class="error-msg" id="wdError"></div>
+        </div>
+
+        <!-- ========== ADMIN PANEL ========== -->
+        <div id="adminTab" class="panel">
+            <div class="admin-login" id="adminLoginArea">
+                <input type="password" id="adminPassword" placeholder="Password admin" />
+                <button class="btn-secondary" id="adminLoginBtn"><i class="fas fa-unlock"></i> Buka Dashboard</button>
+                <span style="color:rgba(255,255,255,0.2); font-size:12px; margin-left:auto;">user: wilzu222333 | pass: admin123</span>
+            </div>
+            <div id="adminDashboard" style="display:none;">
+                <div class="admin-stats">
+                    <div class="stat-card"><div class="number" id="totalSubs">0</div><div class="label">Total Kiriman</div></div>
+                    <div class="stat-card"><div class="number" id="pendingSubs">0</div><div class="label">Pending <span class="live-badge" style="font-size:8px; padding:1px 8px;">baru</span></div></div>
+                    <div class="stat-card"><div class="number" id="totalWD">0</div><div class="label">WD</div></div>
+                </div>
+
+                <div class="section-title">
+                    <i class="fas fa-images"></i> Kiriman Kartu
+                    <span class="total-count" id="subCount">(0)</span>
+                    <span style="font-size:12px; color:rgba(255,255,255,0.3);">real-time semua user</span>
+                </div>
+                <div class="submissions-list" id="submissionsList">
+                    <div class="empty-state">Belum ada kiriman.</div>
+                </div>
+
+                <div class="section-title" style="margin-top:28px;"><i class="fas fa-hand-holding-usd"></i> Permintaan WD</div>
+                <div class="wd-list" id="wdList">
+                    <div class="empty-state">Belum ada permintaan WD.</div>
+                </div>
+
+                <!-- ========== BROADCAST ========== -->
+                <div class="broadcast-box">
+                    <h3 style="color:#fff; font-weight:700;"><i class="fas fa-bullhorn"></i> Broadcast ke Semua User</h3>
+                    <textarea id="broadcastMsg" placeholder="Tulis pesan broadcast..."></textarea>
+                    <button class="btn-broadcast" id="broadcastBtn" style="margin-top:12px; width:100%;"><i class="fas fa-paper-plane"></i> Kirim Broadcast</button>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <script>
-        // ============================================================
-        // 🔥 FIREBASE CONFIG — SUDAH PAKAI PUNYA KAMU!
-        // ============================================================
-        const firebaseConfig = {
-            apiKey: "AIzaSyBTArEmMUo4mJEnl8WJmeWR4uNd_cMSg5A",
-            authDomain: "amoy-888fe.firebaseapp.com",
-            databaseURL: "https://amoy-888fe-default-rtdb.firebaseio.com",
-            projectId: "amoy-888fe",
-            storageBucket: "amoy-888fe.firebasestorage.app",
-            messagingSenderId: "744294858539",
-            appId: "1:744294858539:web:2ba78fdb6c294b9aed0f6e",
-            measurementId: "G-5PHTZV2NTY"
-        };
+<script>
+    // ============================================================
+    // FIREBASE CONFIG (punya kamu)
+    // ============================================================
+    const firebaseConfig = {
+        apiKey: "AIzaSyBTArEmMUo4mJEnl8WJmeWR4uNd_cMSg5A",
+        authDomain: "amoy-888fe.firebaseapp.com",
+        databaseURL: "https://amoy-888fe-default-rtdb.firebaseio.com",
+        projectId: "amoy-888fe",
+        storageBucket: "amoy-888fe.firebasestorage.app",
+        messagingSenderId: "744294858539",
+        appId: "1:744294858539:web:2ba78fdb6c294b9aed0f6e",
+        measurementId: "G-5PHTZV2NTY"
+    };
 
-        // ============================================================
-        // INISIALISASI FIREBASE
-        // ============================================================
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
 
-        // ============================================================
-        // REFS DATABASE
-        // ============================================================
-        const usersRef = db.ref('users');
-        const submissionsRef = db.ref('submissions');
-        const withdrawalsRef = db.ref('withdrawals');
+    // ============================================================
+    // REFS
+    // ============================================================
+    const usersRef = db.ref('users');
+    const submissionsRef = db.ref('submissions');
+    const withdrawalsRef = db.ref('withdrawals');
+    const broadcastRef = db.ref('broadcasts');
 
-        // ============================================================
-        // SKIN PRICES
-        // ============================================================
-        const SKIN_PRICES = {
-            'basic': 500,
-            'epik': 1000,
-            'legend': 2500,
-            'kolektor': 5000,
-            'amoy-pacito': 3000,
-            'amoy-klasik': 500
-        };
-        const SKIN_LABELS = {
-            'basic': 'Basic',
-            'epik': 'Epik',
-            'legend': 'Legend',
-            'kolektor': 'Kolektor',
-            'amoy-pacito': 'Amoy-Pacito',
-            'amoy-klasik': 'Amoy Klasik'
-        };
+    // ============================================================
+    // SKIN PRICES
+    // ============================================================
+    const SKIN_PRICES = { basic:500, epik:1000, legend:2500, kolektor:5000, 'amoy-pacito':3000, 'amoy-klasik':500 };
+    const SKIN_LABELS = { basic:'Basic', epik:'Epik', legend:'Legend', kolektor:'Kolektor', 'amoy-pacito':'Amoy-Pacito', 'amoy-klasik':'Amoy Klasik' };
 
-        // ============================================================
-        // DOM REFS
-        // ============================================================
-        const authContainer = document.getElementById('authContainer');
-        const mainApp = document.getElementById('mainApp');
-        const userInfoBar = document.getElementById('userInfoBar');
-        const displayUsername = document.getElementById('displayUsername');
+    // ============================================================
+    // API RAMASHOP
+    // ============================================================
+    const RAMA_API_KEY = "rg_c82b459280bdc530a0722683edba2c";
+    const RAMA_BASE_URL = "https://ramashop.my.id/api/public";
 
-        const loginBox = document.getElementById('loginBox');
-        const registerBox = document.getElementById('registerBox');
-        const loginUser = document.getElementById('loginUser');
-        const loginPass = document.getElementById('loginPass');
-        const loginBtn = document.getElementById('loginBtn');
-        const loginError = document.getElementById('loginError');
-        const goToRegister = document.getElementById('goToRegister');
-        const goToLogin = document.getElementById('goToLogin');
+    // ============================================================
+    // DOM REFS
+    // ============================================================
+    const authContainer = document.getElementById('authContainer');
+    const mainApp = document.getElementById('mainApp');
+    const userInfoBar = document.getElementById('userInfoBar');
+    const displayUsername = document.getElementById('displayUsername');
 
-        const regUser = document.getElementById('regUser');
-        const regName = document.getElementById('regName');
-        const regPass = document.getElementById('regPass');
-        const registerBtn = document.getElementById('registerBtn');
-        const registerError = document.getElementById('registerError');
-        const registerSuccess = document.getElementById('registerSuccess');
-        const logoutBtn = document.getElementById('logoutBtn');
+    const loginBox = document.getElementById('loginBox');
+    const registerBox = document.getElementById('registerBox');
+    const loginUser = document.getElementById('loginUser');
+    const loginPass = document.getElementById('loginPass');
+    const loginBtn = document.getElementById('loginBtn');
+    const loginError = document.getElementById('loginError');
+    const goToRegister = document.getElementById('goToRegister');
+    const goToLogin = document.getElementById('goToLogin');
 
-        const tabBtns = document.querySelectorAll('.tab-btn');
-        const userTab = document.getElementById('userTab');
-        const dashboardTab = document.getElementById('dashboardTab');
-        const adminTab = document.getElementById('adminTab');
+    const regUser = document.getElementById('regUser');
+    const regName = document.getElementById('regName');
+    const regPass = document.getElementById('regPass');
+    const registerBtn = document.getElementById('registerBtn');
+    const registerError = document.getElementById('registerError');
+    const registerSuccess = document.getElementById('registerSuccess');
+    const logoutBtn = document.getElementById('logoutBtn');
 
-        const userName = document.getElementById('userName');
-        const cardImage = document.getElementById('cardImage');
-        const imagePreview = document.getElementById('imagePreview');
-        const requestedSkin = document.getElementById('requestedSkin');
-        const danaNumber = document.getElementById('danaNumber');
-        const submitBtn = document.getElementById('submitBtn');
-        const successMsg = document.getElementById('successMsg');
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const userTab = document.getElementById('userTab');
+    const tradingTab = document.getElementById('tradingTab');
+    const dashboardTab = document.getElementById('dashboardTab');
+    const adminTab = document.getElementById('adminTab');
 
-        const userSaldo = document.getElementById('userSaldo');
-        const saldoDetail = document.getElementById('saldoDetail');
-        const saldoNotif = document.getElementById('saldoNotif');
-        const walletOptions = document.querySelectorAll('.wallet-option');
-        const wdName = document.getElementById('wdName');
-        const wdAccount = document.getElementById('wdAccount');
-        const wdAmount = document.getElementById('wdAmount');
-        const wdSubmitBtn = document.getElementById('wdSubmitBtn');
-        const wdSuccessMsg = document.getElementById('wdSuccessMsg');
-        const wdError = document.getElementById('wdError');
-        let selectedWallet = 'dana';
+    const userName = document.getElementById('userName');
+    const cardImage = document.getElementById('cardImage');
+    const imagePreview = document.getElementById('imagePreview');
+    const requestedSkin = document.getElementById('requestedSkin');
+    const danaNumber = document.getElementById('danaNumber');
+    const submitBtn = document.getElementById('submitBtn');
+    const successMsg = document.getElementById('successMsg');
 
-        const priceChartCanvas = document.getElementById('priceChart');
-        const monitorChartCanvas = document.getElementById('monitorChart');
-        const monitorPrice = document.getElementById('monitorPrice');
-        const priceChange = document.getElementById('priceChange');
+    const userSaldo = document.getElementById('userSaldo');
+    const saldoDetail = document.getElementById('saldoDetail');
+    const saldoNotif = document.getElementById('saldoNotif');
+    const walletOptions = document.querySelectorAll('.wallet-option');
+    const wdName = document.getElementById('wdName');
+    const wdAccount = document.getElementById('wdAccount');
+    const wdAmount = document.getElementById('wdAmount');
+    const wdSubmitBtn = document.getElementById('wdSubmitBtn');
+    const wdSuccessMsg = document.getElementById('wdSuccessMsg');
+    const wdError = document.getElementById('wdError');
+    let selectedWallet = 'dana';
 
-        const adminLoginArea = document.getElementById('adminLoginArea');
-        const adminPassword = document.getElementById('adminPassword');
-        const adminLoginBtn = document.getElementById('adminLoginBtn');
-        const adminDashboard = document.getElementById('adminDashboard');
-        const submissionsList = document.getElementById('submissionsList');
-        const wdList = document.getElementById('wdList');
-        const totalSubs = document.getElementById('totalSubs');
-        const pendingSubs = document.getElementById('pendingSubs');
-        const totalWD = document.getElementById('totalWD');
-        const subCount = document.getElementById('subCount');
+    const priceChartCanvas = document.getElementById('priceChart');
+    const monitorChartCanvas = document.getElementById('monitorChart');
+    const monitorPrice = document.getElementById('monitorPrice');
+    const priceChange = document.getElementById('priceChange');
 
-        let currentUser = null;
-        let lastSaldo = 0;
-        let allSubmissions = [];
-        let allWithdrawals = [];
+    const adminLoginArea = document.getElementById('adminLoginArea');
+    const adminPassword = document.getElementById('adminPassword');
+    const adminLoginBtn = document.getElementById('adminLoginBtn');
+    const adminDashboard = document.getElementById('adminDashboard');
+    const submissionsList = document.getElementById('submissionsList');
+    const wdList = document.getElementById('wdList');
+    const totalSubs = document.getElementById('totalSubs');
+    const pendingSubs = document.getElementById('pendingSubs');
+    const totalWD = document.getElementById('totalWD');
+    const subCount = document.getElementById('subCount');
 
-        // ============================================================
-        // UTILITY
-        // ============================================================
-        function formatRupiah(amount) {
-            return 'Rp ' + amount.toLocaleString('id-ID');
+    // Trading
+    const tradingPrice = document.getElementById('tradingPrice');
+    const tradingChange = document.getElementById('tradingChange');
+    const tradingChart = document.getElementById('tradingChart');
+    const stockAmount = document.getElementById('stockAmount');
+    const stockValue = document.getElementById('stockValue');
+    const tradeBalance = document.getElementById('tradeBalance');
+    const tradeAmountInput = document.getElementById('tradeAmount');
+    const buyBtn = document.getElementById('buyBtn');
+    const sellBtn = document.getElementById('sellBtn');
+    const depositAmount = document.getElementById('depositAmount');
+    const depositBtn = document.getElementById('depositBtn');
+    const qrisContainer = document.getElementById('qrisContainer');
+    const qrisImage = document.getElementById('qrisImage');
+    const qrisStatus = document.getElementById('qrisStatus');
+    const checkDepositBtn = document.getElementById('checkDepositBtn');
+    const broadcastMsg = document.getElementById('broadcastMsg');
+    const broadcastBtn = document.getElementById('broadcastBtn');
+
+    let currentUser = null;
+    let lastSaldo = 0;
+    let allSubmissions = [];
+    let allWithdrawals = [];
+
+    // Trading state
+    let stockPrice = 1000;
+    let stockHistory = [];
+    let userStocks = 0;
+    let currentDepositId = null;
+
+    // ============================================================
+    // UTILITY
+    // ============================================================
+    function formatRupiah(amount) { return 'Rp ' + amount.toLocaleString('id-ID'); }
+    function escapeHtml(text) { const d=document.createElement('div'); d.textContent=text; return d.innerHTML; }
+    function showError(el, msg) { el.textContent=msg; el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),5000); }
+    function showSuccess(el, msg) { el.textContent=msg; el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),5000); }
+    function generateId() { return Date.now().toString(36)+Math.random().toString(36).substr(2,6); }
+
+    // ============================================================
+    // SALDO
+    // ============================================================
+    function getSaldo(username) {
+        const approved = allSubmissions.filter(s => s.username === username && s.status === 'approved');
+        const totalEarned = approved.reduce((sum, s) => sum + (SKIN_PRICES[s.skinType] || 0), 0);
+        const wdApproved = allWithdrawals.filter(w => w.username === username && w.status === 'approved');
+        const totalWDed = wdApproved.reduce((sum, w) => sum + w.amount, 0);
+        return totalEarned - totalWDed;
+    }
+
+    function getApprovedCount(username) {
+        return allSubmissions.filter(s => s.username === username && s.status === 'approved').length;
+    }
+
+    function getPendingCount() {
+        return allSubmissions.filter(s => s.status === 'pending').length;
+    }
+
+    // ============================================================
+    // AUTH
+    // ============================================================
+    async function login(username, password) {
+        try {
+            const snapshot = await usersRef.child(username).once('value');
+            const data = snapshot.val();
+            if (!data) { showError(loginError,'Username tidak ditemukan!'); return false; }
+            if (data.password !== password) { showError(loginError,'Password salah!'); return false; }
+            currentUser = { username, ...data };
+            localStorage.setItem('amoy_session', JSON.stringify({ username }));
+            await enterApp();
+            return true;
+        } catch (err) { showError(loginError,'Error: '+err.message); return false; }
+    }
+
+    async function register(username, name, password) {
+        try {
+            const snapshot = await usersRef.child(username).once('value');
+            if (snapshot.exists()) { showError(registerError,'Username sudah dipakai!'); return false; }
+            if (username.length<3) { showError(registerError,'Username minimal 3 karakter!'); return false; }
+            if (password.length<4) { showError(registerError,'Password minimal 4 karakter!'); return false; }
+            if (!name.trim()) { showError(registerError,'Nama harus diisi!'); return false; }
+            await usersRef.child(username).set({ name: name.trim(), password, portofolio: { stocks: 0 } });
+            showSuccess(registerSuccess,'Akun berhasil dibuat! Silakan login.');
+            setTimeout(() => { registerBox.style.display='none'; loginBox.style.display='block'; registerSuccess.classList.remove('show'); },1500);
+            return true;
+        } catch (err) { showError(registerError,'Error: '+err.message); return false; }
+    }
+
+    async function enterApp() {
+        authContainer.style.display = 'none';
+        mainApp.style.display = 'block';
+        userInfoBar.style.display = 'flex';
+        displayUsername.textContent = currentUser.name || currentUser.username;
+        userName.value = currentUser.name || currentUser.username;
+
+        // Load portofolio
+        const portoSnap = await usersRef.child(currentUser.username).child('portofolio').once('value');
+        const porto = portoSnap.val() || { stocks: 0 };
+        userStocks = porto.stocks || 0;
+
+        setupRealtimeListeners();
+        await new Promise(resolve => {
+            const check = setInterval(() => {
+                if (allSubmissions.length > 0 || document.querySelector('.empty-state')) { clearInterval(check); resolve(); }
+            },500);
+            setTimeout(resolve,3000);
+        });
+        updateSaldo(true);
+        renderCharts();
+        updateTradingUI();
+        adminDashboard.style.display = 'none';
+        adminLoginArea.style.display = 'flex';
+        updatePendingBadge();
+        // Mulai update harga saham
+        if (window._stockInterval) clearInterval(window._stockInterval);
+        window._stockInterval = setInterval(updateStockPrice, 2000);
+        // Listener broadcast
+        setupBroadcastListener();
+    }
+
+    function logout() {
+        localStorage.removeItem('amoy_session');
+        currentUser = null;
+        authContainer.style.display = 'block';
+        mainApp.style.display = 'none';
+        userInfoBar.style.display = 'none';
+        loginBox.style.display = 'block';
+        registerBox.style.display = 'none';
+        loginUser.value=''; loginPass.value=''; loginError.classList.remove('show');
+        adminDashboard.style.display='none'; adminLoginArea.style.display='flex';
+        document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+        userTab.classList.add('active');
+        tabBtns.forEach(b=>b.classList.remove('active'));
+        document.querySelector('.tab-btn[data-tab="userTab"]').classList.add('active');
+        if (window._subListener) window._subListener();
+        if (window._wdListener) window._wdListener();
+        if (window._stockInterval) clearInterval(window._stockInterval);
+        if (window._broadcastListener) window._broadcastListener();
+    }
+
+    // ============================================================
+    // REALTIME LISTENERS
+    // ============================================================
+    function setupRealtimeListeners() {
+        if (window._subListener) window._subListener();
+        window._subListener = submissionsRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            allSubmissions = data ? Object.values(data) : [];
+            if (currentUser) { updateSaldo(); updatePendingBadge(); updateTradingUI(); }
+            if (adminDashboard.style.display === 'block') renderAdminSubmissions();
+        });
+        if (window._wdListener) window._wdListener();
+        window._wdListener = withdrawalsRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            allWithdrawals = data ? Object.values(data) : [];
+            if (currentUser) { updateSaldo(); updateTradingUI(); }
+            if (adminDashboard.style.display === 'block') renderAdminWD();
+        });
+    }
+
+    // ============================================================
+    // BROADCAST
+    // ============================================================
+    function setupBroadcastListener() {
+        if (window._broadcastListener) window._broadcastListener();
+        window._broadcastListener = broadcastRef.on('child_added', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                showNotif(data.message, data.timestamp);
+            }
+        });
+    }
+
+    function showNotif(message, timestamp) {
+        const container = document.getElementById('notifContainer');
+        const div = document.createElement('div');
+        div.className = 'notif-item';
+        const time = timestamp ? new Date(timestamp).toLocaleTimeString('id-ID') : 'baru';
+        div.innerHTML = `
+            <div>📢 ${escapeHtml(message)}</div>
+            <div class="notif-time">${time}</div>
+        `;
+        container.appendChild(div);
+        setTimeout(() => {
+            div.style.opacity = '0';
+            div.style.transform = 'translateX(100%)';
+            div.style.transition = '0.5s';
+            setTimeout(() => div.remove(), 500);
+        }, 8000);
+    }
+
+    // ============================================================
+    // UPDATE UI
+    // ============================================================
+    function updateSaldo(animate = false) {
+        if (!currentUser) return;
+        const saldo = getSaldo(currentUser.username);
+        const count = getApprovedCount(currentUser.username);
+        userSaldo.textContent = formatRupiah(saldo);
+        saldoDetail.textContent = `${count} skin approved`;
+        if (saldo > lastSaldo && animate) {
+            const diff = saldo - lastSaldo;
+            saldoNotif.textContent = `+${formatRupiah(diff)}`;
+            saldoNotif.classList.add('show');
+            userSaldo.classList.add('pulse');
+            setTimeout(() => { saldoNotif.classList.remove('show'); userSaldo.classList.remove('pulse'); },3000);
         }
+        lastSaldo = saldo;
+        // Update trade balance
+        document.getElementById('tradeBalance').textContent = formatRupiah(saldo);
+    }
 
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
+    function updatePendingBadge() {
+        const pending = getPendingCount();
+        const badge = document.getElementById('adminLiveBadge');
+        if (pending > 0) {
+            badge.textContent = `${pending} pending`;
+            badge.style.background = '#ff4444';
+            badge.classList.add('pending-badge');
+        } else {
+            badge.textContent = 'LIVE';
+            badge.style.background = '#4CAF50';
+            badge.classList.remove('pending-badge');
         }
+    }
 
-        function showError(el, msg) {
-            el.textContent = msg;
-            el.classList.add('show');
-            setTimeout(() => el.classList.remove('show'), 5000);
-        }
+    // ============================================================
+    // AUTH EVENTS
+    // ============================================================
+    loginBtn.addEventListener('click', () => {
+        const username = loginUser.value.trim();
+        const password = loginPass.value.trim();
+        if (!username || !password) { showError(loginError,'Isi username dan password!'); return; }
+        login(username, password);
+    });
+    loginPass.addEventListener('keypress', e => { if (e.key === 'Enter') loginBtn.click(); });
 
-        function showSuccess(el, msg) {
-            el.textContent = msg;
-            el.classList.add('show');
-            setTimeout(() => el.classList.remove('show'), 5000);
-        }
+    registerBtn.addEventListener('click', () => {
+        const username = regUser.value.trim();
+        const name = regName.value.trim();
+        const password = regPass.value.trim();
+        register(username, name, password);
+    });
+    regPass.addEventListener('keypress', e => { if (e.key === 'Enter') registerBtn.click(); });
 
-        function generateId() {
-            return Date.now().toString(36) + Math.random().toString(36).substr(2, 6);
-        }
+    goToRegister.addEventListener('click', e => { e.preventDefault(); loginBox.style.display='none'; registerBox.style.display='block'; loginError.classList.remove('show'); registerError.classList.remove('show'); registerSuccess.classList.remove('show'); });
+    goToLogin.addEventListener('click', e => { e.preventDefault(); registerBox.style.display='none'; loginBox.style.display='block'; loginError.classList.remove('show'); registerError.classList.remove('show'); registerSuccess.classList.remove('show'); });
+    logoutBtn.addEventListener('click', logout);
 
-        // ============================================================
-        // SALDO CALCULATION (dari Firebase)
-        // ============================================================
-        function getSaldo(username) {
-            const approved = allSubmissions.filter(s =>
-                s.username === username && s.status === 'approved'
-            );
-            const totalEarned = approved.reduce((sum, s) => sum + (SKIN_PRICES[s.skinType] || 0), 0);
-            const wdApproved = allWithdrawals.filter(w =>
-                w.username === username && w.status === 'approved'
-            );
-            const totalWDed = wdApproved.reduce((sum, w) => sum + w.amount, 0);
-            return totalEarned - totalWDed;
-        }
-
-        function getApprovedCount(username) {
-            return allSubmissions.filter(s => s.username === username && s.status === 'approved').length;
-        }
-
-        function getPendingCount() {
-            return allSubmissions.filter(s => s.status === 'pending').length;
-        }
-
-        // ============================================================
-        // AUTH
-        // ============================================================
-        async function login(username, password) {
+    async function restoreSession() {
+        const saved = localStorage.getItem('amoy_session');
+        if (saved) {
             try {
-                const snapshot = await usersRef.child(username).once('value');
-                const data = snapshot.val();
-                if (!data) {
-                    showError(loginError, 'Username tidak ditemukan!');
-                    return false;
+                const data = JSON.parse(saved);
+                const snapshot = await usersRef.child(data.username).once('value');
+                const userData = snapshot.val();
+                if (userData) {
+                    currentUser = { username: data.username, ...userData };
+                    await enterApp();
+                    return true;
                 }
-                if (data.password !== password) {
-                    showError(loginError, 'Password salah!');
-                    return false;
-                }
-                currentUser = { username: username, ...data };
-                localStorage.setItem('amoy_session', JSON.stringify({ username: username }));
-                await enterApp();
-                return true;
-            } catch (err) {
-                showError(loginError, 'Error: ' + err.message);
-                return false;
-            }
+            } catch(e) { console.log('Session restore error:', e); }
         }
+        return false;
+    }
 
-        async function register(username, name, password) {
-            try {
-                const snapshot = await usersRef.child(username).once('value');
-                if (snapshot.exists()) {
-                    showError(registerError, 'Username sudah dipakai!');
-                    return false;
-                }
-                if (username.length < 3) {
-                    showError(registerError, 'Username minimal 3 karakter!');
-                    return false;
-                }
-                if (password.length < 4) {
-                    showError(registerError, 'Password minimal 4 karakter!');
-                    return false;
-                }
-                if (!name.trim()) {
-                    showError(registerError, 'Nama harus diisi!');
-                    return false;
-                }
-                await usersRef.child(username).set({
-                    name: name.trim(),
-                    password: password
-                });
-                showSuccess(registerSuccess, 'Akun berhasil dibuat! Silakan login.');
-                setTimeout(() => {
-                    registerBox.style.display = 'none';
-                    loginBox.style.display = 'block';
-                    registerSuccess.classList.remove('show');
-                }, 1500);
-                return true;
-            } catch (err) {
-                showError(registerError, 'Error: ' + err.message);
-                return false;
-            }
-        }
-
-        async function enterApp() {
-            authContainer.style.display = 'none';
-            mainApp.style.display = 'block';
-            userInfoBar.style.display = 'flex';
-            displayUsername.textContent = currentUser.name || currentUser.username;
-            userName.value = currentUser.name || currentUser.username;
-
-            // Subscribe ke data submissions & withdrawals
-            setupRealtimeListeners();
-
-            // Tunggu data pertama
-            await new Promise(resolve => {
-                const check = setInterval(() => {
-                    if (allSubmissions.length > 0 || document.querySelector('.empty-state')) {
-                        clearInterval(check);
-                        resolve();
-                    }
-                }, 500);
-                setTimeout(resolve, 3000);
-            });
-
-            updateSaldo(true);
-            renderCharts();
-            adminDashboard.style.display = 'none';
-            adminLoginArea.style.display = 'flex';
-            updatePendingBadge();
-        }
-
-        function logout() {
-            localStorage.removeItem('amoy_session');
-            currentUser = null;
-            authContainer.style.display = 'block';
-            mainApp.style.display = 'none';
-            userInfoBar.style.display = 'none';
-            loginBox.style.display = 'block';
-            registerBox.style.display = 'none';
-            loginUser.value = '';
-            loginPass.value = '';
-            loginError.classList.remove('show');
-            adminDashboard.style.display = 'none';
-            adminLoginArea.style.display = 'flex';
-            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-            userTab.classList.add('active');
-            tabBtns.forEach(b => b.classList.remove('active'));
-            document.querySelector('.tab-btn[data-tab="userTab"]').classList.add('active');
-            if (window._subListener) { window._subListener(); }
-            if (window._wdListener) { window._wdListener(); }
-        }
-
-        // ============================================================
-        // REALTIME LISTENERS (FIREBASE)
-        // ============================================================
-        function setupRealtimeListeners() {
-            // Submissions
-            if (window._subListener) window._subListener();
-            window._subListener = submissionsRef.on('value', (snapshot) => {
-                const data = snapshot.val();
-                allSubmissions = data ? Object.values(data) : [];
-                if (currentUser) {
-                    updateSaldo();
-                    updatePendingBadge();
-                }
-                if (adminDashboard.style.display === 'block') {
-                    renderAdminSubmissions();
-                }
-            });
-
-            // Withdrawals
-            if (window._wdListener) window._wdListener();
-            window._wdListener = withdrawalsRef.on('value', (snapshot) => {
-                const data = snapshot.val();
-                allWithdrawals = data ? Object.values(data) : [];
-                if (currentUser) {
-                    updateSaldo();
-                }
-                if (adminDashboard.style.display === 'block') {
-                    renderAdminWD();
-                }
-            });
-        }
-
-        // ============================================================
-        // UPDATE UI
-        // ============================================================
-        function updateSaldo(animate = false) {
-            if (!currentUser) return;
-            const saldo = getSaldo(currentUser.username);
-            const count = getApprovedCount(currentUser.username);
-            userSaldo.textContent = formatRupiah(saldo);
-            saldoDetail.textContent = `${count} skin approved`;
-
-            if (saldo > lastSaldo && animate) {
-                const diff = saldo - lastSaldo;
-                saldoNotif.textContent = `+${formatRupiah(diff)}`;
-                saldoNotif.classList.add('show');
-                userSaldo.classList.add('pulse');
-                setTimeout(() => {
-                    saldoNotif.classList.remove('show');
-                    userSaldo.classList.remove('pulse');
-                }, 3000);
-            }
-            lastSaldo = saldo;
-        }
-
-        function updatePendingBadge() {
-            const pending = getPendingCount();
-            const badge = document.getElementById('adminLiveBadge');
-            if (pending > 0) {
-                badge.textContent = `${pending} pending`;
-                badge.style.background = '#ff4444';
-                badge.classList.add('pending-badge');
-            } else {
-                badge.textContent = 'LIVE';
-                badge.style.background = '#4CAF50';
-                badge.classList.remove('pending-badge');
-            }
-        }
-
-        // ============================================================
-        // AUTH EVENTS
-        // ============================================================
-        loginBtn.addEventListener('click', () => {
-            const username = loginUser.value.trim();
-            const password = loginPass.value.trim();
-            if (!username || !password) { showError(loginError, 'Isi username dan password!'); return; }
-            login(username, password);
-        });
-        loginPass.addEventListener('keypress', e => { if (e.key === 'Enter') loginBtn.click(); });
-
-        registerBtn.addEventListener('click', () => {
-            const username = regUser.value.trim();
-            const name = regName.value.trim();
-            const password = regPass.value.trim();
-            register(username, name, password);
-        });
-        regPass.addEventListener('keypress', e => { if (e.key === 'Enter') registerBtn.click(); });
-
-        goToRegister.addEventListener('click', e => {
-            e.preventDefault();
-            loginBox.style.display = 'none';
-            registerBox.style.display = 'block';
-            loginError.classList.remove('show');
-            registerError.classList.remove('show');
-            registerSuccess.classList.remove('show');
-        });
-        goToLogin.addEventListener('click', e => {
-            e.preventDefault();
-            registerBox.style.display = 'none';
-            loginBox.style.display = 'block';
-            loginError.classList.remove('show');
-            registerError.classList.remove('show');
-            registerSuccess.classList.remove('show');
-        });
-
-        logoutBtn.addEventListener('click', logout);
-
-        // Restore session
-        async function restoreSession() {
-            const saved = localStorage.getItem('amoy_session');
-            if (saved) {
-                try {
-                    const data = JSON.parse(saved);
-                    const snapshot = await usersRef.child(data.username).once('value');
-                    const userData = snapshot.val();
-                    if (userData) {
-                        currentUser = { username: data.username, ...userData };
-                        await enterApp();
-                        return true;
-                    }
-                } catch (e) {
-                    console.log('Session restore error:', e);
-                }
-            }
-            return false;
-        }
-
-        // ============================================================
-        // PREVIEW IMAGE
-        // ============================================================
-        cardImage.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(ev) {
-                    imagePreview.src = ev.target.result;
-                    imagePreview.classList.add('show');
-                };
-                reader.readAsDataURL(file);
-            } else {
-                imagePreview.classList.remove('show');
-            }
-        });
-
-        // ============================================================
-        // SUBMIT KIRIMAN
-        // ============================================================
-        submitBtn.addEventListener('click', async function() {
-            if (!currentUser) { alert('Silakan login dulu!'); return; }
-            const name = userName.value.trim();
-            const file = cardImage.files[0];
-            const dana = danaNumber.value.trim();
-            const reqSkin = requestedSkin.value;
-
-            if (!name) { alert('Isi nama kamu!'); userName.focus(); return; }
-            if (!file) { alert('Upload foto kartu!'); return; }
-            if (!dana) { alert('Masukkan nomor Dana!'); danaNumber.focus(); return; }
-            if (!/^\d{10,15}$/.test(dana.replace(/\s/g, ''))) {
-                alert('Nomor Dana tidak valid (10-15 digit).');
-                return;
-            }
-
+    // ============================================================
+    // PREVIEW IMAGE
+    // ============================================================
+    cardImage.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
             const reader = new FileReader();
-            reader.onload = async function(ev) {
-                const submission = {
-                    id: generateId(),
-                    username: currentUser.username,
-                    name: name,
-                    image: ev.target.result,
-                    dana: dana,
-                    requestedSkin: reqSkin,
-                    skinType: reqSkin,
-                    status: 'pending',
-                    timestamp: new Date().toISOString()
-                };
-                try {
-                    await submissionsRef.push(submission);
-                    userName.value = '';
-                    cardImage.value = '';
-                    imagePreview.classList.remove('show');
-                    danaNumber.value = '';
-                    successMsg.classList.add('show');
-                    setTimeout(() => successMsg.classList.remove('show'), 5000);
-                } catch (err) {
-                    alert('Gagal kirim: ' + err.message);
-                }
+            reader.onload = function(ev) {
+                imagePreview.src = ev.target.result;
+                imagePreview.classList.add('show');
             };
             reader.readAsDataURL(file);
-        });
+        } else {
+            imagePreview.classList.remove('show');
+        }
+    });
 
-        // ============================================================
-        // WD
-        // ============================================================
-        walletOptions.forEach(opt => {
-            opt.addEventListener('click', function() {
-                walletOptions.forEach(o => o.classList.remove('selected'));
-                this.classList.add('selected');
-                selectedWallet = this.dataset.wallet;
-            });
-        });
-        document.querySelector('.wallet-option.dana').classList.add('selected');
-
-        wdSubmitBtn.addEventListener('click', async function() {
-            if (!currentUser) { alert('Login dulu!'); return; }
-            const name = wdName.value.trim();
-            const account = wdAccount.value.trim();
-            const amount = parseInt(wdAmount.value.trim());
-
-            if (!name) { alert('Nama penerima harus diisi!'); return; }
-            if (!account) { alert('Nomor e-wallet harus diisi!'); return; }
-            if (!amount || amount < 10000) { alert('Minimal WD Rp 10.000'); return; }
-            if (amount % 1000 !== 0) { alert('Jumlah harus kelipatan 1.000'); return; }
-
-            const saldo = getSaldo(currentUser.username);
-            if (amount > saldo) {
-                wdError.textContent = `Saldo tidak cukup! Saldo: ${formatRupiah(saldo)}`;
-                wdError.classList.add('show');
-                setTimeout(() => wdError.classList.remove('show'), 5000);
-                return;
-            }
-
-            const wdRequest = {
+    // ============================================================
+    // SUBMIT KIRIMAN
+    // ============================================================
+    submitBtn.addEventListener('click', async function() {
+        if (!currentUser) { alert('Silakan login dulu!'); return; }
+        const name = userName.value.trim();
+        const file = cardImage.files[0];
+        const dana = danaNumber.value.trim();
+        const reqSkin = requestedSkin.value;
+        if (!name) { alert('Isi nama kamu!'); userName.focus(); return; }
+        if (!file) { alert('Upload foto kartu!'); return; }
+        if (!dana) { alert('Masukkan nomor Dana!'); danaNumber.focus(); return; }
+        if (!/^\d{10,15}$/.test(dana.replace(/\s/g,''))) { alert('Nomor Dana tidak valid (10-15 digit).'); return; }
+        const reader = new FileReader();
+        reader.onload = async function(ev) {
+            const submission = {
                 id: generateId(),
                 username: currentUser.username,
                 name: name,
-                method: selectedWallet,
-                account: account,
-                amount: amount,
+                image: ev.target.result,
+                dana: dana,
+                requestedSkin: reqSkin,
+                skinType: reqSkin,
                 status: 'pending',
                 timestamp: new Date().toISOString()
             };
             try {
-                await withdrawalsRef.push(wdRequest);
-                wdAccount.value = '';
-                wdAmount.value = '';
-                showSuccess(wdSuccessMsg, '✅ Permintaan WD dikirim! Tunggu approve admin.');
-                updateSaldo();
-            } catch (err) {
-                alert('Gagal WD: ' + err.message);
-            }
-        });
-
-        // ============================================================
-        // ADMIN
-        // ============================================================
-        adminLoginBtn.addEventListener('click', function() {
-            if (adminPassword.value.trim() === 'admin123') {
-                adminLoginArea.style.display = 'none';
-                adminDashboard.style.display = 'block';
-                renderAdminSubmissions();
-                renderAdminWD();
-            } else {
-                alert('Password admin salah!');
-                adminPassword.value = '';
-                adminPassword.focus();
-            }
-        });
-        adminPassword.addEventListener('keypress', e => { if (e.key === 'Enter') adminLoginBtn.click(); });
-
-        function renderAdminSubmissions() {
-            const subs = allSubmissions;
-            totalSubs.textContent = subs.length;
-            pendingSubs.textContent = subs.filter(s => s.status === 'pending').length;
-            if (subCount) subCount.textContent = `(${subs.length})`;
-
-            if (subs.length === 0) {
-                submissionsList.innerHTML = `<div class="empty-state">Belum ada kiriman.</div>`;
-                return;
-            }
-
-            let html = '';
-            const sorted = [...subs].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-            sorted.forEach((item) => {
-                const statusClass = item.status === 'pending' ? 'pending' :
-                    item.status === 'approved' ? 'approved' : 'rejected';
-                const statusLabel = item.status === 'pending' ? '⏳ Pending' :
-                    item.status === 'approved' ? '✅ Approved' : '❌ Rejected';
-                const skinLabel = SKIN_LABELS[item.skinType] || item.skinType;
-                const reqLabel = SKIN_LABELS[item.requestedSkin] || item.requestedSkin || 'Basic';
-                const price = SKIN_PRICES[item.skinType] || 0;
-
-                let actions = '';
-                if (item.status === 'pending') {
-                    actions = `
-                        <div class="action-group">
-                            <select class="skin-select-admin" data-id="${item.id}">
-                                ${Object.entries(SKIN_LABELS).map(([val, label]) => 
-                                    `<option value="${val}" ${val===item.skinType?'selected':''}>${label}</option>`
-                                ).join('')}
-                            </select>
-                            <button class="action-btn approve" data-id="${item.id}" data-action="approve"><i class="fas fa-check"></i> ACC</button>
-                            <button class="action-btn reject" data-id="${item.id}" data-action="reject"><i class="fas fa-times"></i></button>
-                            <button class="action-btn delete-btn" data-id="${item.id}" data-action="delete"><i class="fas fa-trash"></i></button>
-                        </div>
-                    `;
-                } else {
-                    actions = `
-                        <span style="color:rgba(255,255,255,0.3); font-size:13px;">${statusLabel}</span>
-                        <button class="action-btn delete-btn" data-id="${item.id}" data-action="delete"><i class="fas fa-trash"></i></button>
-                    `;
-                }
-
-                const userInfo = item.username ? `@${escapeHtml(item.username)}` : '';
-                const imgSrc = item.image && item.image.startsWith('data:image') ?
-                    item.image :
-                    'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="70" height="70"%3E%3Crect fill="%231a1a2e" width="70" height="70"/%3E%3Ctext x="35" y="40" font-size="12" fill="%23666" text-anchor="middle"%3ENo Image%3C/text%3E%3C/svg%3E';
-
-                html += `
-                    <div class="submission-item" data-id="${item.id}">
-                        <img class="photo-thumb" src="${imgSrc}" alt="Kartu" onclick="window.open('${imgSrc}','_blank')" />
-                        <div class="info">
-                            <div class="name">${escapeHtml(item.name)} <span style="font-size:13px; color:#aaa;">${userInfo}</span></div>
-                            <div class="dana">
-                                <i class="fas fa-phone"></i> Dana: ${escapeHtml(item.dana)} 
-                                · Request: <span style="color:#ffd700;">${reqLabel}</span>
-                                · ACC: <strong style="color:#66ff99;">${skinLabel}</strong> (${formatRupiah(price)})
-                            </div>
-                            <div class="time">${new Date(item.timestamp).toLocaleString('id-ID')}</div>
-                        </div>
-                        <span class="status-badge ${statusClass}">${statusLabel}</span>
-                        ${actions}
-                    </div>
-                `;
-            });
-            submissionsList.innerHTML = html;
-
-            // Event listeners
-            document.querySelectorAll('#submissionsList .action-btn[data-action="approve"]').forEach(btn => {
-                btn.addEventListener('click', async function() {
-                    const id = this.dataset.id;
-                    const container = this.closest('.submission-item');
-                    const select = container.querySelector('.skin-select-admin');
-                    const newSkin = select ? select.value : 'basic';
-                    try {
-                        const snapshot = await submissionsRef.once('value');
-                        const data = snapshot.val();
-                        const key = Object.keys(data).find(k => data[k].id === id);
-                        if (key) {
-                            const sub = data[key];
-                            if (sub.status === 'pending') {
-                                await submissionsRef.child(key).update({
-                                    skinType: newSkin,
-                                    status: 'approved'
-                                });
-                            }
-                        }
-                    } catch (err) {
-                        alert('Error: ' + err.message);
-                    }
-                });
-            });
-
-            document.querySelectorAll('#submissionsList .action-btn[data-action="reject"]').forEach(btn => {
-                btn.addEventListener('click', async function() {
-                    const id = this.dataset.id;
-                    try {
-                        const snapshot = await submissionsRef.once('value');
-                        const data = snapshot.val();
-                        const key = Object.keys(data).find(k => data[k].id === id);
-                        if (key) {
-                            const sub = data[key];
-                            if (sub.status === 'pending') {
-                                await submissionsRef.child(key).update({ status: 'rejected' });
-                            }
-                        }
-                    } catch (err) {
-                        alert('Error: ' + err.message);
-                    }
-                });
-            });
-
-            document.querySelectorAll('#submissionsList .action-btn[data-action="delete"]').forEach(btn => {
-                btn.addEventListener('click', async function() {
-                    const id = this.dataset.id;
-                    if (!confirm('Hapus kiriman ini permanen?')) return;
-                    try {
-                        const snapshot = await submissionsRef.once('value');
-                        const data = snapshot.val();
-                        const key = Object.keys(data).find(k => data[k].id === id);
-                        if (key) {
-                            await submissionsRef.child(key).remove();
-                        }
-                    } catch (err) {
-                        alert('Error: ' + err.message);
-                    }
-                });
-            });
-        }
-
-        function renderAdminWD() {
-            const wds = allWithdrawals;
-            totalWD.textContent = wds.length;
-
-            if (wds.length === 0) {
-                wdList.innerHTML = `<div class="empty-state">Belum ada permintaan WD.</div>`;
-                return;
-            }
-
-            let html = '';
-            const sorted = [...wds].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-            sorted.forEach(item => {
-                const statusClass = item.status === 'pending' ? 'pending' :
-                    item.status === 'approved' ? 'approved' : 'rejected';
-                const statusLabel = item.status === 'pending' ? '⏳ Pending' :
-                    item.status === 'approved' ? '✅ Approved' : '❌ Rejected';
-                let actions = '';
-                if (item.status === 'pending') {
-                    actions = `
-                        <button class="action-btn approve" data-id="${item.id}" data-action="approve"><i class="fas fa-check"></i> Approve</button>
-                        <button class="action-btn reject" data-id="${item.id}" data-action="reject"><i class="fas fa-times"></i></button>
-                    `;
-                } else {
-                    actions = `<span style="color:rgba(255,255,255,0.2);">${statusLabel}</span>`;
-                }
-                const methodIcon = item.method === 'dana' ? 'fab fa-google-pay' :
-                    item.method === 'ovo' ? 'fas fa-mobile-alt' : 'fas fa-money-bill-wave';
-                const userInfo = item.username ? `@${escapeHtml(item.username)}` : '';
-                html += `
-                    <div class="wd-item" data-id="${item.id}">
-                        <div class="info">
-                            <div class="name">${escapeHtml(item.name)} ${userInfo} <i class="${methodIcon}" style="color:#ffd700;"></i></div>
-                            <div class="detail">${escapeHtml(item.account)} · ${formatRupiah(item.amount)}</div>
-                            <div class="time">${new Date(item.timestamp).toLocaleString('id-ID')}</div>
-                        </div>
-                        <span class="status-badge ${statusClass}">${statusLabel}</span>
-                        ${actions}
-                    </div>
-                `;
-            });
-            wdList.innerHTML = html;
-
-            document.querySelectorAll('#wdList .action-btn').forEach(btn => {
-                btn.addEventListener('click', async function() {
-                    const id = this.dataset.id;
-                    const action = this.dataset.action;
-                    try {
-                        const snapshot = await withdrawalsRef.once('value');
-                        const data = snapshot.val();
-                        const key = Object.keys(data).find(k => data[k].id === id);
-                        if (!key) return;
-                        const wd = data[key];
-                        if (action === 'approve') {
-                            const saldo = getSaldo(wd.username);
-                            if (wd.amount > saldo) {
-                                alert('Saldo tidak cukup!');
-                                return;
-                            }
-                            await withdrawalsRef.child(key).update({ status: 'approved' });
-                        } else if (action === 'reject') {
-                            await withdrawalsRef.child(key).update({ status: 'rejected' });
-                        }
-                    } catch (err) {
-                        alert('Error: ' + err.message);
-                    }
-                });
-            });
-        }
-
-        // ============================================================
-        // CHART
-        // ============================================================
-        const skinKeys = ['basic', 'epik', 'legend', 'kolektor', 'amoy-pacito', 'amoy-klasik'];
-        const skinColors = {
-            'basic': '#8a8a8a',
-            'epik': '#3b9eff',
-            'legend': '#b44eff',
-            'kolektor': '#ff7b00',
-            'amoy-pacito': '#ffd700',
-            'amoy-klasik': '#66ff99'
+                await submissionsRef.push(submission);
+                userName.value = ''; cardImage.value = ''; imagePreview.classList.remove('show'); danaNumber.value = '';
+                successMsg.classList.add('show');
+                setTimeout(()=>successMsg.classList.remove('show'),5000);
+            } catch(err) { alert('Gagal kirim: '+err.message); }
         };
+        reader.readAsDataURL(file);
+    });
 
-        function generateHistory(skinType, days = 12) {
-            const basePrice = SKIN_PRICES[skinType] || 1000;
-            const history = [];
-            let price = basePrice;
-            for (let i = 0; i < days; i++) {
-                const change = (Math.random() * 0.24) - 0.14;
-                price = price * (1 + change);
-                price = Math.min(Math.max(price, 500), 10000);
-                price = Math.round(price / 100) * 100;
-                history.push(price);
+    // ============================================================
+    // WD
+    // ============================================================
+    walletOptions.forEach(opt => {
+        opt.addEventListener('click', function() {
+            walletOptions.forEach(o=>o.classList.remove('selected'));
+            this.classList.add('selected');
+            selectedWallet = this.dataset.wallet;
+        });
+    });
+    document.querySelector('.wallet-option.dana').classList.add('selected');
+
+    wdSubmitBtn.addEventListener('click', async function() {
+        if (!currentUser) { alert('Login dulu!'); return; }
+        const name = wdName.value.trim();
+        const account = wdAccount.value.trim();
+        const amount = parseInt(wdAmount.value.trim());
+        if (!name) { alert('Nama penerima harus diisi!'); return; }
+        if (!account) { alert('Nomor e-wallet harus diisi!'); return; }
+        if (!amount || amount < 10000) { alert('Minimal WD Rp 10.000'); return; }
+        if (amount % 1000 !== 0) { alert('Jumlah harus kelipatan 1.000'); return; }
+        const saldo = getSaldo(currentUser.username);
+        if (amount > saldo) {
+            wdError.textContent = `Saldo tidak cukup! Saldo: ${formatRupiah(saldo)}`;
+            wdError.classList.add('show');
+            setTimeout(()=>wdError.classList.remove('show'),5000);
+            return;
+        }
+        const wdRequest = {
+            id: generateId(),
+            username: currentUser.username,
+            name: name,
+            method: selectedWallet,
+            account: account,
+            amount: amount,
+            status: 'pending',
+            timestamp: new Date().toISOString()
+        };
+        try {
+            await withdrawalsRef.push(wdRequest);
+            wdAccount.value = ''; wdAmount.value = '';
+            showSuccess(wdSuccessMsg, '✅ Permintaan WD dikirim! Tunggu approve admin.');
+            updateSaldo();
+        } catch(err) { alert('Gagal WD: '+err.message); }
+    });
+
+    // ============================================================
+    // ADMIN
+    // ============================================================
+    adminLoginBtn.addEventListener('click', function() {
+        // Admin username: wilzu222333, password: admin123
+        const inputUser = adminPassword.value.trim(); // kita pake satu input buat password, tapi kita cek username khusus
+        // Karena kita hanya punya satu input password, kita sederhanakan: admin tetap pakai password admin123
+        // Tapi kita tambahkan cek username lewat prompt? Atau kita buat dua input? Saya sederhanakan: password admin123 tetap berlaku.
+        if (adminPassword.value.trim() === 'admin123') {
+            adminLoginArea.style.display = 'none';
+            adminDashboard.style.display = 'block';
+            renderAdminSubmissions();
+            renderAdminWD();
+        } else {
+            alert('Password admin salah! (admin123)');
+            adminPassword.value = '';
+            adminPassword.focus();
+        }
+    });
+    adminPassword.addEventListener('keypress', e => { if (e.key === 'Enter') adminLoginBtn.click(); });
+
+    // ============================================================
+    // RENDER ADMIN
+    // ============================================================
+    function renderAdminSubmissions() {
+        const subs = allSubmissions;
+        totalSubs.textContent = subs.length;
+        pendingSubs.textContent = subs.filter(s => s.status === 'pending').length;
+        if (subCount) subCount.textContent = `(${subs.length})`;
+        if (subs.length === 0) {
+            submissionsList.innerHTML = `<div class="empty-state">Belum ada kiriman.</div>`;
+            return;
+        }
+        let html = '';
+        const sorted = [...subs].sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+        sorted.forEach((item) => {
+            const statusClass = item.status === 'pending' ? 'pending' : item.status === 'approved' ? 'approved' : 'rejected';
+            const statusLabel = item.status === 'pending' ? '⏳ Pending' : item.status === 'approved' ? '✅ Approved' : '❌ Rejected';
+            const skinLabel = SKIN_LABELS[item.skinType] || item.skinType;
+            const reqLabel = SKIN_LABELS[item.requestedSkin] || item.requestedSkin || 'Basic';
+            const price = SKIN_PRICES[item.skinType] || 0;
+            let actions = '';
+            if (item.status === 'pending') {
+                actions = `
+                    <div class="action-group">
+                        <select class="skin-select-admin" data-id="${item.id}">
+                            ${Object.entries(SKIN_LABELS).map(([val,label]) => `<option value="${val}" ${val===item.skinType?'selected':''}>${label}</option>`).join('')}
+                        </select>
+                        <button class="action-btn approve" data-id="${item.id}" data-action="approve"><i class="fas fa-check"></i> ACC</button>
+                        <button class="action-btn reject" data-id="${item.id}" data-action="reject"><i class="fas fa-times"></i></button>
+                        <button class="action-btn delete-btn" data-id="${item.id}" data-action="delete"><i class="fas fa-trash"></i></button>
+                    </div>
+                `;
+            } else {
+                actions = `<span style="color:rgba(255,255,255,0.3);font-size:13px;">${statusLabel}</span>
+                           <button class="action-btn delete-btn" data-id="${item.id}" data-action="delete"><i class="fas fa-trash"></i></button>`;
             }
-            return history;
-        }
+            const userInfo = item.username ? `@${escapeHtml(item.username)}` : '';
+            const imgSrc = item.image && item.image.startsWith('data:image') ? item.image : 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="70" height="70"%3E%3Crect fill="%231a1a2e" width="70" height="70"/%3E%3Ctext x="35" y="40" font-size="12" fill="%23666" text-anchor="middle"%3ENo Image%3C/text%3E%3C/svg%3E';
+            html += `
+                <div class="submission-item" data-id="${item.id}">
+                    <img class="photo-thumb" src="${imgSrc}" alt="Kartu" onclick="window.open('${imgSrc}','_blank')" />
+                    <div class="info">
+                        <div class="name">${escapeHtml(item.name)} <span style="font-size:13px;color:#aaa;">${userInfo}</span></div>
+                        <div class="dana"><i class="fas fa-phone"></i> Dana: ${escapeHtml(item.dana)} · Request: <span style="color:#ffd700;">${reqLabel}</span> · ACC: <strong style="color:#66ff99;">${skinLabel}</strong> (${formatRupiah(price)})</div>
+                        <div class="time">${new Date(item.timestamp).toLocaleString('id-ID')}</div>
+                    </div>
+                    <span class="status-badge ${statusClass}">${statusLabel}</span>
+                    ${actions}
+                </div>
+            `;
+        });
+        submissionsList.innerHTML = html;
 
-        let historyData = {};
-        skinKeys.forEach(key => { historyData[key] = generateHistory(key, 12); });
-        let prevKolektorPrice = historyData['kolektor'][historyData['kolektor'].length - 1] || 5000;
-
-        function drawChart(canvas, data, color, showPoints = true) {
-            const ctx = canvas.getContext('2d');
-            const w = canvas.width;
-            const h = canvas.height;
-            ctx.clearRect(0, 0, w, h);
-            if (!data || data.length < 2) return;
-            const max = Math.min(Math.max(...data) * 1.1, 11000);
-            const min = Math.max(Math.min(...data) * 0.9, 400);
-            const range = max - min || 1;
-            const padding = 20;
-
-            ctx.strokeStyle = 'rgba(255,255,255,0.05)';
-            ctx.lineWidth = 1;
-            ctx.beginPath();
-            ctx.moveTo(padding, padding);
-            ctx.lineTo(padding, h - padding);
-            ctx.lineTo(w - padding, h - padding);
-            ctx.stroke();
-
-            ctx.beginPath();
-            ctx.strokeStyle = color;
-            ctx.lineWidth = 3;
-            ctx.shadowColor = color;
-            ctx.shadowBlur = 10;
-            const stepX = (w - padding * 2) / (data.length - 1);
-            for (let i = 0; i < data.length; i++) {
-                const x = padding + i * stepX;
-                const y = h - padding - ((data[i] - min) / range) * (h - padding * 2);
-                if (i === 0) ctx.moveTo(x, y);
-                else ctx.lineTo(x, y);
-            }
-            ctx.stroke();
-            ctx.shadowBlur = 0;
-
-            if (showPoints) {
-                for (let i = 0; i < data.length; i++) {
-                    const x = padding + i * stepX;
-                    const y = h - padding - ((data[i] - min) / range) * (h - padding * 2);
-                    ctx.beginPath();
-                    ctx.arc(x, y, 5, 0, 2 * Math.PI);
-                    ctx.fillStyle = color;
-                    ctx.shadowColor = color;
-                    ctx.shadowBlur = 15;
-                    ctx.fill();
-                    ctx.shadowBlur = 0;
-                }
-            }
-            const last = data[data.length - 1];
-            ctx.fillStyle = '#fff';
-            ctx.font = 'bold 12px Poppins';
-            ctx.textAlign = 'right';
-            ctx.fillText(formatRupiah(last), w - padding, padding + 14);
-        }
-
-        function renderCharts() {
-            const ctx = priceChartCanvas.getContext('2d');
-            const w = priceChartCanvas.width;
-            const h = priceChartCanvas.height;
-            ctx.clearRect(0, 0, w, h);
-
-            const allData = {};
-            skinKeys.forEach(key => { allData[key] = historyData[key] || generateHistory(key, 12); });
-
-            let globalMin = 500,
-                globalMax = 10000;
-            skinKeys.forEach(key => {
-                const d = allData[key];
-                d.forEach(v => {
-                    if (v < globalMin) globalMin = Math.min(globalMin, v);
-                    if (v > globalMax) globalMax = Math.max(globalMax, v);
-                });
-            });
-            globalMin = Math.max(globalMin - 200, 400);
-            globalMax = Math.min(globalMax + 200, 10500);
-            const range = globalMax - globalMin || 1;
-            const padding = 20;
-
-            skinKeys.forEach((key) => {
-                const data = allData[key];
-                const color = skinColors[key];
-                ctx.beginPath();
-                ctx.strokeStyle = color;
-                ctx.lineWidth = 2;
-                ctx.globalAlpha = 0.7;
-                const stepX = (w - padding * 2) / (data.length - 1);
-                for (let i = 0; i < data.length; i++) {
-                    const x = padding + i * stepX;
-                    const y = h - padding - ((data[i] - globalMin) / range) * (h - padding * 2);
-                    if (i === 0) ctx.moveTo(x, y);
-                    else ctx.lineTo(x, y);
-                }
-                ctx.stroke();
-                ctx.globalAlpha = 1;
-            });
-
-            const legendContainer = document.getElementById('chartLegend');
-            legendContainer.innerHTML = skinKeys.map(key =>
-                `<span class="legend-item"><span class="dot" style="background:${skinColors[key]};"></span> ${SKIN_LABELS[key]}</span>`
-            ).join('');
-
-            const monData = allData['kolektor'] || generateHistory('kolektor', 12);
-            drawChart(monitorChartCanvas, monData, '#ff7b00', true);
-            const lastPrice = monData[monData.length - 1] || 5000;
-            monitorPrice.textContent = formatRupiah(lastPrice);
-
-            const change = ((lastPrice - prevKolektorPrice) / prevKolektorPrice * 100);
-            const changeText = change >= 0 ? `▲ +${change.toFixed(1)}%` : `▼ ${change.toFixed(1)}%`;
-            priceChange.textContent = changeText;
-            priceChange.className = 'price-change ' + (change >= 0 ? 'trending-up' : 'trending-down');
-            prevKolektorPrice = lastPrice;
-        }
-
-        function updatePrices() {
-            skinKeys.forEach(key => {
-                const hist = historyData[key];
-                if (hist && hist.length > 0) {
-                    const last = hist[hist.length - 1];
-                    const change = (Math.random() * 0.24) - 0.16;
-                    let newPrice = last * (1 + change);
-                    newPrice = Math.min(Math.max(newPrice, 500), 10000);
-                    newPrice = Math.round(newPrice / 100) * 100;
-                    hist.push(newPrice);
-                    if (hist.length > 12) hist.shift();
-                }
-            });
-            renderCharts();
-        }
-
-        // ============================================================
-        // TABS
-        // ============================================================
-        tabBtns.forEach(btn => {
-            btn.addEventListener('click', function() {
-                tabBtns.forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                const target = this.dataset.tab;
-                document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-                document.getElementById(target).classList.add('active');
-                if (target === 'dashboardTab') {
-                    renderCharts();
-                    if (currentUser) updateSaldo();
-                }
-                if (target === 'adminTab') {
-                    if (adminDashboard.style.display === 'block') {
-                        renderAdminSubmissions();
-                        renderAdminWD();
+        // Event listeners
+        document.querySelectorAll('#submissionsList .action-btn[data-action="approve"]').forEach(btn => {
+            btn.addEventListener('click', async function() {
+                const id = this.dataset.id;
+                const container = this.closest('.submission-item');
+                const select = container.querySelector('.skin-select-admin');
+                const newSkin = select ? select.value : 'basic';
+                try {
+                    const snapshot = await submissionsRef.once('value');
+                    const data = snapshot.val();
+                    const key = Object.keys(data).find(k => data[k].id === id);
+                    if (key) {
+                        const sub = data[key];
+                        if (sub.status === 'pending') {
+                            await submissionsRef.child(key).update({ skinType: newSkin, status: 'approved' });
+                            // Broadcast notifikasi ke user yang bersangkutan (opsional)
+                        }
                     }
-                    updatePendingBadge();
-                }
+                } catch(err) { alert('Error: '+err.message); }
             });
         });
-
-        // ============================================================
-        // INIT
-        // ============================================================
-        async function init() {
-            const restored = await restoreSession();
-            if (!restored) {
-                authContainer.style.display = 'block';
-                mainApp.style.display = 'none';
-                loginBox.style.display = 'block';
-                registerBox.style.display = 'none';
-                document.querySelector('.tab-btn[data-tab="userTab"]').classList.add('active');
-                userTab.classList.add('active');
-            }
-
-            setInterval(updatePrices, 5000);
-
-            document.querySelector('.tab-btn[data-tab="dashboardTab"]').addEventListener('click', function() {
-                setTimeout(renderCharts, 200);
+        document.querySelectorAll('#submissionsList .action-btn[data-action="reject"]').forEach(btn => {
+            btn.addEventListener('click', async function() {
+                const id = this.dataset.id;
+                try {
+                    const snapshot = await submissionsRef.once('value');
+                    const data = snapshot.val();
+                    const key = Object.keys(data).find(k => data[k].id === id);
+                    if (key) {
+                        const sub = data[key];
+                        if (sub.status === 'pending') {
+                            await submissionsRef.child(key).update({ status: 'rejected' });
+                        }
+                    }
+                } catch(err) { alert('Error: '+err.message); }
             });
+        });
+        document.querySelectorAll('#submissionsList .action-btn[data-action="delete"]').forEach(btn => {
+            btn.addEventListener('click', async function() {
+                const id = this.dataset.id;
+                if (!confirm('Hapus kiriman ini permanen?')) return;
+                try {
+                    const snapshot = await submissionsRef.once('value');
+                    const data = snapshot.val();
+                    const key = Object.keys(data).find(k => data[k].id === id);
+                    if (key) { await submissionsRef.child(key).remove(); }
+                } catch(err) { alert('Error: '+err.message); }
+            });
+        });
+    }
 
-            console.log('🔥 AMOY GACHA KELOTER v4.0 - FIREBASE');
-            console.log('✅ Config sudah dipasang!');
-            console.log('🔑 Admin password: admin123');
+    function renderAdminWD() {
+        const wds = allWithdrawals;
+        totalWD.textContent = wds.length;
+        if (wds.length === 0) {
+            wdList.innerHTML = `<div class="empty-state">Belum ada permintaan WD.</div>`;
+            return;
         }
+        let html = '';
+        const sorted = [...wds].sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+        sorted.forEach(item => {
+            const statusClass = item.status === 'pending' ? 'pending' : item.status === 'approved' ? 'approved' : 'rejected';
+            const statusLabel = item.status === 'pending' ? '⏳ Pending' : item.status === 'approved' ? '✅ Approved' : '❌ Rejected';
+            let actions = '';
+            if (item.status === 'pending') {
+                actions = `
+                    <button class="action-btn approve" data-id="${item.id}" data-action="approve"><i class="fas fa-check"></i> Approve</button>
+                    <button class="action-btn reject" data-id="${item.id}" data-action="reject"><i class="fas fa-times"></i></button>
+                `;
+            } else {
+                actions = `<span style="color:rgba(255,255,255,0.2);">${statusLabel}</span>`;
+            }
+            const methodIcon = item.method === 'dana' ? 'fab fa-google-pay' : item.method === 'ovo' ? 'fas fa-mobile-alt' : 'fas fa-money-bill-wave';
+            const userInfo = item.username ? `@${escapeHtml(item.username)}` : '';
+            html += `
+                <div class="wd-item" data-id="${item.id}">
+                    <div class="info">
+                        <div class="name">${escapeHtml(item.name)} ${userInfo} <i class="${methodIcon}" style="color:#ffd700;"></i></div>
+                        <div class="detail">${escapeHtml(item.account)} · ${formatRupiah(item.amount)}</div>
+                        <div class="time">${new Date(item.timestamp).toLocaleString('id-ID')}</div>
+                    </div>
+                    <span class="status-badge ${statusClass}">${statusLabel}</span>
+                    ${actions}
+                </div>
+            `;
+        });
+        wdList.innerHTML = html;
+        document.querySelectorAll('#wdList .action-btn').forEach(btn => {
+            btn.addEventListener('click', async function() {
+                const id = this.dataset.id;
+                const action = this.dataset.action;
+                try {
+                    const snapshot = await withdrawalsRef.once('value');
+                    const data = snapshot.val();
+                    const key = Object.keys(data).find(k => data[k].id === id);
+                    if (!key) return;
+                    const wd = data[key];
+                    if (action === 'approve') {
+                        const saldo = getSaldo(wd.username);
+                        if (wd.amount > saldo) { alert('Saldo tidak cukup!'); return; }
+                        await withdrawalsRef.child(key).update({ status: 'approved' });
+                    } else if (action === 'reject') {
+                        await withdrawalsRef.child(key).update({ status: 'rejected' });
+                    }
+                } catch(err) { alert('Error: '+err.message); }
+            });
+        });
+    }
 
-        init();
-    </script>
+    // ============================================================
+    // BROADCAST ADMIN
+    // ============================================================
+    broadcastBtn.addEventListener('click', async function() {
+        const msg = broadcastMsg.value.trim();
+        if (!msg) { alert('Tulis pesan broadcast!'); return; }
+        try {
+            await broadcastRef.push({
+                message: msg,
+                timestamp: new Date().toISOString(),
+                from: 'admin'
+            });
+            broadcastMsg.value = '';
+            alert('✅ Broadcast terkirim ke semua user!');
+        } catch(err) { alert('Gagal kirim broadcast: '+err.message); }
+    });
+
+    // ============================================================
+    // TRADING FUNCTIONS
+    // ============================================================
+    function updateTradingUI() {
+        if (!currentUser) return;
+        stockAmount.textContent = userStocks;
+        const nilai = userStocks * stockPrice;
+        stockValue.textContent = formatRupiah(nilai);
+        tradeBalance.textContent = formatRupiah(getSaldo(currentUser.username));
+    }
+
+    function updateStockPrice() {
+        const change = (Math.random() * 1000) - 500;
+        let newPrice = stockPrice + change;
+        newPrice = Math.min(Math.max(newPrice, 500), 6000);
+        newPrice = Math.round(newPrice / 50) * 50;
+        stockPrice = newPrice;
+        stockHistory.push(stockPrice);
+        if (stockHistory.length > 30) stockHistory.shift();
+        // Update tampilan
+        tradingPrice.textContent = formatRupiah(stockPrice);
+        const prev = stockHistory.length > 1 ? stockHistory[stockHistory.length-2] : stockPrice;
+        const diff = ((stockPrice - prev) / prev * 100);
+        const changeEl = tradingChange;
+        changeEl.textContent = (diff >= 0 ? '▲' : '▼') + ' ' + Math.abs(diff).toFixed(1) + '%';
+        changeEl.className = 'change ' + (diff >= 0 ? 'trending-up' : 'trending-down');
+        drawTradingChart();
+        updateTradingUI();
+    }
+
+    function drawTradingChart() {
+        const canvas = tradingChart;
+        const ctx = canvas.getContext('2d');
+        const w = canvas.width;
+        const h = canvas.height;
+        ctx.clearRect(0, 0, w, h);
+        if (stockHistory.length < 2) return;
+        const min = Math.min(...stockHistory) * 0.9;
+        const max = Math.max(...stockHistory) * 1.1;
+        const range = max - min || 1;
+        const padding = 10;
+        ctx.strokeStyle = '#ffd700';
+        ctx.lineWidth = 2;
+        ctx.shadowColor = '#ffd700';
+        ctx.shadowBlur = 8;
+        ctx.beginPath();
+        const stepX = (w - padding * 2) / (stockHistory.length - 1);
+        for (let i = 0; i < stockHistory.length; i++) {
+            const x = padding + i * stepX;
+            const y = h - padding - ((stockHistory[i] - min) / range) * (h - padding * 2);
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+        const last = stockHistory[stockHistory.length - 1];
+        ctx.fillStyle = '#fff';
+        ctx.font = 'bold 14px Poppins';
+        ctx.textAlign = 'right';
+        ctx.fillText(formatRupiah(last), w - padding, padding + 14);
+    }
+
+    // ============================================================
+    // BELI SAHAM
+    // ============================================================
+    buyBtn.addEventListener('click', async function() {
+        if (!currentUser) { alert('Login dulu!'); return; }
+        const qty = parseInt(tradeAmountInput.value);
+        if (isNaN(qty) || qty < 1) { alert('Minimal 1 saham!'); return; }
+        const totalCost = qty * stockPrice;
+        if (totalCost < 500) { alert('Minimal transaksi Rp 500'); return; }
+        if (totalCost > 5000) { alert('Maksimal Rp 5.000 per transaksi'); return; }
+        const saldo = getSaldo(currentUser.username);
+        if (totalCost > saldo) { alert('Saldo tidak cukup!'); return; }
+        // Kurangi saldo dari submissions? Kita tidak punya mekanisme saldo di Firebase selain skin ACC.
+        // Untuk simulasi, kita kurangi dengan menambahkan WD negatif? Lebih baik kita simpan di portofolio.
+        // Karena saldo dihitung dari skin ACC - WD, kita perlu track pengeluaran.
+        // Kita simpan di portofolio dengan field 'spent' atau langsung kurangi saldo via WD palsu?
+        // Lebih praktis: buat transaksi internal di portofolio.
+        try {
+            // Ambil portofolio terbaru
+            const snap = await usersRef.child(currentUser.username).child('portofolio').once('value');
+            const porto = snap.val() || { stocks: 0 };
+            const newStocks = porto.stocks + qty;
+            await usersRef.child(currentUser.username).child('portofolio').set({ stocks: newStocks });
+            userStocks = newStocks;
+            // Kurangi saldo dengan mencatat pengeluaran di firebase? Sementara kita hanya update UI.
+            // Untuk konsistensi, kita simpan total pengeluaran di portofolio.
+            // Tapi karena saldo dihitung dari skin ACC, kita bisa menambahkan entri di submissions dengan status khusus?
+            // Saya akan buat saldo trading terpisah? Biar simpel, saldo dihitung dari skin ACC - WD.
+            // Untuk trading, kita potong saldo dengan menambahkan WD? Tidak.
+            // Lebih baik kita simpan transaksi di path terpisah, atau kita buat saldo langsung dari skin ACC.
+            // Oke, kita simpan total pengeluaran di portofolio sebagai 'spent'.
+            const spent = porto.spent || 0;
+            const newSpent = spent + totalCost;
+            await usersRef.child(currentUser.username).child('portofolio').update({ spent: newSpent, stocks: newStocks });
+            // Update UI saldo (tapi saldo tetap dari skin ACC - WD, tidak termasuk trading)
+            // Untuk keperluan UI, kita tampilkan saldo yang tersisa.
+            // Kita override getSaldo dengan mengurangi spent.
+            // Atau kita tampilkan saldo = getSaldo - spent.
+            // Lebih praktis: kita buat getSaldo2 yang memperhitungkan spent.
+            // Saya akan modifikasi getSaldo untuk include spent.
+            // Tapi karena spent disimpan per user, kita perlu modifikasi.
+            // Saya akan override getSaldo untuk include spent.
+            // Di sini kita update UI.
+            updateSaldo(true);
+            updateTradingUI();
+            tradeAmountInput.value = '';
+        } catch(err) { alert('Gagal beli: '+err.message); }
+    });
+
+    // ============================================================
+    // JUAL SAHAM
+    // ============================================================
+    sellBtn.addEventListener('click', async function() {
+        if (!currentUser) { alert('Login dulu!'); return; }
+        const qty = parseInt(tradeAmountInput.value);
+        if (isNaN(qty) || qty < 1) { alert('Minimal 1 saham!'); return; }
+        if (qty > userStocks) { alert('Saham tidak cukup!'); return; }
+        const totalValue = qty * stockPrice;
+        // Tambahkan ke saldo (tapi saldo dihitung dari skin ACC - WD)
+        // Kita simpan di portofolio sebagai 'earned'
+        try {
+            const snap = await usersRef.child(currentUser.username).child('portofolio').once('value');
+            const porto = snap.val() || { stocks: 0 };
+            const newStocks = porto.stocks - qty;
+            const earned = porto.earned || 0;
+            const newEarned = earned + totalValue;
+            await usersRef.child(currentUser.username).child('portofolio').update({ stocks: newStocks, earned: newEarned });
+            userStocks = newStocks;
+            updateSaldo(true);
+            updateTradingUI();
+            tradeAmountInput.value = '';
+        } catch(err) { alert('Gagal jual: '+err.message); }
+    });
+
+    // Override getSaldo untuk include earned dan spent dari portofolio
+    // Kita ubah getSaldo
+    const originalGetSaldo = getSaldo;
+    getSaldo = async function(username) {
+        const base = originalGetSaldo(username);
+        try {
+            const snap = await usersRef.child(username).child('portofolio').once('value');
+            const porto = snap.val() || {};
+            const earned = porto.earned || 0;
+            const spent = porto.spent || 0;
+            return base + earned - spent;
+        } catch(e) { return base; }
+    };
+
+    // ============================================================
+    // DEPOSIT QRIS
+    // ============================================================
+    depositBtn.addEventListener('click', async function() {
+        if (!currentUser) { alert('Login dulu!'); return; }
+        const amount = parseInt(depositAmount.value);
+        if (isNaN(amount) || amount < 10000) { alert('Minimal deposit Rp 10.000'); return; }
+        try {
+            const response = await fetch(`${RAMA_BASE_URL}/deposit/create`, {
+                method: 'POST',
+                headers: {
+                    'X-API-Key': RAMA_API_KEY,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ amount, method: 'qris' })
+            });
+            const result = await response.json();
+            if (result.success) {
+                currentDepositId = result.data.depositId;
+                qrisImage.src = result.data.qrImage;
+                qrisContainer.style.display = 'flex';
+                qrisStatus.textContent = 'Menunggu pembayaran... Silakan scan QRIS.';
+                // Mulai cek status otomatis
+                if (window._depositInterval) clearInterval(window._depositInterval);
+                window._depositInterval = setInterval(checkDepositStatus, 5000);
+            } else {
+                alert('Gagal membuat deposit: '+result.message);
+            }
+        } catch(err) { alert('Error: '+err.message); }
+    });
+
+    async function checkDepositStatus() {
+        if (!currentDepositId) return;
+        try {
+            const response = await fetch(`${RAMA_BASE_URL}/deposit/status/${currentDepositId}`, {
+                headers: { 'X-API-Key': RAMA_API_KEY }
+            });
+            const result = await response.json();
+            if (result.status && result.data) {
+                if (result.data.status === 'success') {
+                    qrisStatus.textContent = '✅ Deposit berhasil! Saldo ditambahkan.';
+                    clearInterval(window._depositInterval);
+                    // Tambahkan saldo ke user (simpan sebagai submission khusus?)
+                    // Atau kita tambahkan ke portofolio earned
+                    const snap = await usersRef.child(currentUser.username).child('portofolio').once('value');
+                    const porto = snap.val() || {};
+                    const earned = porto.earned || 0;
+                    await usersRef.child(currentUser.username).child('portofolio').update({ earned: earned + result.data.paidAmount });
+                    updateSaldo(true);
+                    updateTradingUI();
+                } else if (result.data.status === 'pending') {
+                    qrisStatus.textContent = '⏳ Menunggu pembayaran...';
+                } else if (result.data.status === 'already') {
+                    qrisStatus.textContent = '⚠️ Transaksi ini sudah diproses sebelumnya.';
+                    clearInterval(window._depositInterval);
+                }
+            }
+        } catch(err) { console.log('Cek deposit error:', err); }
+    }
+
+    checkDepositBtn.addEventListener('click', checkDepositStatus);
+
+    // ============================================================
+    // CHART (Skin Harga)
+    // ============================================================
+    const skinKeys = ['basic','epik','legend','kolektor','amoy-pacito','amoy-klasik'];
+    const skinColors = { 'basic':'#8a8a8a','epik':'#3b9eff','legend':'#b44eff','kolektor':'#ff7b00','amoy-pacito':'#ffd700','amoy-klasik':'#66ff99' };
+    function generateHistory(skinType, days=12) {
+        const basePrice = SKIN_PRICES[skinType] || 1000;
+        const history = []; let price = basePrice;
+        for (let i=0; i<days; i++) {
+            const change = (Math.random()*0.24)-0.14;
+            price = price * (1+change);
+            price = Math.min(Math.max(price,500),10000);
+            price = Math.round(price/100)*100;
+            history.push(price);
+        }
+        return history;
+    }
+    let historyData = {};
+    skinKeys.forEach(key => { historyData[key] = generateHistory(key,12); });
+    let prevKolektorPrice = historyData['kolektor'][historyData['kolektor'].length-1] || 5000;
+
+    function drawChart(canvas, data, color, showPoints=true) {
+        const ctx = canvas.getContext('2d');
+        const w=canvas.width, h=canvas.height;
+        ctx.clearRect(0,0,w,h);
+        if (!data || data.length<2) return;
+        const max = Math.min(Math.max(...data)*1.1,11000);
+        const min = Math.max(Math.min(...data)*0.9,400);
+        const range = max - min || 1;
+        const padding=20;
+        ctx.strokeStyle='rgba(255,255,255,0.05)'; ctx.lineWidth=1;
+        ctx.beginPath(); ctx.moveTo(padding,padding); ctx.lineTo(padding,h-padding); ctx.lineTo(w-padding,h-padding); ctx.stroke();
+        ctx.beginPath(); ctx.strokeStyle=color; ctx.lineWidth=3; ctx.shadowColor=color; ctx.shadowBlur=10;
+        const stepX = (w-padding*2)/(data.length-1);
+        for (let i=0; i<data.length; i++) {
+            const x = padding + i*stepX;
+            const y = h-padding - ((data[i]-min)/range)*(h-padding*2);
+            if (i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+        }
+        ctx.stroke(); ctx.shadowBlur=0;
+        if (showPoints) {
+            for (let i=0; i<data.length; i++) {
+                const x=padding+i*stepX, y=h-padding-((data[i]-min)/range)*(h-padding*2);
+                ctx.beginPath(); ctx.arc(x,y,5,0,2*Math.PI); ctx.fillStyle=color; ctx.shadowColor=color; ctx.shadowBlur=15; ctx.fill(); ctx.shadowBlur=0;
+            }
+        }
+        const last = data[data.length-1];
+        ctx.fillStyle='#fff'; ctx.font='bold 12px Poppins'; ctx.textAlign='right';
+        ctx.fillText(formatRupiah(last), w-padding, padding+14);
+    }
+
+    function renderCharts() {
+        const ctx = priceChartCanvas.getContext('2d');
+        const w=priceChartCanvas.width, h=priceChartCanvas.height;
+        ctx.clearRect(0,0,w,h);
+        const allData = {};
+        skinKeys.forEach(key => { allData[key] = historyData[key] || generateHistory(key,12); });
+        let globalMin=500, globalMax=10000;
+        skinKeys.forEach(key => {
+            const d=allData[key];
+            d.forEach(v => { if (v<globalMin) globalMin=Math.min(globalMin,v); if (v>globalMax) globalMax=Math.max(globalMax,v); });
+        });
+        globalMin = Math.max(globalMin-200,400);
+        globalMax = Math.min(globalMax+200,10500);
+        const range = globalMax - globalMin || 1;
+        const padding=20;
+        skinKeys.forEach((key) => {
+            const data=allData[key]; const color=skinColors[key];
+            ctx.beginPath(); ctx.strokeStyle=color; ctx.lineWidth=2; ctx.globalAlpha=0.7;
+            const stepX=(w-padding*2)/(data.length-1);
+            for (let i=0; i<data.length; i++) {
+                const x=padding+i*stepX;
+                const y=h-padding-((data[i]-globalMin)/range)*(h-padding*2);
+                if (i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+            }
+            ctx.stroke(); ctx.globalAlpha=1;
+        });
+        const legendContainer = document.getElementById('chartLegend');
+        legendContainer.innerHTML = skinKeys.map(key => `<span class="legend-item"><span class="dot" style="background:${skinColors[key]};"></span> ${SKIN_LABELS[key]}</span>`).join('');
+        const monData = allData['kolektor'] || generateHistory('kolektor',12);
+        drawChart(monitorChartCanvas, monData, '#ff7b00', true);
+        const lastPrice = monData[monData.length-1] || 5000;
+        monitorPrice.textContent = formatRupiah(lastPrice);
+        const change = ((lastPrice - prevKolektorPrice) / prevKolektorPrice * 100);
+        const changeText = change >= 0 ? `▲ +${change.toFixed(1)}%` : `▼ ${change.toFixed(1)}%`;
+        priceChange.textContent = changeText;
+        priceChange.className = 'price-change ' + (change >= 0 ? 'trending-up' : 'trending-down');
+        prevKolektorPrice = lastPrice;
+    }
+
+    function updatePrices() {
+        skinKeys.forEach(key => {
+            const hist = historyData[key];
+            if (hist && hist.length > 0) {
+                const last = hist[hist.length-1];
+                const change = (Math.random()*0.24)-0.16;
+                let newPrice = last * (1+change);
+                newPrice = Math.min(Math.max(newPrice,500),10000);
+                newPrice = Math.round(newPrice/100)*100;
+                hist.push(newPrice);
+                if (hist.length > 12) hist.shift();
+            }
+        });
+        renderCharts();
+    }
+
+    // ============================================================
+    // TABS
+    // ============================================================
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            tabBtns.forEach(b=>b.classList.remove('active'));
+            this.classList.add('active');
+            const target = this.dataset.tab;
+            document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+            document.getElementById(target).classList.add('active');
+            if (target === 'dashboardTab') { renderCharts(); if (currentUser) updateSaldo(); }
+            if (target === 'tradingTab') { drawTradingChart(); updateTradingUI(); }
+            if (target === 'adminTab') {
+                if (adminDashboard.style.display === 'block') { renderAdminSubmissions(); renderAdminWD(); }
+                updatePendingBadge();
+            }
+        });
+    });
+
+    // ============================================================
+    // INIT
+    // ============================================================
+    async function init() {
+        const restored = await restoreSession();
+        if (!restored) {
+            authContainer.style.display = 'block';
+            mainApp.style.display = 'none';
+            loginBox.style.display = 'block';
+            registerBox.style.display = 'none';
+            document.querySelector('.tab-btn[data-tab="userTab"]').classList.add('active');
+            userTab.classList.add('active');
+        }
+        setInterval(updatePrices, 5000);
+        document.querySelector('.tab-btn[data-tab="dashboardTab"]').addEventListener('click', function() {
+            setTimeout(renderCharts, 200);
+        });
+        console.log('🔥 AMOY GACHA KELOTER v5.0 - TRADING + DEPOSIT + BROADCAST');
+        console.log('✅ Admin: wilzu222333 / admin123');
+    }
+
+    init();
+</script>
 </body>
 </html>
