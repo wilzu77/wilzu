@@ -9,7 +9,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
     <style>
-        /* ====== STYLE (sama seperti sebelumnya, hanya sedikit tambahan untuk preset) ====== */
         * { margin:0; padding:0; box-sizing:border-box; }
         body {
             font-family: 'Poppins', sans-serif;
@@ -120,22 +119,13 @@
         .btn-down { background:#e17055; color:#fff; }
         .btn-up:hover { transform:scale(1.05); box-shadow:0 6px 20px rgba(0,184,148,0.3); }
         .btn-down:hover { transform:scale(1.05); box-shadow:0 6px 20px rgba(225,112,85,0.3); }
-        .btn-preset {
-            background:rgba(255,215,0,0.15);
-            color:#ffd700;
-            border:1px solid rgba(255,215,0,0.2);
-            padding:6px 14px;
-            border-radius:30px;
-            font-weight:700;
-            cursor:pointer;
-            transition:0.2s;
-            font-family:'Poppins',sans-serif;
-            font-size:13px;
+        .btn-price-preset {
+            padding:6px 14px; border:none; border-radius:30px; font-weight:700; font-size:13px;
+            cursor:pointer; transition:0.2s; font-family:'Poppins',sans-serif;
+            background:rgba(255,255,255,0.06); color:#ccc; border:1px solid rgba(255,255,255,0.08);
         }
-        .btn-preset:hover {
-            background:rgba(255,215,0,0.25);
-            transform:scale(1.05);
-        }
+        .btn-price-preset:hover { background:rgba(255,215,0,0.15); color:#ffd700; border-color:#ffd700; }
+        .btn-price-preset.active { background:#ffd700; color:#0f0f1a; border-color:#ffd700; }
         .success-msg {
             background:rgba(0,255,100,0.1); border-left:4px solid #00ff66; padding:14px 18px;
             border-radius:16px; color:#66ff99; font-weight:600; margin-top:16px; display:none;
@@ -376,10 +366,10 @@
             flex:1; padding:12px 16px; border:none; border-radius:40px; font-weight:800;
             font-size:16px; cursor:pointer; transition:0.2s; font-family:'Poppins',sans-serif;
         }
-        .btn-up { background:#00b894; color:#fff; }
-        .btn-down { background:#e17055; color:#fff; }
-        .btn-up:hover { transform:scale(1.05); box-shadow:0 6px 20px rgba(0,184,148,0.3); }
-        .btn-down:hover { transform:scale(1.05); box-shadow:0 6px 20px rgba(225,112,85,0.3); }
+        .btn-buy { background:#00b894; color:#fff; }
+        .btn-sell { background:#e17055; color:#fff; }
+        .btn-buy:hover { transform:scale(1.05); box-shadow:0 6px 20px rgba(0,184,148,0.3); }
+        .btn-sell:hover { transform:scale(1.05); box-shadow:0 6px 20px rgba(225,112,85,0.3); }
         .portofolio-box {
             background:rgba(255,255,255,0.03); border-radius:20px; padding:16px; margin:12px 0;
             border:1px solid rgba(255,255,255,0.04); display:flex; justify-content:space-around; flex-wrap:wrap;
@@ -397,13 +387,6 @@
         }
         .deposit-section .info-box .dana-number { font-size:24px; font-weight:900; color:#ffd700; }
         .deposit-section .info-box .label { color:rgba(255,255,255,0.5); font-size:13px; }
-        .deposit-section .qris-container {
-            display:flex; flex-direction:column; align-items:center; gap:12px;
-        }
-        .deposit-section .qris-container img {
-            max-width:200px; border-radius:20px; background:#fff; padding:10px;
-        }
-        .deposit-section .qris-container .status-text { font-weight:700; color:#ffd700; }
         .btn-deposit {
             background:linear-gradient(135deg,#00b894,#00cec9); color:#fff; border:none;
             padding:14px 28px; border-radius:40px; font-weight:800; font-size:16px;
@@ -433,9 +416,6 @@
             flex:1; padding:10px; border:none; border-radius:40px; font-weight:700;
             cursor:pointer; transition:0.2s; font-family:'Poppins',sans-serif; min-width:80px;
         }
-        .admin-control .preset-group {
-            display:flex; gap:6px; flex-wrap:wrap; margin-top:8px;
-        }
         .admin-control .manual-input {
             display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;
         }
@@ -451,6 +431,9 @@
             background:#0984e3; color:#fff;
         }
         .admin-control .manual-input button:hover { transform:scale(1.02); box-shadow:0 6px 20px rgba(9,132,227,0.3); }
+        .price-preset-group {
+            display:flex; gap:8px; flex-wrap:wrap; margin:8px 0;
+        }
         .notif-container {
             position:fixed; top:20px; right:20px; max-width:350px; width:100%;
             z-index:9999; display:flex; flex-direction:column; gap:10px; pointer-events:none;
@@ -463,9 +446,6 @@
         }
         @keyframes slideIn { from{transform:translateX(100%);opacity:0;} to{transform:translateX(0);opacity:1;} }
         .notif-item .notif-time { font-size:11px; color:rgba(255,255,255,0.4); margin-top:4px; }
-        .notif-container .notif-item:not(:last-child) {
-            display:none;
-        }
         @media (max-width:600px){
             .app-wrapper{ padding:20px 16px; }
             .header h1{ font-size:28px; }
@@ -481,12 +461,12 @@
 <div class="app-wrapper" id="app">
     <div class="header">
         <h1>✨ AMOY GACHA KELOTER ✨</h1>
-        <p><i class="fas fa-crown"></i> Kirim · Trading Naik/Turun · Deposit</p>
+        <p><i class="fas fa-crown"></i> Kirim · Trading · Deposit</p>
     </div>
 
     <div class="notif-container" id="notifContainer"></div>
 
-    <!-- ========== AUTH ========== -->
+    <!-- AUTH -->
     <div id="authContainer">
         <div class="user-info" id="userInfoBar" style="display:none;">
             <span class="username"><i class="fas fa-user-circle"></i> <span id="displayUsername">User</span></span>
@@ -512,7 +492,7 @@
         </div>
     </div>
 
-    <!-- ========== MAIN APP ========== -->
+    <!-- MAIN APP -->
     <div id="mainApp" style="display:none;">
         <div class="tabs">
             <button class="tab-btn active" data-tab="userTab"><i class="fas fa-paper-plane"></i> Kirim Kartu</button>
@@ -548,23 +528,26 @@
         <!-- TRADING PANEL -->
         <div id="tradingTab" class="panel">
             <div class="trading-panel">
-                <h2 style="color:#fff; font-weight:700;"><i class="fas fa-coins"></i> Trading Naik/Turun</h2>
+                <h2 style="color:#fff; font-weight:700;"><i class="fas fa-coins"></i> Trading Saham</h2>
                 <div class="price-display" id="tradingPrice">Rp 1.000</div>
                 <div class="change" id="tradingChange">▲ 0%</div>
                 <canvas id="tradingChart" width="400" height="150" style="width:100%; height:150px; background:rgba(0,0,0,0.2); border-radius:20px;"></canvas>
                 <div class="portofolio-box">
+                    <div class="item"><div class="label">Saham</div><div class="value" id="stockAmount">0</div></div>
+                    <div class="item"><div class="label">Nilai</div><div class="value" id="stockValue">Rp 0</div></div>
                     <div class="item"><div class="label">Saldo</div><div class="value" id="tradeBalance">Rp 0</div></div>
                 </div>
 
+                <!-- FORM BELI/JUAL -->
                 <div class="trade-form">
-                    <input type="number" id="tradeNominal" placeholder="Nominal (contoh: 1000)" min="100" />
+                    <input type="number" id="tradeQty" placeholder="Jumlah saham" min="1" />
                     <div class="btn-group-trade">
-                        <button class="btn-up" id="upBtn"><i class="fas fa-arrow-up"></i> Naik +</button>
-                        <button class="btn-down" id="downBtn"><i class="fas fa-arrow-down"></i> Turun -</button>
+                        <button class="btn-buy" id="buyBtn"><i class="fas fa-arrow-up"></i> Beli</button>
+                        <button class="btn-sell" id="sellBtn"><i class="fas fa-arrow-down"></i> Jual</button>
                     </div>
                 </div>
                 <div style="font-size:12px; color:rgba(255,255,255,0.3); text-align:center; margin-top:4px;">
-                    ⚡ Naik: saldo +nominal  |  Turun: saldo -nominal (hangus)
+                    ⚡ Beli: harga naik, saldo berkurang | Jual: harga turun, jika harga 0 → hangus
                 </div>
 
                 <!-- DEPOSIT -->
@@ -645,7 +628,7 @@
             <div class="admin-login" id="adminLoginArea">
                 <input type="password" id="adminPassword" placeholder="Password admin" />
                 <button class="btn-secondary" id="adminLoginBtn"><i class="fas fa-unlock"></i> Buka Dashboard</button>
-                <span style="color:rgba(255,255,255,0.2); font-size:12px; margin-left:auto;">pass: wilzu2233</span>
+                <span style="color:rgba(255,255,255,0.2); font-size:12px; margin-left:auto;">pass: ***</span>
             </div>
             <div id="adminDashboard" style="display:none;">
                 <div class="admin-stats">
@@ -674,19 +657,21 @@
                     <div style="text-align:center; margin-top:6px;">
                         <span class="range-value" id="sliderValue">Rp 1.000</span>
                     </div>
+
+                    <!-- PRESET HARGA JUAL -->
+                    <div class="price-preset-group">
+                        <button class="btn-price-preset" data-price="0">0</button>
+                        <button class="btn-price-preset" data-price="100">100</button>
+                        <button class="btn-price-preset" data-price="500">500</button>
+                        <button class="btn-price-preset" data-price="1000">1000</button>
+                        <button class="btn-price-preset" data-price="3000">3000</button>
+                        <button class="btn-price-preset" data-price="5000">5000</button>
+                    </div>
+
                     <div class="btn-group">
                         <button class="btn-secondary" id="setPriceBtn"><i class="fas fa-sync"></i> Set</button>
                         <button class="btn-pump" id="pumpBtn"><i class="fas fa-arrow-up"></i> +500</button>
                         <button class="btn-rungkad" id="dumpBtn"><i class="fas fa-arrow-down"></i> -500</button>
-                    </div>
-                    <!-- PRESET HARGA -->
-                    <div class="preset-group">
-                        <button class="btn-preset" data-price="0">0</button>
-                        <button class="btn-preset" data-price="100">100</button>
-                        <button class="btn-preset" data-price="500">500</button>
-                        <button class="btn-preset" data-price="1000">1000</button>
-                        <button class="btn-preset" data-price="3000">3000</button>
-                        <button class="btn-preset" data-price="5000">5000</button>
                     </div>
                     <div class="manual-input">
                         <input type="text" id="manualPriceInput" placeholder="+12, -5, atau 2500" />
@@ -740,7 +725,7 @@
     const SKIN_LABELS = { basic:'Basic', epik:'Epik', legend:'Legend', kolektor:'Kolektor', 'amoy-pacito':'Amoy-Pacito', 'amoy-klasik':'Amoy Klasik' };
 
     // ================================================================
-    // DOM REFS (singkat, fokus ke fungsi utama)
+    // DOM REFS
     // ================================================================
     const authContainer = document.getElementById('authContainer');
     const mainApp = document.getElementById('mainApp');
@@ -803,10 +788,12 @@
     const tradingPrice = document.getElementById('tradingPrice');
     const tradingChange = document.getElementById('tradingChange');
     const tradingChart = document.getElementById('tradingChart');
+    const stockAmount = document.getElementById('stockAmount');
+    const stockValue = document.getElementById('stockValue');
     const tradeBalance = document.getElementById('tradeBalance');
-    const tradeNominal = document.getElementById('tradeNominal');
-    const upBtn = document.getElementById('upBtn');
-    const downBtn = document.getElementById('downBtn');
+    const tradeQty = document.getElementById('tradeQty');
+    const buyBtn = document.getElementById('buyBtn');
+    const sellBtn = document.getElementById('sellBtn');
     const depositImage = document.getElementById('depositImage');
     const depositPreview = document.getElementById('depositPreview');
     const depositAmount = document.getElementById('depositAmount');
@@ -821,16 +808,18 @@
     const dumpBtn = document.getElementById('dumpBtn');
     const manualPriceInput = document.getElementById('manualPriceInput');
     const manualSetBtn = document.getElementById('manualSetBtn');
-    const presetBtns = document.querySelectorAll('.btn-preset');
+    const pricePresetBtns = document.querySelectorAll('.btn-price-preset');
 
     let currentUser = null;
     let lastSaldo = 0;
     let allSubmissions = [];
     let allWithdrawals = [];
     let allDeposits = [];
+    let userStocks = 0;
     let stockPrice = 1000;
     let stockHistory = [];
     let lastNotifiedPrice = null;
+    let broadcastListener = null;
 
     // ================================================================
     // UTILITY
@@ -871,7 +860,7 @@
     }
 
     // ================================================================
-    // AUTH (sama, disingkat)
+    // AUTH
     // ================================================================
     async function login(username, password) {
         try {
@@ -906,6 +895,9 @@
         userInfoBar.style.display = 'flex';
         displayUsername.textContent = currentUser.name || currentUser.username;
         userName.value = currentUser.name || currentUser.username;
+        const portoSnap = await usersRef.child(currentUser.username).child('portofolio').once('value');
+        const porto = portoSnap.val() || { stocks:0, earned:0, spent:0 };
+        userStocks = porto.stocks || 0;
         setupRealtimeListeners();
         await new Promise(resolve => { const check = setInterval(() => { if (allSubmissions.length > 0 || document.querySelector('.empty-state')) { clearInterval(check); resolve(); } },500); setTimeout(resolve,3000); });
         updateSaldo(true);
@@ -918,13 +910,17 @@
         priceSlider.addEventListener('input', function() {
             sliderValue.textContent = formatRupiah(parseInt(this.value));
         });
-        // Auto update harga tiap 1 detik
+        // AUTO UPDATE HARGA TIAP 1 DETIK (untuk grafik trading)
         if (window._stockInterval) clearInterval(window._stockInterval);
         window._stockInterval = setInterval(autoUpdatePrice, 1000);
-        // Preset event
-        presetBtns.forEach(btn => {
+
+        // PRESET HARGA
+        pricePresetBtns.forEach(btn => {
             btn.addEventListener('click', function() {
                 const price = parseInt(this.dataset.price);
+                priceSlider.value = price;
+                sliderValue.textContent = formatRupiah(price);
+                // Langsung set harga
                 setStockPrice(price);
             });
         });
@@ -948,7 +944,7 @@
         if (window._wdListener) window._wdListener();
         if (window._depositListener) window._depositListener();
         if (window._priceListener) window._priceListener();
-        if (window._broadcastListener) window._broadcastListener();
+        if (broadcastListener) broadcastListener();
         if (window._stockInterval) clearInterval(window._stockInterval);
     }
 
@@ -977,40 +973,22 @@
             if (currentUser) { updateSaldo(); updateTradingUI(); }
             if (adminDashboard.style.display === 'block') renderAdmin();
         });
-        if (window._broadcastListener) window._broadcastListener();
-        window._broadcastListener = broadcastRef.on('child_added', (snapshot) => {
+        // BROADCAST LISTENER - HANYA 1 NOTIF TERBARU
+        if (broadcastListener) broadcastListener();
+        broadcastListener = broadcastRef.limitToLast(1).on('child_added', (snapshot) => {
             const data = snapshot.val();
             if (data) {
-                // Hapus notifikasi lama, hanya tampilkan yang terbaru
+                // Hapus notif lama
                 const container = document.getElementById('notifContainer');
                 container.innerHTML = '';
+                // Tampilkan notif baru
                 showNotif(data.message, data.timestamp);
             }
         });
     }
 
     // ================================================================
-    // NOTIF (hanya satu)
-    // ================================================================
-    function showNotif(message, timestamp) {
-        const container = document.getElementById('notifContainer');
-        // Kosongkan dulu
-        container.innerHTML = '';
-        const div = document.createElement('div');
-        div.className = 'notif-item';
-        const time = timestamp ? new Date(timestamp).toLocaleTimeString('id-ID') : 'baru';
-        div.innerHTML = `<div>📢 ${escapeHtml(message)}</div><div class="notif-time">${time}</div>`;
-        container.appendChild(div);
-        setTimeout(() => {
-            div.style.opacity = '0';
-            div.style.transform = 'translateX(100%)';
-            div.style.transition = '0.5s';
-            setTimeout(() => div.remove(), 500);
-        }, 8000);
-    }
-
-    // ================================================================
-    // MARKET PRICE LISTENER
+    // MARKET PRICE LISTENER + NOTIF
     // ================================================================
     function setupMarketListener() {
         if (window._priceListener) window._priceListener();
@@ -1021,13 +999,8 @@
                     const diff = price - lastNotifiedPrice;
                     const direction = diff > 0 ? '📈 Naik' : '📉 Turun';
                     const msg = `💰 Harga saham ${direction} ${formatRupiah(Math.abs(diff))} menjadi ${formatRupiah(price)}`;
-                    // Hanya tampilkan notif jika perubahan signifikan (opsional)
-                    // Tapi kita tampilkan saja
-                    // Tapi kita sudah punya broadcast, jadi kita skip notif ini agar tidak spam
-                    // Kita tetap tampilkan tapi kita hapus yang lama
-                    // Kita panggil showNotif dengan pesan dari harga
-                    // Tapi karena sudah ada broadcast, kita skip notif dari sini
-                    // Kita hanya update UI
+                    // Tampilkan notif di container terpisah (bukan broadcast)
+                    showNotif(msg, new Date().toISOString());
                 }
                 lastNotifiedPrice = price;
                 stockPrice = price;
@@ -1048,7 +1021,7 @@
     }
 
     // ================================================================
-    // AUTO UPDATE HARGA (1 DETIK)
+    // AUTO UPDATE HARGA (RANDOM WALK - 1 DETIK)
     // ================================================================
     async function autoUpdatePrice() {
         if (!currentUser) return;
@@ -1067,199 +1040,26 @@
     }
 
     // ================================================================
-    // ADMIN SET HARGA (dengan preset)
+    // NOTIF (HANYA 1 YANG TAMPIL)
     // ================================================================
-    async function setStockPrice(newPrice) {
-        newPrice = Math.min(Math.max(newPrice, 0), 6000);
-        newPrice = Math.round(newPrice / 50) * 50;
-        try {
-            await priceRef.set(newPrice);
-            await broadcastRef.push({
-                message: `📊 Admin mengubah harga menjadi ${formatRupiah(newPrice)}`,
-                timestamp: new Date().toISOString(),
-                from: 'system'
-            });
-        } catch(e) { alert('Gagal update harga: '+e.message); }
-    }
-
-    // Tombol-tombol admin
-    setPriceBtn.addEventListener('click', function() {
-        const newPrice = parseInt(priceSlider.value);
-        if (isNaN(newPrice) || newPrice < 0 || newPrice > 6000) {
-            alert('Harga harus antara Rp 0 - Rp 6.000');
-            return;
-        }
-        setStockPrice(newPrice);
-    });
-
-    pumpBtn.addEventListener('click', function() {
-        const newPrice = Math.min(stockPrice + 500, 6000);
-        setStockPrice(newPrice);
-    });
-
-    dumpBtn.addEventListener('click', function() {
-        const newPrice = Math.max(stockPrice - 500, 0);
-        setStockPrice(newPrice);
-    });
-
-    manualSetBtn.addEventListener('click', function() {
-        const input = manualPriceInput.value.trim();
-        if (!input) { alert('Masukkan angka! Contoh: +50, -30, atau 2000'); return; }
-        let newPrice = stockPrice;
-        if (input.startsWith('+')) {
-            const val = parseInt(input.substring(1));
-            if (isNaN(val)) { alert('Format salah! Contoh: +50'); return; }
-            newPrice = stockPrice + val;
-        } else if (input.startsWith('-')) {
-            const val = parseInt(input.substring(1));
-            if (isNaN(val)) { alert('Format salah! Contoh: -30'); return; }
-            newPrice = stockPrice - val;
-        } else {
-            const val = parseInt(input);
-            if (isNaN(val)) { alert('Masukkan angka valid!'); return; }
-            newPrice = val;
-        }
-        setStockPrice(newPrice);
-        manualPriceInput.value = '';
-    });
-
-    // ================================================================
-    // TRADING NAIK / TURUN
-    // ================================================================
-    async function handleTrade(action) {
-        if (!currentUser) { alert('Login dulu!'); return; }
-        const nominal = parseInt(tradeNominal.value);
-        if (isNaN(nominal) || nominal < 100) {
-            alert('Masukkan nominal minimal 100!');
-            return;
-        }
-
-        const snap = await usersRef.child(currentUser.username).child('portofolio').once('value');
-        const porto = snap.val() || { stocks: 0, earned: 0, spent: 0 };
-
-        if (action === 'up') {
-            const newEarned = (porto.earned || 0) + nominal;
-            await usersRef.child(currentUser.username).child('portofolio').set({
-                stocks: porto.stocks || 0,
-                earned: newEarned,
-                spent: porto.spent || 0
-            });
-            let newPrice = stockPrice + nominal;
-            newPrice = Math.min(newPrice, 6000);
-            newPrice = Math.round(newPrice / 50) * 50;
-            await priceRef.set(newPrice);
-            await broadcastRef.push({
-                message: `📈 ${currentUser.name} menaikkan harga +${formatRupiah(nominal)} menjadi ${formatRupiah(newPrice)}`,
-                timestamp: new Date().toISOString(),
-                from: 'system'
-            });
-        } else if (action === 'down') {
-            const newSpent = (porto.spent || 0) + nominal;
-            await usersRef.child(currentUser.username).child('portofolio').set({
-                stocks: porto.stocks || 0,
-                earned: porto.earned || 0,
-                spent: newSpent
-            });
-            let newPrice = stockPrice - nominal;
-            newPrice = Math.max(newPrice, 0);
-            newPrice = Math.round(newPrice / 50) * 50;
-            await priceRef.set(newPrice);
-            await broadcastRef.push({
-                message: `📉 ${currentUser.name} menurunkan harga -${formatRupiah(nominal)} menjadi ${formatRupiah(newPrice)}`,
-                timestamp: new Date().toISOString(),
-                from: 'system'
-            });
-        }
-        tradeNominal.value = '';
-        updateSaldo(true);
-        updateTradingUI();
-    }
-
-    upBtn.addEventListener('click', () => handleTrade('up'));
-    downBtn.addEventListener('click', () => handleTrade('down'));
-
-    // ================================================================
-    // TRADING UI & CHART
-    // ================================================================
-    function updateTradingUI() {
-        if (!currentUser) return;
-        updateSaldo();
-    }
-
-    function drawTradingChart() {
-        const canvas = tradingChart;
-        const ctx = canvas.getContext('2d');
-        const w = canvas.width;
-        const h = canvas.height;
-        ctx.clearRect(0, 0, w, h);
-        if (stockHistory.length < 2) return;
-        const min = Math.min(...stockHistory) * 0.9;
-        const max = Math.max(...stockHistory) * 1.1;
-        const range = max - min || 1;
-        const padding = 10;
-        const stepX = (w - padding * 2) / (stockHistory.length - 1);
-
-        for (let i = 1; i < stockHistory.length; i++) {
-            const prevPrice = stockHistory[i-1];
-            const currPrice = stockHistory[i];
-            const isGreen = currPrice >= prevPrice;
-            const x = padding + i * stepX;
-            const yPrev = h - padding - ((prevPrice - min) / range) * (h - padding * 2);
-            const yCurr = h - padding - ((currPrice - min) / range) * (h - padding * 2);
-            const barWidth = Math.min(stepX * 0.6, 10);
-            ctx.fillStyle = isGreen ? '#4CAF50' : '#f44336';
-            ctx.shadowColor = isGreen ? '#4CAF50' : '#f44336';
-            ctx.shadowBlur = 6;
-            const startY = Math.min(yPrev, yCurr);
-            const endY = Math.max(yPrev, yCurr);
-            const height = Math.max(endY - startY, 2);
-            ctx.fillRect(x - barWidth/2, startY, barWidth, height);
-            ctx.shadowBlur = 0;
-            ctx.strokeStyle = isGreen ? '#4CAF50' : '#f44336';
-            ctx.lineWidth = 1.5;
-            ctx.beginPath();
-            ctx.moveTo(x, yPrev);
-            ctx.lineTo(x, yCurr);
-            ctx.stroke();
-        }
-
-        ctx.shadowBlur = 0;
-        ctx.beginPath();
-        ctx.strokeStyle = '#ffd700';
-        ctx.lineWidth = 2.5;
-        ctx.shadowColor = '#ffd700';
-        ctx.shadowBlur = 12;
-        for (let i = 0; i < stockHistory.length; i++) {
-            const x = padding + i * stepX;
-            const y = h - padding - ((stockHistory[i] - min) / range) * (h - padding * 2);
-            if (i === 0) ctx.moveTo(x, y);
-            else ctx.lineTo(x, y);
-        }
-        ctx.stroke();
-        ctx.shadowBlur = 0;
-
-        const last = stockHistory[stockHistory.length - 1];
-        const lastX = padding + (stockHistory.length - 1) * stepX;
-        const lastY = h - padding - ((last - min) / range) * (h - padding * 2);
-        ctx.fillStyle = 'rgba(0,0,0,0.7)';
-        ctx.roundRect ? ctx.roundRect(lastX - 65, lastY - 22, 130, 28, 8) : ctx.rect(lastX - 65, lastY - 22, 130, 28);
-        ctx.fill();
-        ctx.fillStyle = '#fff';
-        ctx.font = 'bold 13px Poppins';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        const prev = stockHistory.length > 1 ? stockHistory[stockHistory.length-2] : last;
-        const diffPercent = ((last - prev) / prev * 100);
-        const sign = diffPercent >= 0 ? '+' : '';
-        ctx.fillStyle = '#fff';
-        ctx.fillText(formatRupiah(last), lastX, lastY - 2);
-        ctx.fillStyle = diffPercent >= 0 ? '#66ff99' : '#ff4444';
-        ctx.font = 'bold 11px Poppins';
-        ctx.fillText(`${sign}${diffPercent.toFixed(1)}%`, lastX, lastY + 16);
+    function showNotif(message, timestamp) {
+        const container = document.getElementById('notifContainer');
+        container.innerHTML = ''; // Hapus semua notif lama
+        const div = document.createElement('div');
+        div.className = 'notif-item';
+        const time = timestamp ? new Date(timestamp).toLocaleTimeString('id-ID') : 'baru';
+        div.innerHTML = `<div>📢 ${escapeHtml(message)}</div><div class="notif-time">${time}</div>`;
+        container.appendChild(div);
+        setTimeout(() => {
+            div.style.opacity='0';
+            div.style.transform='translateX(100%)';
+            div.style.transition='0.5s';
+            setTimeout(() => div.remove(), 500);
+        }, 5000);
     }
 
     // ================================================================
-    // UPDATE UI LAINNYA
+    // UPDATE UI
     // ================================================================
     async function updateSaldo(animate = false) {
         if (!currentUser) return;
@@ -1475,7 +1275,7 @@
     });
 
     // ================================================================
-    // ADMIN (render)
+    // ADMIN
     // ================================================================
     adminLoginBtn.addEventListener('click', function() {
         const inputPass = adminPassword.value.trim();
@@ -1492,6 +1292,9 @@
     });
     adminPassword.addEventListener('keypress', e => { if (e.key === 'Enter') adminLoginBtn.click(); });
 
+    // ================================================================
+    // RENDER ADMIN
+    // ================================================================
     function renderAdmin() {
         const subs = allSubmissions;
         const wds = allWithdrawals;
@@ -1545,7 +1348,6 @@
                 `;
             });
             submissionsList.innerHTML = html;
-            // Event listeners...
             document.querySelectorAll('#submissionsList .action-btn[data-action="approve"]').forEach(btn => {
                 btn.addEventListener('click', async function() {
                     const id = this.dataset.id;
@@ -1595,7 +1397,6 @@
             });
         }
 
-        // WD
         if (wds.length === 0) {
             wdList.innerHTML = `<div class="empty-state">Belum ada permintaan WD.</div>`;
         } else {
@@ -1650,7 +1451,6 @@
             });
         }
 
-        // Deposit
         if (dps.length === 0) {
             depositList.innerHTML = `<div class="empty-state">Belum ada permintaan deposit.</div>`;
         } else {
@@ -1723,7 +1523,7 @@
     }
 
     // ================================================================
-    // BROADCAST
+    // BROADCAST ADMIN
     // ================================================================
     broadcastBtn.addEventListener('click', async function() {
         const msg = broadcastMsg.value.trim();
@@ -1731,15 +1531,218 @@
         try {
             await broadcastRef.push({ message: msg, timestamp: new Date().toISOString(), from: 'admin' });
             broadcastMsg.value = '';
-            alert('✅ Broadcast terkirim ke semua user!');
+            alert('✅ Broadcast terkirim!');
         } catch(err) { alert('Gagal kirim broadcast: '+err.message); }
     });
 
     // ================================================================
-    // CHART SKIN (Dashboard)
+    // ADMIN SET HARGA
+    // ================================================================
+    async function setStockPrice(newPrice) {
+        newPrice = Math.min(Math.max(newPrice, 0), 6000);
+        newPrice = Math.round(newPrice / 50) * 50;
+        try {
+            await priceRef.set(newPrice);
+            // Broadcast otomatis
+            await broadcastRef.push({
+                message: `📊 Admin mengubah harga menjadi ${formatRupiah(newPrice)}`,
+                timestamp: new Date().toISOString(),
+                from: 'system'
+            });
+        } catch(e) { alert('Gagal update harga: '+e.message); }
+    }
+
+    setPriceBtn.addEventListener('click', function() {
+        const newPrice = parseInt(priceSlider.value);
+        if (isNaN(newPrice) || newPrice < 0 || newPrice > 6000) {
+            alert('Harga harus antara Rp 0 - Rp 6.000');
+            return;
+        }
+        setStockPrice(newPrice);
+    });
+
+    pumpBtn.addEventListener('click', function() {
+        const newPrice = Math.min(stockPrice + 500, 6000);
+        setStockPrice(newPrice);
+    });
+
+    dumpBtn.addEventListener('click', function() {
+        const newPrice = Math.max(stockPrice - 500, 0);
+        setStockPrice(newPrice);
+    });
+
+    manualSetBtn.addEventListener('click', function() {
+        const input = manualPriceInput.value.trim();
+        if (!input) { alert('Masukkan angka! Contoh: +50, -30, atau 2000'); return; }
+        let newPrice = stockPrice;
+        if (input.startsWith('+')) {
+            const val = parseInt(input.substring(1));
+            if (isNaN(val)) { alert('Format salah! Contoh: +50'); return; }
+            newPrice = stockPrice + val;
+        } else if (input.startsWith('-')) {
+            const val = parseInt(input.substring(1));
+            if (isNaN(val)) { alert('Format salah! Contoh: -30'); return; }
+            newPrice = stockPrice - val;
+        } else {
+            const val = parseInt(input);
+            if (isNaN(val)) { alert('Masukkan angka valid!'); return; }
+            newPrice = val;
+        }
+        setStockPrice(newPrice);
+        manualPriceInput.value = '';
+    });
+
+    // ================================================================
+    // TRADING BELI / JUAL
+    // ================================================================
+    async function handleTrade(type) {
+        if (!currentUser) { alert('Login dulu!'); return; }
+        const qty = parseInt(tradeQty.value);
+        if (isNaN(qty) || qty < 1) { alert('Masukkan jumlah saham (min 1)!'); return; }
+        const price = stockPrice;
+        const total = qty * price;
+
+        const snap = await usersRef.child(currentUser.username).child('portofolio').once('value');
+        const porto = snap.val() || { stocks: 0, earned: 0, spent: 0 };
+
+        if (type === 'buy') {
+            const saldo = await getSaldo(currentUser.username);
+            if (total > saldo) { alert('Saldo tidak cukup!'); return; }
+            const newStocks = (porto.stocks || 0) + qty;
+            const newSpent = (porto.spent || 0) + total;
+            await usersRef.child(currentUser.username).child('portofolio').set({
+                stocks: newStocks,
+                earned: porto.earned || 0,
+                spent: newSpent
+            });
+            let newPrice = price + (qty * 10);
+            newPrice = Math.min(newPrice, 6000);
+            await priceRef.set(newPrice);
+            showNotif(`✅ Beli ${qty} saham, saldo -${formatRupiah(total)}`, new Date().toISOString());
+        } else if (type === 'sell') {
+            const currentStocks = porto.stocks || 0;
+            if (qty > currentStocks) { alert('Saham tidak cukup!'); return; }
+            const newStocks = currentStocks - qty;
+            let newEarned = porto.earned || 0;
+            // CEK HARGA: jika 0 → hangus, tidak dapat saldo
+            if (price > 0) {
+                newEarned += total;
+                await usersRef.child(currentUser.username).child('portofolio').set({
+                    stocks: newStocks,
+                    earned: newEarned,
+                    spent: porto.spent || 0
+                });
+                showNotif(`💰 Jual ${qty} saham, saldo +${formatRupiah(total)}`, new Date().toISOString());
+            } else {
+                // HARGA 0 → HANGUS!
+                await usersRef.child(currentUser.username).child('portofolio').set({
+                    stocks: newStocks,
+                    earned: porto.earned || 0,
+                    spent: porto.spent || 0
+                });
+                showNotif(`💸 Jual ${qty} saham di harga 0 → HANGUS!`, new Date().toISOString());
+            }
+            let newPrice = price - (qty * 10);
+            newPrice = Math.max(newPrice, 0);
+            await priceRef.set(newPrice);
+        }
+        tradeQty.value = '';
+        updateSaldo(true);
+        updateTradingUI();
+    }
+
+    buyBtn.addEventListener('click', () => handleTrade('buy'));
+    sellBtn.addEventListener('click', () => handleTrade('sell'));
+
+    // ================================================================
+    // TRADING UI & CHART
+    // ================================================================
+    function updateTradingUI() {
+        if (!currentUser) return;
+        stockAmount.textContent = userStocks;
+        const nilai = userStocks * stockPrice;
+        stockValue.textContent = formatRupiah(nilai);
+        updateSaldo();
+    }
+
+    function drawTradingChart() {
+        const canvas = tradingChart;
+        const ctx = canvas.getContext('2d');
+        const w = canvas.width;
+        const h = canvas.height;
+        ctx.clearRect(0, 0, w, h);
+        if (stockHistory.length < 2) return;
+        const min = Math.min(...stockHistory) * 0.9;
+        const max = Math.max(...stockHistory) * 1.1;
+        const range = max - min || 1;
+        const padding = 10;
+        const stepX = (w - padding * 2) / (stockHistory.length - 1);
+
+        for (let i = 1; i < stockHistory.length; i++) {
+            const prevPrice = stockHistory[i-1];
+            const currPrice = stockHistory[i];
+            const isGreen = currPrice >= prevPrice;
+            const x = padding + i * stepX;
+            const yPrev = h - padding - ((prevPrice - min) / range) * (h - padding * 2);
+            const yCurr = h - padding - ((currPrice - min) / range) * (h - padding * 2);
+            const barWidth = Math.min(stepX * 0.6, 10);
+            ctx.fillStyle = isGreen ? '#4CAF50' : '#f44336';
+            ctx.shadowColor = isGreen ? '#4CAF50' : '#f44336';
+            ctx.shadowBlur = 6;
+            const startY = Math.min(yPrev, yCurr);
+            const endY = Math.max(yPrev, yCurr);
+            const height = Math.max(endY - startY, 2);
+            ctx.fillRect(x - barWidth/2, startY, barWidth, height);
+            ctx.shadowBlur = 0;
+            ctx.strokeStyle = isGreen ? '#4CAF50' : '#f44336';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.moveTo(x, yPrev);
+            ctx.lineTo(x, yCurr);
+            ctx.stroke();
+        }
+
+        ctx.shadowBlur = 0;
+        ctx.beginPath();
+        ctx.strokeStyle = '#ffd700';
+        ctx.lineWidth = 2.5;
+        ctx.shadowColor = '#ffd700';
+        ctx.shadowBlur = 12;
+        for (let i = 0; i < stockHistory.length; i++) {
+            const x = padding + i * stepX;
+            const y = h - padding - ((stockHistory[i] - min) / range) * (h - padding * 2);
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+
+        const last = stockHistory[stockHistory.length - 1];
+        const lastX = padding + (stockHistory.length - 1) * stepX;
+        const lastY = h - padding - ((last - min) / range) * (h - padding * 2);
+        ctx.fillStyle = 'rgba(0,0,0,0.7)';
+        ctx.roundRect ? ctx.roundRect(lastX - 65, lastY - 22, 130, 28, 8) : ctx.rect(lastX - 65, lastY - 22, 130, 28);
+        ctx.fill();
+        ctx.fillStyle = '#fff';
+        ctx.font = 'bold 13px Poppins';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        const prev = stockHistory.length > 1 ? stockHistory[stockHistory.length-2] : last;
+        const diffPercent = ((last - prev) / prev * 100);
+        const sign = diffPercent >= 0 ? '+' : '';
+        ctx.fillStyle = '#fff';
+        ctx.fillText(formatRupiah(last), lastX, lastY - 2);
+        ctx.fillStyle = diffPercent >= 0 ? '#66ff99' : '#ff4444';
+        ctx.font = 'bold 11px Poppins';
+        ctx.fillText(`${sign}${diffPercent.toFixed(1)}%`, lastX, lastY + 16);
+    }
+
+    // ================================================================
+    // CHART SKIN (Dashboard) - BERGERAK
     // ================================================================
     const skinKeys = ['basic','epik','legend','kolektor','amoy-pacito','amoy-klasik'];
     const skinColors = { 'basic':'#8a8a8a','epik':'#3b9eff','legend':'#b44eff','kolektor':'#ff7b00','amoy-pacito':'#ffd700','amoy-klasik':'#66ff99' };
+
     function generateHistory(skinType, days=12) {
         const basePrice = SKIN_PRICES[skinType] || 1000;
         const history = []; let price = basePrice;
@@ -1752,6 +1755,7 @@
         }
         return history;
     }
+
     let historyData = {};
     skinKeys.forEach(key => { historyData[key] = generateHistory(key,12); });
     let prevKolektorPrice = historyData['kolektor'][historyData['kolektor'].length-1] || 5000;
@@ -1825,6 +1829,7 @@
         prevKolektorPrice = lastPrice;
     }
 
+    // UPDATE GRAFIK DASHBOARD TIAP 5 DETIK
     function updatePrices() {
         skinKeys.forEach(key => {
             const hist = historyData[key];
@@ -1873,15 +1878,16 @@
             document.querySelector('.tab-btn[data-tab="userTab"]').classList.add('active');
             userTab.classList.add('active');
         }
+        // GRAFIK DASHBOARD UPDATE TIAP 5 DETIK
         setInterval(updatePrices, 5000);
         document.querySelector('.tab-btn[data-tab="dashboardTab"]').addEventListener('click', function() {
             setTimeout(renderCharts, 200);
         });
-        console.log('🔥 AMOY GACHA KELOTER v14.0 - GRAFIK BERGERAK + PRESET + BROADCAST FIX');
+        console.log('🔥 AMOY GACHA KELOTER v14.0 - GRAFIK BERGERAK + PRESET HARGA');
         console.log('✅ Admin password: wilzu2233');
-        console.log('✅ Grafik trading bergerak tiap 1 detik');
-        console.log('✅ Admin preset harga: 0,100,500,1000,3000,5000');
-        console.log('✅ Broadcast hanya tampilkan 1 notif terakhir');
+        console.log('✅ Grafik Trading update 1 detik');
+        console.log('✅ Admin preset harga: 0, 100, 500, 1000, 3000, 5000');
+        console.log('✅ Jual di harga 0 → HANGUS!');
     }
 
     init();
