@@ -419,7 +419,11 @@
             outline:none; min-width:100px; font-family:'Poppins',sans-serif;
         }
         .admin-control .manual-input input:focus { border-color:#ffd700; }
-        .admin-control .manual-input button { flex:1; padding:10px 20px; border:none; border-radius:40px; font-weight:700; cursor:pointer; transition:0.2s; font-family:'Poppins',sans-serif; background:#0984e3; color:#fff; }
+        .admin-control .manual-input button {
+            flex:1; padding:10px 20px; border:none; border-radius:40px; font-weight:700;
+            cursor:pointer; transition:0.2s; font-family:'Poppins',sans-serif;
+            background:#0984e3; color:#fff;
+        }
         .admin-control .manual-input button:hover { transform:scale(1.02); box-shadow:0 6px 20px rgba(9,132,227,0.3); }
         .notif-container {
             position:fixed; top:20px; right:20px; max-width:350px; width:100%;
@@ -453,7 +457,7 @@
 
     <div class="notif-container" id="notifContainer"></div>
 
-    <!-- ============ AUTH ============ -->
+    <!-- AUTH -->
     <div id="authContainer">
         <div class="user-info" id="userInfoBar" style="display:none;">
             <span class="username"><i class="fas fa-user-circle"></i> <span id="displayUsername">User</span></span>
@@ -479,7 +483,7 @@
         </div>
     </div>
 
-    <!-- ============ MAIN APP ============ -->
+    <!-- MAIN APP -->
     <div id="mainApp" style="display:none;">
         <div class="tabs">
             <button class="tab-btn active" data-tab="userTab"><i class="fas fa-paper-plane"></i> Kirim Kartu</button>
@@ -638,15 +642,15 @@
                         <span class="range-value" id="sliderValue">Rp 1.000</span>
                     </div>
                     <div class="btn-group">
-                        <button class="btn-secondary" id="setPriceBtn" style="flex:1;"><i class="fas fa-sync"></i> Set Harga</button>
-                        <button class="btn-pump" id="pumpBtn" style="flex:1;"><i class="fas fa-arrow-up"></i> PUMP +500</button>
-                        <button class="btn-rungkad" id="dumpBtn" style="flex:1;"><i class="fas fa-arrow-down"></i> RUNGKAD -500</button>
+                        <button class="btn-secondary" id="setPriceBtn"><i class="fas fa-sync"></i> Set</button>
+                        <button class="btn-pump" id="pumpBtn"><i class="fas fa-arrow-up"></i> +500</button>
+                        <button class="btn-rungkad" id="dumpBtn"><i class="fas fa-arrow-down"></i> -500</button>
                     </div>
 
                     <!-- MANUAL INPUT -->
                     <div class="manual-input">
                         <input type="text" id="manualPriceInput" placeholder="+12, -5, atau 2500" />
-                        <button id="manualSetBtn"><i class="fas fa-edit"></i> Set</button>
+                        <button id="manualSetBtn"><i class="fas fa-edit"></i> Set Manual</button>
                     </div>
                     <div style="font-size:12px; color:rgba(255,255,255,0.3); margin-top:4px;">Contoh: +50 (naik 50), -30 (turun 30), 2000 (set langsung)</div>
                 </div>
@@ -655,7 +659,7 @@
                 <div class="broadcast-box">
                     <h3 style="color:#fff; font-weight:700;"><i class="fas fa-bullhorn"></i> Broadcast ke Semua User</h3>
                     <textarea id="broadcastMsg" placeholder="Tulis pesan broadcast..."></textarea>
-                    <button class="btn-broadcast" id="broadcastBtn" style="margin-top:12px; width:100%;"><i class="fas fa-paper-plane"></i> Kirim Broadcast</button>
+                    <button class="btn-broadcast" id="broadcastBtn"><i class="fas fa-paper-plane"></i> Kirim Broadcast</button>
                 </div>
             </div>
         </div>
@@ -697,9 +701,87 @@
     const SKIN_LABELS = { basic:'Basic', epik:'Epik', legend:'Legend', kolektor:'Kolektor', 'amoy-pacito':'Amoy-Pacito', 'amoy-klasik':'Amoy Klasik' };
 
     // ============================================================
-    // DOM REFS (singkat, fokus ke fitur baru)
+    // DOM REFS (lengkap)
     // ============================================================
-    // ... (ambil semua elemen seperti sebelumnya, tambahkan manualPriceInput, manualSetBtn)
+    const authContainer = document.getElementById('authContainer');
+    const mainApp = document.getElementById('mainApp');
+    const userInfoBar = document.getElementById('userInfoBar');
+    const displayUsername = document.getElementById('displayUsername');
+    const loginBox = document.getElementById('loginBox');
+    const registerBox = document.getElementById('registerBox');
+    const loginUser = document.getElementById('loginUser');
+    const loginPass = document.getElementById('loginPass');
+    const loginBtn = document.getElementById('loginBtn');
+    const loginError = document.getElementById('loginError');
+    const goToRegister = document.getElementById('goToRegister');
+    const goToLogin = document.getElementById('goToLogin');
+    const regUser = document.getElementById('regUser');
+    const regName = document.getElementById('regName');
+    const regPass = document.getElementById('regPass');
+    const registerBtn = document.getElementById('registerBtn');
+    const registerError = document.getElementById('registerError');
+    const registerSuccess = document.getElementById('registerSuccess');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const userTab = document.getElementById('userTab');
+    const tradingTab = document.getElementById('tradingTab');
+    const dashboardTab = document.getElementById('dashboardTab');
+    const adminTab = document.getElementById('adminTab');
+    const userName = document.getElementById('userName');
+    const cardImage = document.getElementById('cardImage');
+    const imagePreview = document.getElementById('imagePreview');
+    const requestedSkin = document.getElementById('requestedSkin');
+    const danaNumber = document.getElementById('danaNumber');
+    const submitBtn = document.getElementById('submitBtn');
+    const successMsg = document.getElementById('successMsg');
+    const userSaldo = document.getElementById('userSaldo');
+    const saldoDetail = document.getElementById('saldoDetail');
+    const saldoNotif = document.getElementById('saldoNotif');
+    const walletOptions = document.querySelectorAll('.wallet-option');
+    const wdName = document.getElementById('wdName');
+    const wdAccount = document.getElementById('wdAccount');
+    const wdAmount = document.getElementById('wdAmount');
+    const wdSubmitBtn = document.getElementById('wdSubmitBtn');
+    const wdSuccessMsg = document.getElementById('wdSuccessMsg');
+    const wdError = document.getElementById('wdError');
+    let selectedWallet = 'dana';
+    const priceChartCanvas = document.getElementById('priceChart');
+    const monitorChartCanvas = document.getElementById('monitorChart');
+    const monitorPrice = document.getElementById('monitorPrice');
+    const priceChange = document.getElementById('priceChange');
+    const adminLoginArea = document.getElementById('adminLoginArea');
+    const adminPassword = document.getElementById('adminPassword');
+    const adminLoginBtn = document.getElementById('adminLoginBtn');
+    const adminDashboard = document.getElementById('adminDashboard');
+    const submissionsList = document.getElementById('submissionsList');
+    const wdList = document.getElementById('wdList');
+    const depositList = document.getElementById('depositList');
+    const totalSubs = document.getElementById('totalSubs');
+    const pendingSubs = document.getElementById('pendingSubs');
+    const totalWD = document.getElementById('totalWD');
+    const totalDeposit = document.getElementById('totalDeposit');
+    const subCount = document.getElementById('subCount');
+    const tradingPrice = document.getElementById('tradingPrice');
+    const tradingChange = document.getElementById('tradingChange');
+    const tradingChart = document.getElementById('tradingChart');
+    const stockAmount = document.getElementById('stockAmount');
+    const stockValue = document.getElementById('stockValue');
+    const tradeBalance = document.getElementById('tradeBalance');
+    const tradeAmountInput = document.getElementById('tradeAmount');
+    const buyBtn = document.getElementById('buyBtn');
+    const sellBtn = document.getElementById('sellBtn');
+    const depositImage = document.getElementById('depositImage');
+    const depositPreview = document.getElementById('depositPreview');
+    const depositAmount = document.getElementById('depositAmount');
+    const depositBtn = document.getElementById('depositBtn');
+    const depositSuccessMsg = document.getElementById('depositSuccessMsg');
+    const broadcastMsg = document.getElementById('broadcastMsg');
+    const broadcastBtn = document.getElementById('broadcastBtn');
+    const priceSlider = document.getElementById('priceSlider');
+    const sliderValue = document.getElementById('sliderValue');
+    const setPriceBtn = document.getElementById('setPriceBtn');
+    const pumpBtn = document.getElementById('pumpBtn');
+    const dumpBtn = document.getElementById('dumpBtn');
     const manualPriceInput = document.getElementById('manualPriceInput');
     const manualSetBtn = document.getElementById('manualSetBtn');
 
@@ -711,7 +793,7 @@
     let userStocks = 0;
     let stockPrice = 1000;
     let stockHistory = [];
-    let lastNotifiedPrice = null; // untuk notifikasi sekali tiap perubahan
+    let lastNotifiedPrice = null;
 
     // ============================================================
     // UTILITY
@@ -752,15 +834,118 @@
     }
 
     // ============================================================
-    // AUTH (sama seperti sebelumnya)
+    // AUTH
     // ============================================================
-    async function login(username, password) { /* ... */ }
-    async function register(username, name, password) { /* ... */ }
-    async function enterApp() { /* ... setup listener, dll */ }
-    function logout() { /* ... */ }
+    async function login(username, password) {
+        try {
+            const snapshot = await usersRef.child(username).once('value');
+            const data = snapshot.val();
+            if (!data) { showError(loginError,'Username tidak ditemukan!'); return false; }
+            if (data.password !== password) { showError(loginError,'Password salah!'); return false; }
+            currentUser = { username, ...data };
+            localStorage.setItem('amoy_session', JSON.stringify({ username }));
+            await enterApp();
+            return true;
+        } catch(err) { showError(loginError,'Error: '+err.message); return false; }
+    }
 
-    // Untuk singkat, saya asumsikan fungsi auth sudah sama seperti sebelumnya.
-    // Saya akan tulis ulang fungsi utama yang berhubungan dengan harga dan grafik.
+    async function register(username, name, password) {
+        try {
+            const snapshot = await usersRef.child(username).once('value');
+            if (snapshot.exists()) { showError(registerError,'Username sudah dipakai!'); return false; }
+            if (username.length<3) { showError(registerError,'Username minimal 3 karakter!'); return false; }
+            if (password.length<4) { showError(registerError,'Password minimal 4 karakter!'); return false; }
+            if (!name.trim()) { showError(registerError,'Nama harus diisi!'); return false; }
+            await usersRef.child(username).set({
+                name: name.trim(),
+                password,
+                portofolio: { stocks:0, earned:0, spent:0 }
+            });
+            showSuccess(registerSuccess,'Akun berhasil dibuat! Silakan login.');
+            setTimeout(() => { registerBox.style.display='none'; loginBox.style.display='block'; registerSuccess.classList.remove('show'); },1500);
+            return true;
+        } catch(err) { showError(registerError,'Error: '+err.message); return false; }
+    }
+
+    async function enterApp() {
+        authContainer.style.display = 'none';
+        mainApp.style.display = 'block';
+        userInfoBar.style.display = 'flex';
+        displayUsername.textContent = currentUser.name || currentUser.username;
+        userName.value = currentUser.name || currentUser.username;
+        const portoSnap = await usersRef.child(currentUser.username).child('portofolio').once('value');
+        const porto = portoSnap.val() || { stocks:0, earned:0, spent:0 };
+        userStocks = porto.stocks || 0;
+        setupRealtimeListeners();
+        await new Promise(resolve => { const check = setInterval(() => { if (allSubmissions.length > 0 || document.querySelector('.empty-state')) { clearInterval(check); resolve(); } },500); setTimeout(resolve,3000); });
+        updateSaldo(true);
+        renderCharts();
+        updateTradingUI();
+        adminDashboard.style.display = 'none';
+        adminLoginArea.style.display = 'flex';
+        updatePendingBadge();
+        setupMarketListener();
+        priceSlider.addEventListener('input', function() {
+            sliderValue.textContent = formatRupiah(parseInt(this.value));
+        });
+        // Mulai updater otomatis
+        if (window._stockInterval) clearInterval(window._stockInterval);
+        window._stockInterval = setInterval(autoUpdatePrice, 2000);
+    }
+
+    function logout() {
+        localStorage.removeItem('amoy_session');
+        currentUser = null;
+        authContainer.style.display = 'block';
+        mainApp.style.display = 'none';
+        userInfoBar.style.display = 'none';
+        loginBox.style.display = 'block';
+        registerBox.style.display = 'none';
+        loginUser.value=''; loginPass.value=''; loginError.classList.remove('show');
+        adminDashboard.style.display='none'; adminLoginArea.style.display='flex';
+        document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+        userTab.classList.add('active');
+        tabBtns.forEach(b=>b.classList.remove('active'));
+        document.querySelector('.tab-btn[data-tab="userTab"]').classList.add('active');
+        if (window._subListener) window._subListener();
+        if (window._wdListener) window._wdListener();
+        if (window._depositListener) window._depositListener();
+        if (window._priceListener) window._priceListener();
+        if (window._broadcastListener) window._broadcastListener();
+        if (window._stockInterval) clearInterval(window._stockInterval);
+    }
+
+    // ============================================================
+    // REALTIME LISTENERS
+    // ============================================================
+    function setupRealtimeListeners() {
+        if (window._subListener) window._subListener();
+        window._subListener = submissionsRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            allSubmissions = data ? Object.values(data) : [];
+            if (currentUser) { updateSaldo(); updatePendingBadge(); updateTradingUI(); }
+            if (adminDashboard.style.display === 'block') renderAdmin();
+        });
+        if (window._wdListener) window._wdListener();
+        window._wdListener = withdrawalsRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            allWithdrawals = data ? Object.values(data) : [];
+            if (currentUser) { updateSaldo(); updateTradingUI(); }
+            if (adminDashboard.style.display === 'block') renderAdmin();
+        });
+        if (window._depositListener) window._depositListener();
+        window._depositListener = depositsRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            allDeposits = data ? Object.values(data) : [];
+            if (currentUser) { updateSaldo(); updateTradingUI(); }
+            if (adminDashboard.style.display === 'block') renderAdmin();
+        });
+        if (window._broadcastListener) window._broadcastListener();
+        window._broadcastListener = broadcastRef.on('child_added', (snapshot) => {
+            const data = snapshot.val();
+            if (data) { showNotif(data.message, data.timestamp); }
+        });
+    }
 
     // ============================================================
     // MARKET PRICE LISTENER + NOTIF
@@ -770,39 +955,578 @@
         window._priceListener = priceRef.on('value', (snapshot) => {
             const price = snapshot.val();
             if (price !== null && typeof price === 'number') {
-                // Cek perubahan untuk notifikasi
                 if (lastNotifiedPrice !== null && lastNotifiedPrice !== price) {
                     const diff = price - lastNotifiedPrice;
                     const direction = diff > 0 ? '📈 Naik' : '📉 Turun';
-                    const msg = `Harga saham ${direction} sebesar ${formatRupiah(Math.abs(diff))} menjadi ${formatRupiah(price)}`;
+                    const msg = `💰 Harga saham ${direction} ${formatRupiah(Math.abs(diff))} menjadi ${formatRupiah(price)}`;
                     showNotif(msg, new Date().toISOString());
                 }
                 lastNotifiedPrice = price;
-
                 stockPrice = price;
                 stockHistory.push(stockPrice);
                 if (stockHistory.length > 30) stockHistory.shift();
                 updateTradingUI();
                 drawTradingChart();
-                // Update tampilan harga di trading
-                document.getElementById('tradingPrice').textContent = formatRupiah(stockPrice);
-                // Update change
+                tradingPrice.textContent = formatRupiah(stockPrice);
                 const prev = stockHistory.length > 1 ? stockHistory[stockHistory.length-2] : stockPrice;
                 const diffPercent = ((stockPrice - prev) / prev * 100);
-                const changeEl = document.getElementById('tradingChange');
+                const changeEl = tradingChange;
                 changeEl.textContent = (diffPercent >= 0 ? '▲' : '▼') + ' ' + Math.abs(diffPercent).toFixed(1) + '%';
                 changeEl.className = 'change ' + (diffPercent >= 0 ? 'trending-up' : 'trending-down');
-                // Update slider
-                document.getElementById('priceSlider').value = stockPrice;
-                document.getElementById('sliderValue').textContent = formatRupiah(stockPrice);
+                priceSlider.value = stockPrice;
+                sliderValue.textContent = formatRupiah(stockPrice);
             }
         });
     }
 
     // ============================================================
-    // ADMIN MANUAL INPUT
+    // AUTO UPDATE HARGA (RANDOM WALK)
     // ============================================================
-    manualSetBtn.addEventListener('click', async function() {
+    async function autoUpdatePrice() {
+        if (!currentUser) return;
+        try {
+            const snap = await priceRef.once('value');
+            let currentPrice = snap.val();
+            if (currentPrice === null || typeof currentPrice !== 'number') currentPrice = 1000;
+            const change = (Math.random() * 600) - 300;
+            let newPrice = currentPrice + change;
+            newPrice = Math.min(Math.max(newPrice, 500), 6000);
+            newPrice = Math.round(newPrice / 50) * 50;
+            if (newPrice !== currentPrice) {
+                await priceRef.set(newPrice);
+            }
+        } catch(e) { /* ignore */ }
+    }
+
+    // ============================================================
+    // NOTIF
+    // ============================================================
+    function showNotif(message, timestamp) {
+        const container = document.getElementById('notifContainer');
+        const div = document.createElement('div');
+        div.className = 'notif-item';
+        const time = timestamp ? new Date(timestamp).toLocaleTimeString('id-ID') : 'baru';
+        div.innerHTML = `<div>📢 ${escapeHtml(message)}</div><div class="notif-time">${time}</div>`;
+        container.appendChild(div);
+        setTimeout(() => { div.style.opacity='0'; div.style.transform='translateX(100%)'; div.style.transition='0.5s'; setTimeout(()=>div.remove(),500); }, 8000);
+    }
+
+    // ============================================================
+    // UPDATE UI
+    // ============================================================
+    async function updateSaldo(animate = false) {
+        if (!currentUser) return;
+        const saldo = await getSaldo(currentUser.username);
+        const count = getApprovedCount(currentUser.username);
+        userSaldo.textContent = formatRupiah(saldo);
+        saldoDetail.textContent = `${count} skin approved`;
+        if (saldo > lastSaldo && animate) {
+            const diff = saldo - lastSaldo;
+            saldoNotif.textContent = `+${formatRupiah(diff)}`;
+            saldoNotif.classList.add('show');
+            userSaldo.classList.add('pulse');
+            setTimeout(() => { saldoNotif.classList.remove('show'); userSaldo.classList.remove('pulse'); },3000);
+        }
+        lastSaldo = saldo;
+        tradeBalance.textContent = formatRupiah(saldo);
+    }
+
+    function updatePendingBadge() {
+        const pending = getPendingCount();
+        const badge = document.getElementById('adminLiveBadge');
+        if (pending > 0) {
+            badge.textContent = `${pending} pending`;
+            badge.style.background = '#ff4444';
+            badge.classList.add('pending-badge');
+        } else {
+            badge.textContent = 'LIVE';
+            badge.style.background = '#4CAF50';
+            badge.classList.remove('pending-badge');
+        }
+    }
+
+    // ============================================================
+    // AUTH EVENTS
+    // ============================================================
+    loginBtn.addEventListener('click', () => {
+        const username = loginUser.value.trim();
+        const password = loginPass.value.trim();
+        if (!username || !password) { showError(loginError,'Isi username dan password!'); return; }
+        login(username, password);
+    });
+    loginPass.addEventListener('keypress', e => { if (e.key === 'Enter') loginBtn.click(); });
+    registerBtn.addEventListener('click', () => {
+        const username = regUser.value.trim();
+        const name = regName.value.trim();
+        const password = regPass.value.trim();
+        register(username, name, password);
+    });
+    regPass.addEventListener('keypress', e => { if (e.key === 'Enter') registerBtn.click(); });
+    goToRegister.addEventListener('click', e => { e.preventDefault(); loginBox.style.display='none'; registerBox.style.display='block'; loginError.classList.remove('show'); registerError.classList.remove('show'); registerSuccess.classList.remove('show'); });
+    goToLogin.addEventListener('click', e => { e.preventDefault(); registerBox.style.display='none'; loginBox.style.display='block'; loginError.classList.remove('show'); registerError.classList.remove('show'); registerSuccess.classList.remove('show'); });
+    logoutBtn.addEventListener('click', logout);
+
+    async function restoreSession() {
+        const saved = localStorage.getItem('amoy_session');
+        if (saved) {
+            try {
+                const data = JSON.parse(saved);
+                const snapshot = await usersRef.child(data.username).once('value');
+                const userData = snapshot.val();
+                if (userData) {
+                    currentUser = { username: data.username, ...userData };
+                    await enterApp();
+                    return true;
+                }
+            } catch(e) { console.log('Session restore error:', e); }
+        }
+        return false;
+    }
+
+    // ============================================================
+    // PREVIEW IMAGES
+    // ============================================================
+    cardImage.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                imagePreview.src = ev.target.result;
+                imagePreview.classList.add('show');
+            };
+            reader.readAsDataURL(file);
+        } else {
+            imagePreview.classList.remove('show');
+        }
+    });
+
+    depositImage.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                depositPreview.src = ev.target.result;
+                depositPreview.classList.add('show');
+            };
+            reader.readAsDataURL(file);
+        } else {
+            depositPreview.classList.remove('show');
+        }
+    });
+
+    // ============================================================
+    // SUBMIT KIRIMAN
+    // ============================================================
+    submitBtn.addEventListener('click', async function() {
+        if (!currentUser) { alert('Silakan login dulu!'); return; }
+        const name = userName.value.trim();
+        const file = cardImage.files[0];
+        const dana = danaNumber.value.trim();
+        const reqSkin = requestedSkin.value;
+        if (!name) { alert('Isi nama kamu!'); userName.focus(); return; }
+        if (!file) { alert('Upload foto kartu!'); return; }
+        if (!dana) { alert('Masukkan nomor Dana!'); danaNumber.focus(); return; }
+        if (!/^\d{10,15}$/.test(dana.replace(/\s/g,''))) { alert('Nomor Dana tidak valid (10-15 digit).'); return; }
+        const reader = new FileReader();
+        reader.onload = async function(ev) {
+            const submission = {
+                id: generateId(),
+                username: currentUser.username,
+                name: name,
+                image: ev.target.result,
+                dana: dana,
+                requestedSkin: reqSkin,
+                skinType: reqSkin,
+                status: 'pending',
+                timestamp: new Date().toISOString()
+            };
+            try {
+                await submissionsRef.push(submission);
+                userName.value = ''; cardImage.value = ''; imagePreview.classList.remove('show'); danaNumber.value = '';
+                successMsg.classList.add('show');
+                setTimeout(()=>successMsg.classList.remove('show'),5000);
+            } catch(err) { alert('Gagal kirim: '+err.message); }
+        };
+        reader.readAsDataURL(file);
+    });
+
+    // ============================================================
+    // DEPOSIT MANUAL
+    // ============================================================
+    depositBtn.addEventListener('click', async function() {
+        if (!currentUser) { alert('Login dulu!'); return; }
+        const file = depositImage.files[0];
+        const amount = parseInt(depositAmount.value);
+        if (!file) { alert('Upload bukti transfer!'); return; }
+        if (isNaN(amount) || amount < 500) { alert('Minimal deposit Rp 500'); return; }
+        const reader = new FileReader();
+        reader.onload = async function(ev) {
+            const deposit = {
+                id: generateId(),
+                username: currentUser.username,
+                name: currentUser.name || currentUser.username,
+                image: ev.target.result,
+                amount: amount,
+                status: 'pending',
+                timestamp: new Date().toISOString()
+            };
+            try {
+                await depositsRef.push(deposit);
+                depositImage.value = ''; depositPreview.classList.remove('show'); depositAmount.value = '';
+                depositSuccessMsg.classList.add('show');
+                setTimeout(()=>depositSuccessMsg.classList.remove('show'),5000);
+                if (adminDashboard.style.display === 'block') renderAdmin();
+            } catch(err) { alert('Gagal kirim deposit: '+err.message); }
+        };
+        reader.readAsDataURL(file);
+    });
+
+    // ============================================================
+    // WD
+    // ============================================================
+    walletOptions.forEach(opt => {
+        opt.addEventListener('click', function() {
+            walletOptions.forEach(o=>o.classList.remove('selected'));
+            this.classList.add('selected');
+            selectedWallet = this.dataset.wallet;
+        });
+    });
+    document.querySelector('.wallet-option.dana').classList.add('selected');
+
+    wdSubmitBtn.addEventListener('click', async function() {
+        if (!currentUser) { alert('Login dulu!'); return; }
+        const name = wdName.value.trim();
+        const account = wdAccount.value.trim();
+        const amount = parseInt(wdAmount.value.trim());
+        if (!name) { alert('Nama penerima harus diisi!'); return; }
+        if (!account) { alert('Nomor e-wallet harus diisi!'); return; }
+        if (!amount || amount < 10000) { alert('Minimal WD Rp 10.000'); return; }
+        if (amount % 1000 !== 0) { alert('Jumlah harus kelipatan 1.000'); return; }
+        const saldo = await getSaldo(currentUser.username);
+        if (amount > saldo) {
+            wdError.textContent = `Saldo tidak cukup! Saldo: ${formatRupiah(saldo)}`;
+            wdError.classList.add('show');
+            setTimeout(()=>wdError.classList.remove('show'),5000);
+            return;
+        }
+        const wdRequest = {
+            id: generateId(),
+            username: currentUser.username,
+            name: name,
+            method: selectedWallet,
+            account: account,
+            amount: amount,
+            status: 'pending',
+            timestamp: new Date().toISOString()
+        };
+        try {
+            await withdrawalsRef.push(wdRequest);
+            wdAccount.value = ''; wdAmount.value = '';
+            showSuccess(wdSuccessMsg, '✅ Permintaan WD dikirim! Tunggu approve admin.');
+            updateSaldo();
+        } catch(err) { alert('Gagal WD: '+err.message); }
+    });
+
+    // ============================================================
+    // ADMIN — PASSWORD wilzu2233
+    // ============================================================
+    adminLoginBtn.addEventListener('click', function() {
+        const inputPass = adminPassword.value.trim();
+        if (inputPass === 'wilzu2233') {
+            adminLoginArea.style.display = 'none';
+            adminDashboard.style.display = 'block';
+            renderAdmin();
+            adminPassword.value = '';
+        } else {
+            alert('Password admin salah! Harus: wilzu2233');
+            adminPassword.value = '';
+            adminPassword.focus();
+        }
+    });
+    adminPassword.addEventListener('keypress', e => { if (e.key === 'Enter') adminLoginBtn.click(); });
+
+    // ============================================================
+    // RENDER ADMIN
+    // ============================================================
+    function renderAdmin() {
+        // Kiriman
+        const subs = allSubmissions;
+        const wds = allWithdrawals;
+        const dps = allDeposits;
+        totalSubs.textContent = subs.length;
+        pendingSubs.textContent = subs.filter(s => s.status === 'pending').length;
+        totalWD.textContent = wds.length;
+        totalDeposit.textContent = dps.length;
+        if (subCount) subCount.textContent = `(${subs.length})`;
+
+        if (subs.length === 0) {
+            submissionsList.innerHTML = `<div class="empty-state">Belum ada kiriman.</div>`;
+        } else {
+            let html = '';
+            const sorted = [...subs].sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+            sorted.forEach((item) => {
+                const statusClass = item.status === 'pending' ? 'pending' : item.status === 'approved' ? 'approved' : 'rejected';
+                const statusLabel = item.status === 'pending' ? '⏳ Pending' : item.status === 'approved' ? '✅ Approved' : '❌ Rejected';
+                const skinLabel = SKIN_LABELS[item.skinType] || item.skinType;
+                const reqLabel = SKIN_LABELS[item.requestedSkin] || item.requestedSkin || 'Basic';
+                const price = SKIN_PRICES[item.skinType] || 0;
+                let actions = '';
+                if (item.status === 'pending') {
+                    actions = `
+                        <div class="action-group">
+                            <select class="skin-select-admin" data-id="${item.id}">
+                                ${Object.entries(SKIN_LABELS).map(([val,label]) => `<option value="${val}" ${val===item.skinType?'selected':''}>${label}</option>`).join('')}
+                            </select>
+                            <button class="action-btn approve" data-id="${item.id}" data-action="approve"><i class="fas fa-check"></i> ACC</button>
+                            <button class="action-btn reject" data-id="${item.id}" data-action="reject"><i class="fas fa-times"></i></button>
+                            <button class="action-btn delete-btn" data-id="${item.id}" data-action="delete"><i class="fas fa-trash"></i></button>
+                        </div>
+                    `;
+                } else {
+                    actions = `<span style="color:rgba(255,255,255,0.3);font-size:13px;">${statusLabel}</span>
+                               <button class="action-btn delete-btn" data-id="${item.id}" data-action="delete"><i class="fas fa-trash"></i></button>`;
+                }
+                const userInfo = item.username ? `@${escapeHtml(item.username)}` : '';
+                const imgSrc = item.image && item.image.startsWith('data:image') ? item.image : 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="70" height="70"%3E%3Crect fill="%231a1a2e" width="70" height="70"/%3E%3Ctext x="35" y="40" font-size="12" fill="%23666" text-anchor="middle"%3ENo Image%3C/text%3E%3C/svg%3E';
+                html += `
+                    <div class="submission-item" data-id="${item.id}">
+                        <img class="photo-thumb" src="${imgSrc}" alt="Kartu" onclick="window.open('${imgSrc}','_blank')" />
+                        <div class="info">
+                            <div class="name">${escapeHtml(item.name)} <span style="font-size:13px;color:#aaa;">${userInfo}</span></div>
+                            <div class="dana"><i class="fas fa-phone"></i> Dana: ${escapeHtml(item.dana)} · Request: <span style="color:#ffd700;">${reqLabel}</span> · ACC: <strong style="color:#66ff99;">${skinLabel}</strong> (${formatRupiah(price)})</div>
+                            <div class="time">${new Date(item.timestamp).toLocaleString('id-ID')}</div>
+                        </div>
+                        <span class="status-badge ${statusClass}">${statusLabel}</span>
+                        ${actions}
+                    </div>
+                `;
+            });
+            submissionsList.innerHTML = html;
+            document.querySelectorAll('#submissionsList .action-btn[data-action="approve"]').forEach(btn => {
+                btn.addEventListener('click', async function() {
+                    const id = this.dataset.id;
+                    const container = this.closest('.submission-item');
+                    const select = container.querySelector('.skin-select-admin');
+                    const newSkin = select ? select.value : 'basic';
+                    try {
+                        const snapshot = await submissionsRef.once('value');
+                        const data = snapshot.val();
+                        const key = Object.keys(data).find(k => data[k].id === id);
+                        if (key) {
+                            const sub = data[key];
+                            if (sub.status === 'pending') {
+                                await submissionsRef.child(key).update({ skinType: newSkin, status: 'approved' });
+                            }
+                        }
+                    } catch(err) { alert('Error: '+err.message); }
+                });
+            });
+            document.querySelectorAll('#submissionsList .action-btn[data-action="reject"]').forEach(btn => {
+                btn.addEventListener('click', async function() {
+                    const id = this.dataset.id;
+                    try {
+                        const snapshot = await submissionsRef.once('value');
+                        const data = snapshot.val();
+                        const key = Object.keys(data).find(k => data[k].id === id);
+                        if (key) {
+                            const sub = data[key];
+                            if (sub.status === 'pending') {
+                                await submissionsRef.child(key).update({ status: 'rejected' });
+                            }
+                        }
+                    } catch(err) { alert('Error: '+err.message); }
+                });
+            });
+            document.querySelectorAll('#submissionsList .action-btn[data-action="delete"]').forEach(btn => {
+                btn.addEventListener('click', async function() {
+                    const id = this.dataset.id;
+                    if (!confirm('Hapus kiriman ini permanen?')) return;
+                    try {
+                        const snapshot = await submissionsRef.once('value');
+                        const data = snapshot.val();
+                        const key = Object.keys(data).find(k => data[k].id === id);
+                        if (key) { await submissionsRef.child(key).remove(); }
+                    } catch(err) { alert('Error: '+err.message); }
+                });
+            });
+        }
+
+        // WD
+        if (wds.length === 0) {
+            wdList.innerHTML = `<div class="empty-state">Belum ada permintaan WD.</div>`;
+        } else {
+            let html = '';
+            const sorted = [...wds].sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+            sorted.forEach(item => {
+                const statusClass = item.status === 'pending' ? 'pending' : item.status === 'approved' ? 'approved' : 'rejected';
+                const statusLabel = item.status === 'pending' ? '⏳ Pending' : item.status === 'approved' ? '✅ Approved' : '❌ Rejected';
+                let actions = '';
+                if (item.status === 'pending') {
+                    actions = `
+                        <button class="action-btn approve" data-id="${item.id}" data-action="approve"><i class="fas fa-check"></i> Approve</button>
+                        <button class="action-btn reject" data-id="${item.id}" data-action="reject"><i class="fas fa-times"></i></button>
+                    `;
+                } else {
+                    actions = `<span style="color:rgba(255,255,255,0.2);">${statusLabel}</span>`;
+                }
+                const methodIcon = item.method === 'dana' ? 'fab fa-google-pay' : item.method === 'ovo' ? 'fas fa-mobile-alt' : 'fas fa-money-bill-wave';
+                const userInfo = item.username ? `@${escapeHtml(item.username)}` : '';
+                html += `
+                    <div class="wd-item" data-id="${item.id}">
+                        <div class="info">
+                            <div class="name">${escapeHtml(item.name)} ${userInfo} <i class="${methodIcon}" style="color:#ffd700;"></i></div>
+                            <div class="detail">${escapeHtml(item.account)} · ${formatRupiah(item.amount)}</div>
+                            <div class="time">${new Date(item.timestamp).toLocaleString('id-ID')}</div>
+                        </div>
+                        <span class="status-badge ${statusClass}">${statusLabel}</span>
+                        ${actions}
+                    </div>
+                `;
+            });
+            wdList.innerHTML = html;
+            document.querySelectorAll('#wdList .action-btn').forEach(btn => {
+                btn.addEventListener('click', async function() {
+                    const id = this.dataset.id;
+                    const action = this.dataset.action;
+                    try {
+                        const snapshot = await withdrawalsRef.once('value');
+                        const data = snapshot.val();
+                        const key = Object.keys(data).find(k => data[k].id === id);
+                        if (!key) return;
+                        const wd = data[key];
+                        if (action === 'approve') {
+                            const saldo = await getSaldo(wd.username);
+                            if (wd.amount > saldo) { alert('Saldo tidak cukup!'); return; }
+                            await withdrawalsRef.child(key).update({ status: 'approved' });
+                        } else if (action === 'reject') {
+                            await withdrawalsRef.child(key).update({ status: 'rejected' });
+                        }
+                    } catch(err) { alert('Error: '+err.message); }
+                });
+            });
+        }
+
+        // DEPOSIT
+        if (dps.length === 0) {
+            depositList.innerHTML = `<div class="empty-state">Belum ada permintaan deposit.</div>`;
+        } else {
+            let html = '';
+            const sorted = [...dps].sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+            sorted.forEach(item => {
+                const statusClass = item.status === 'pending' ? 'pending' : item.status === 'approved' ? 'approved' : 'rejected';
+                const statusLabel = item.status === 'pending' ? '⏳ Pending' : item.status === 'approved' ? '✅ Approved' : '❌ Rejected';
+                let actions = '';
+                if (item.status === 'pending') {
+                    actions = `
+                        <button class="action-btn approve" data-id="${item.id}" data-action="approve"><i class="fas fa-check"></i> Konfirmasi</button>
+                        <button class="action-btn reject" data-id="${item.id}" data-action="reject"><i class="fas fa-times"></i></button>
+                    `;
+                } else {
+                    actions = `<span style="color:rgba(255,255,255,0.2);">${statusLabel}</span>`;
+                }
+                const userInfo = item.username ? `@${escapeHtml(item.username)}` : '';
+                const imgSrc = item.image && item.image.startsWith('data:image') ? item.image : 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="70" height="70"%3E%3Crect fill="%231a1a2e" width="70" height="70"/%3E%3Ctext x="35" y="40" font-size="12" fill="%23666" text-anchor="middle"%3ENo Image%3C/text%3E%3C/svg%3E';
+                html += `
+                    <div class="deposit-item" data-id="${item.id}">
+                        <img class="photo-thumb" src="${imgSrc}" alt="Bukti" onclick="window.open('${imgSrc}','_blank')" />
+                        <div class="info">
+                            <div class="name">${escapeHtml(item.name)} ${userInfo}</div>
+                            <div class="detail">💰 ${formatRupiah(item.amount)}</div>
+                            <div class="time">${new Date(item.timestamp).toLocaleString('id-ID')}</div>
+                        </div>
+                        <span class="status-badge ${statusClass}">${statusLabel}</span>
+                        ${actions}
+                    </div>
+                `;
+            });
+            depositList.innerHTML = html;
+            document.querySelectorAll('#depositList .action-btn[data-action="approve"]').forEach(btn => {
+                btn.addEventListener('click', async function() {
+                    const id = this.dataset.id;
+                    try {
+                        const snapshot = await depositsRef.once('value');
+                        const data = snapshot.val();
+                        const key = Object.keys(data).find(k => data[k].id === id);
+                        if (key) {
+                            const dp = data[key];
+                            if (dp.status === 'pending') {
+                                await depositsRef.child(key).update({ status: 'approved' });
+                                if (currentUser && currentUser.username === dp.username) {
+                                    updateSaldo(true);
+                                }
+                            }
+                        }
+                    } catch(err) { alert('Error: '+err.message); }
+                });
+            });
+            document.querySelectorAll('#depositList .action-btn[data-action="reject"]').forEach(btn => {
+                btn.addEventListener('click', async function() {
+                    const id = this.dataset.id;
+                    try {
+                        const snapshot = await depositsRef.once('value');
+                        const data = snapshot.val();
+                        const key = Object.keys(data).find(k => data[k].id === id);
+                        if (key) {
+                            const dp = data[key];
+                            if (dp.status === 'pending') {
+                                await depositsRef.child(key).update({ status: 'rejected' });
+                            }
+                        }
+                    } catch(err) { alert('Error: '+err.message); }
+                });
+            });
+        }
+    }
+
+    // ============================================================
+    // BROADCAST ADMIN
+    // ============================================================
+    broadcastBtn.addEventListener('click', async function() {
+        const msg = broadcastMsg.value.trim();
+        if (!msg) { alert('Tulis pesan broadcast!'); return; }
+        try {
+            await broadcastRef.push({ message: msg, timestamp: new Date().toISOString(), from: 'admin' });
+            broadcastMsg.value = '';
+            alert('✅ Broadcast terkirim ke semua user!');
+        } catch(err) { alert('Gagal kirim broadcast: '+err.message); }
+    });
+
+    // ============================================================
+    // ADMIN SET HARGA (manual, pump, dump)
+    // ============================================================
+    async function setStockPrice(newPrice) {
+        newPrice = Math.min(Math.max(newPrice, 500), 6000);
+        newPrice = Math.round(newPrice / 50) * 50;
+        try {
+            await priceRef.set(newPrice);
+            await broadcastRef.push({
+                message: `📊 Admin mengubah harga menjadi ${formatRupiah(newPrice)}`,
+                timestamp: new Date().toISOString(),
+                from: 'system'
+            });
+        } catch(e) { alert('Gagal update harga: '+e.message); }
+    }
+
+    setPriceBtn.addEventListener('click', function() {
+        const newPrice = parseInt(priceSlider.value);
+        if (isNaN(newPrice) || newPrice < 500 || newPrice > 6000) {
+            alert('Harga harus antara Rp 500 - Rp 6.000');
+            return;
+        }
+        setStockPrice(newPrice);
+    });
+
+    pumpBtn.addEventListener('click', function() {
+        const newPrice = Math.min(stockPrice + 500, 6000);
+        setStockPrice(newPrice);
+    });
+
+    dumpBtn.addEventListener('click', function() {
+        const newPrice = Math.max(stockPrice - 500, 500);
+        setStockPrice(newPrice);
+    });
+
+    manualSetBtn.addEventListener('click', function() {
         const input = manualPriceInput.value.trim();
         if (!input) { alert('Masukkan angka! Contoh: +50, -30, atau 2000'); return; }
         let newPrice = stockPrice;
@@ -819,30 +1543,23 @@
             if (isNaN(val)) { alert('Masukkan angka valid!'); return; }
             newPrice = val;
         }
-        newPrice = Math.min(Math.max(newPrice, 500), 6000);
-        newPrice = Math.round(newPrice / 50) * 50;
-        try {
-            await priceRef.set(newPrice);
-            manualPriceInput.value = '';
-            // Broadcast notifikasi
-            await broadcastRef.push({
-                message: `📊 Admin mengubah harga menjadi ${formatRupiah(newPrice)}`,
-                timestamp: new Date().toISOString(),
-                from: 'system'
-            });
-        } catch(e) { alert('Gagal update harga: '+e.message); }
+        setStockPrice(newPrice);
+        manualPriceInput.value = '';
     });
 
     // ============================================================
-    // PUMP / RUNGKAD (juga update harga)
+    // TRADING UI & CHART
     // ============================================================
-    // Tombol pump, dump, setPrice juga panggil priceRef.set()
+    function updateTradingUI() {
+        if (!currentUser) return;
+        stockAmount.textContent = userStocks;
+        const nilai = userStocks * stockPrice;
+        stockValue.textContent = formatRupiah(nilai);
+        updateSaldo();
+    }
 
-    // ============================================================
-    // DRAW TRADING CHART (sama seperti dashboard)
-    // ============================================================
     function drawTradingChart() {
-        const canvas = document.getElementById('tradingChart');
+        const canvas = tradingChart;
         const ctx = canvas.getContext('2d');
         const w = canvas.width;
         const h = canvas.height;
@@ -900,7 +1617,6 @@
         const lastX = padding + (stockHistory.length - 1) * stepX;
         const lastY = h - padding - ((last - min) / range) * (h - padding * 2);
         ctx.fillStyle = 'rgba(0,0,0,0.7)';
-        ctx.beginPath();
         ctx.roundRect ? ctx.roundRect(lastX - 45, lastY - 20, 90, 26, 8) : ctx.rect(lastX - 45, lastY - 20, 90, 26);
         ctx.fill();
         ctx.fillStyle = '#ffd700';
@@ -911,21 +1627,208 @@
     }
 
     // ============================================================
-    // FUNGSI LAIN (submit, WD, deposit, dll) SAMA SEPERTI SEBELUMNYA
+    // BELI SAHAM
     // ============================================================
-    // (saya singkat, tapi di kode final semua sudah lengkap)
+    buyBtn.addEventListener('click', async function() {
+        if (!currentUser) { alert('Login dulu!'); return; }
+        const qty = parseInt(tradeAmountInput.value);
+        if (isNaN(qty) || qty < 1) { alert('Minimal 1 saham!'); return; }
+        const totalCost = qty * stockPrice;
+        if (totalCost < 500) { alert('Minimal transaksi Rp 500'); return; }
+        if (totalCost > 5000) { alert('Maksimal Rp 5.000 per transaksi'); return; }
+        const saldo = await getSaldo(currentUser.username);
+        if (totalCost > saldo) { alert('Saldo tidak cukup!'); return; }
+        try {
+            const snap = await usersRef.child(currentUser.username).child('portofolio').once('value');
+            const porto = snap.val() || { stocks: 0, spent: 0, earned: 0 };
+            const newStocks = (porto.stocks || 0) + qty;
+            const spent = (porto.spent || 0) + totalCost;
+            await usersRef.child(currentUser.username).child('portofolio').set({
+                stocks: newStocks,
+                spent: spent,
+                earned: porto.earned || 0
+            });
+            userStocks = newStocks;
+            await updateSaldo(true);
+            updateTradingUI();
+            tradeAmountInput.value = '';
+        } catch(err) { alert('Gagal beli: '+err.message); }
+    });
+
+    // ============================================================
+    // JUAL SAHAM
+    // ============================================================
+    sellBtn.addEventListener('click', async function() {
+        if (!currentUser) { alert('Login dulu!'); return; }
+        const qty = parseInt(tradeAmountInput.value);
+        if (isNaN(qty) || qty < 1) { alert('Minimal 1 saham!'); return; }
+        if (qty > userStocks) { alert('Saham tidak cukup!'); return; }
+        const totalValue = qty * stockPrice;
+        try {
+            const snap = await usersRef.child(currentUser.username).child('portofolio').once('value');
+            const porto = snap.val() || { stocks: 0, earned: 0, spent: 0 };
+            const newStocks = (porto.stocks || 0) - qty;
+            const earned = (porto.earned || 0) + totalValue;
+            await usersRef.child(currentUser.username).child('portofolio').set({
+                stocks: newStocks,
+                earned: earned,
+                spent: porto.spent || 0
+            });
+            userStocks = newStocks;
+            await updateSaldo(true);
+            updateTradingUI();
+            tradeAmountInput.value = '';
+        } catch(err) { alert('Gagal jual: '+err.message); }
+    });
+
+    // ============================================================
+    // CHART SKIN (Dashboard)
+    // ============================================================
+    const skinKeys = ['basic','epik','legend','kolektor','amoy-pacito','amoy-klasik'];
+    const skinColors = { 'basic':'#8a8a8a','epik':'#3b9eff','legend':'#b44eff','kolektor':'#ff7b00','amoy-pacito':'#ffd700','amoy-klasik':'#66ff99' };
+    function generateHistory(skinType, days=12) {
+        const basePrice = SKIN_PRICES[skinType] || 1000;
+        const history = []; let price = basePrice;
+        for (let i=0; i<days; i++) {
+            const change = (Math.random()*0.24)-0.14;
+            price = price * (1+change);
+            price = Math.min(Math.max(price,500),10000);
+            price = Math.round(price/100)*100;
+            history.push(price);
+        }
+        return history;
+    }
+    let historyData = {};
+    skinKeys.forEach(key => { historyData[key] = generateHistory(key,12); });
+    let prevKolektorPrice = historyData['kolektor'][historyData['kolektor'].length-1] || 5000;
+
+    function drawChart(canvas, data, color, showPoints=true) {
+        const ctx = canvas.getContext('2d');
+        const w=canvas.width, h=canvas.height;
+        ctx.clearRect(0,0,w,h);
+        if (!data || data.length<2) return;
+        const max = Math.min(Math.max(...data)*1.1,11000);
+        const min = Math.max(Math.min(...data)*0.9,400);
+        const range = max - min || 1;
+        const padding=20;
+        ctx.strokeStyle='rgba(255,255,255,0.05)'; ctx.lineWidth=1;
+        ctx.beginPath(); ctx.moveTo(padding,padding); ctx.lineTo(padding,h-padding); ctx.lineTo(w-padding,h-padding); ctx.stroke();
+        ctx.beginPath(); ctx.strokeStyle=color; ctx.lineWidth=3; ctx.shadowColor=color; ctx.shadowBlur=10;
+        const stepX = (w-padding*2)/(data.length-1);
+        for (let i=0; i<data.length; i++) {
+            const x = padding + i*stepX;
+            const y = h-padding - ((data[i]-min)/range)*(h-padding*2);
+            if (i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+        }
+        ctx.stroke(); ctx.shadowBlur=0;
+        if (showPoints) {
+            for (let i=0; i<data.length; i++) {
+                const x=padding+i*stepX, y=h-padding-((data[i]-min)/range)*(h-padding*2);
+                ctx.beginPath(); ctx.arc(x,y,5,0,2*Math.PI); ctx.fillStyle=color; ctx.shadowColor=color; ctx.shadowBlur=15; ctx.fill(); ctx.shadowBlur=0;
+            }
+        }
+        const last = data[data.length-1];
+        ctx.fillStyle='#fff'; ctx.font='bold 12px Poppins'; ctx.textAlign='right';
+        ctx.fillText(formatRupiah(last), w-padding, padding+14);
+    }
+
+    function renderCharts() {
+        const ctx = priceChartCanvas.getContext('2d');
+        const w=priceChartCanvas.width, h=priceChartCanvas.height;
+        ctx.clearRect(0,0,w,h);
+        const allData = {};
+        skinKeys.forEach(key => { allData[key] = historyData[key] || generateHistory(key,12); });
+        let globalMin=500, globalMax=10000;
+        skinKeys.forEach(key => {
+            const d=allData[key];
+            d.forEach(v => { if (v<globalMin) globalMin=Math.min(globalMin,v); if (v>globalMax) globalMax=Math.max(globalMax,v); });
+        });
+        globalMin = Math.max(globalMin-200,400);
+        globalMax = Math.min(globalMax+200,10500);
+        const range = globalMax - globalMin || 1;
+        const padding=20;
+        skinKeys.forEach((key) => {
+            const data=allData[key]; const color=skinColors[key];
+            ctx.beginPath(); ctx.strokeStyle=color; ctx.lineWidth=2; ctx.globalAlpha=0.7;
+            const stepX=(w-padding*2)/(data.length-1);
+            for (let i=0; i<data.length; i++) {
+                const x=padding+i*stepX;
+                const y=h-padding-((data[i]-globalMin)/range)*(h-padding*2);
+                if (i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+            }
+            ctx.stroke(); ctx.globalAlpha=1;
+        });
+        const legendContainer = document.getElementById('chartLegend');
+        legendContainer.innerHTML = skinKeys.map(key => `<span class="legend-item"><span class="dot" style="background:${skinColors[key]};"></span> ${SKIN_LABELS[key]}</span>`).join('');
+        const monData = allData['kolektor'] || generateHistory('kolektor',12);
+        drawChart(monitorChartCanvas, monData, '#ff7b00', true);
+        const lastPrice = monData[monData.length-1] || 5000;
+        monitorPrice.textContent = formatRupiah(lastPrice);
+        const change = ((lastPrice - prevKolektorPrice) / prevKolektorPrice * 100);
+        const changeText = change >= 0 ? `▲ +${change.toFixed(1)}%` : `▼ ${change.toFixed(1)}%`;
+        priceChange.textContent = changeText;
+        priceChange.className = 'price-change ' + (change >= 0 ? 'trending-up' : 'trending-down');
+        prevKolektorPrice = lastPrice;
+    }
+
+    function updatePrices() {
+        skinKeys.forEach(key => {
+            const hist = historyData[key];
+            if (hist && hist.length > 0) {
+                const last = hist[hist.length-1];
+                const change = (Math.random()*0.24)-0.16;
+                let newPrice = last * (1+change);
+                newPrice = Math.min(Math.max(newPrice,500),10000);
+                newPrice = Math.round(newPrice/100)*100;
+                hist.push(newPrice);
+                if (hist.length > 12) hist.shift();
+            }
+        });
+        renderCharts();
+    }
+
+    // ============================================================
+    // TABS
+    // ============================================================
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            tabBtns.forEach(b=>b.classList.remove('active'));
+            this.classList.add('active');
+            const target = this.dataset.tab;
+            document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+            document.getElementById(target).classList.add('active');
+            if (target === 'dashboardTab') { renderCharts(); if (currentUser) updateSaldo(); }
+            if (target === 'tradingTab') { drawTradingChart(); updateTradingUI(); }
+            if (target === 'adminTab') {
+                if (adminDashboard.style.display === 'block') { renderAdmin(); }
+                updatePendingBadge();
+            }
+        });
+    });
 
     // ============================================================
     // INIT
     // ============================================================
     async function init() {
-        // ... (sama seperti sebelumnya, panggil restoreSession, setup listener)
-        console.log('🔥 AMOY GACHA KELOTER v10.0 - GRAFIK BERGERAK + NOTIF + MANUAL INPUT');
+        const restored = await restoreSession();
+        if (!restored) {
+            authContainer.style.display = 'block';
+            mainApp.style.display = 'none';
+            loginBox.style.display = 'block';
+            registerBox.style.display = 'none';
+            document.querySelector('.tab-btn[data-tab="userTab"]').classList.add('active');
+            userTab.classList.add('active');
+        }
+        setInterval(updatePrices, 5000);
+        document.querySelector('.tab-btn[data-tab="dashboardTab"]').addEventListener('click', function() {
+            setTimeout(renderCharts, 200);
+        });
+        console.log('🔥 AMOY GACHA KELOTER v10.0 - ALL FITUR LENGKAP!');
         console.log('✅ Admin password: wilzu2233');
-        console.log('✅ Harga saham SINKRON semua user via Firebase');
-        console.log('✅ Notifikasi muncul 1 kali tiap perubahan harga');
-        console.log('✅ Admin bisa input +12, -5, atau angka langsung');
+        console.log('✅ Semua fitur: Kirim, Trading, Deposit, WD, Broadcast, Manual Input');
+        console.log('✅ Grafik bergerak terus + notifikasi harga');
     }
+
     init();
 </script>
 </body>
