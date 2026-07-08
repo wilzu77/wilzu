@@ -628,6 +628,15 @@
             background: #f44336;
             color: #fff;
         }
+        .action-btn.delete-btn {
+            background: rgba(255, 70, 70, 0.2);
+            color: #ff6666;
+            border: 1px solid rgba(255, 70, 70, 0.2);
+        }
+        .action-btn.delete-btn:hover {
+            background: rgba(255, 70, 70, 0.4);
+            box-shadow: 0 6px 20px rgba(255, 70, 70, 0.2);
+        }
         .action-btn.approve:hover {
             box-shadow: 0 6px 20px rgba(76, 175, 80, 0.3);
         }
@@ -822,10 +831,9 @@
                 transform: none;
             }
         }
-        /* real-time badge */
         .live-badge {
             display: inline-block;
-            background: #ff4444;
+            background: #4CAF50;
             color: #fff;
             font-size: 10px;
             font-weight: 800;
@@ -834,6 +842,9 @@
             margin-left: 8px;
             animation: pulse 1s infinite;
             text-transform: uppercase;
+        }
+        .live-badge.pending-badge {
+            background: #ff4444;
         }
         .skin-select-admin {
             padding: 4px 12px;
@@ -860,6 +871,17 @@
             padding: 2px 12px;
             border-radius: 20px;
             display: inline-block;
+        }
+        .total-count {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.3);
+            margin-left: 8px;
+        }
+        .action-group {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            align-items: center;
         }
     </style>
 </head>
@@ -1032,7 +1054,11 @@
                         <div class="stat-card"><div class="number" id="totalWD">0</div><div class="label">WD</div></div>
                     </div>
 
-                    <div class="section-title"><i class="fas fa-images"></i> Kiriman Kartu <span style="font-size:12px; color:rgba(255,255,255,0.3);">(real-time 1 detik)</span></div>
+                    <div class="section-title">
+                        <i class="fas fa-images"></i> Kiriman Kartu 
+                        <span class="total-count" id="subCount">(0)</span>
+                        <span style="font-size:12px; color:rgba(255,255,255,0.3);">real-time 1 detik</span>
+                    </div>
                     <div class="submissions-list" id="submissionsList">
                         <div class="empty-state">Belum ada kiriman.</div>
                     </div>
@@ -1158,6 +1184,7 @@
             const totalSubs = document.getElementById('totalSubs');
             const pendingSubs = document.getElementById('pendingSubs');
             const totalWD = document.getElementById('totalWD');
+            const subCount = document.getElementById('subCount');
 
             let currentUser = null;
             let lastSaldo = 0;
@@ -1244,7 +1271,6 @@
                 renderCharts();
                 adminDashboard.style.display = 'none';
                 adminLoginArea.style.display = 'flex';
-                // Update pending badge di admin tab
                 updatePendingBadge();
             }
 
@@ -1276,7 +1302,6 @@
                 userSaldo.textContent = formatRupiah(saldo);
                 saldoDetail.textContent = `${count} skin approved`;
 
-                // Notifikasi jika saldo naik
                 if (saldo > lastSaldo && animate) {
                     const diff = saldo - lastSaldo;
                     saldoNotif.textContent = `+${formatRupiah(diff)}`;
@@ -1296,9 +1321,11 @@
                 if (pending > 0) {
                     badge.textContent = `${pending} pending`;
                     badge.style.background = '#ff4444';
+                    badge.classList.add('pending-badge');
                 } else {
                     badge.textContent = 'LIVE';
                     badge.style.background = '#4CAF50';
+                    badge.classList.remove('pending-badge');
                 }
             }
 
@@ -1396,7 +1423,7 @@
                         image: ev.target.result,
                         dana: dana,
                         requestedSkin: reqSkin,
-                        skinType: reqSkin, // default, admin bisa ganti
+                        skinType: reqSkin,
                         status: 'pending',
                         timestamp: new Date().toISOString()
                     };
@@ -1496,14 +1523,16 @@
                 totalSubs.textContent = subs.length;
                 pendingSubs.textContent = subs.filter(s => s.status === 'pending').length;
                 totalWD.textContent = wds.length;
+                if (subCount) subCount.textContent = `(${subs.length})`;
 
-                // Submissions
+                // ===== SUBMISSIONS =====
                 if (subs.length === 0) {
                     submissionsList.innerHTML = `<div class="empty-state">Belum ada kiriman.</div>`;
                 } else {
                     let html = '';
-                    subs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-                    subs.forEach(item => {
+                    // Urutkan dari yang terbaru
+                    const sorted = [...subs].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                    sorted.forEach((item, index) => {
                         const statusClass = item.status === 'pending' ? 'pending' :
                             item.status === 'approved' ? 'approved' : 'rejected';
                         const statusLabel = item.status === 'pending' ? '⏳ Pending' :
@@ -1511,22 +1540,35 @@
                         const skinLabel = SKIN_LABELS[item.skinType] || item.skinType;
                         const reqLabel = SKIN_LABELS[item.requestedSkin] || item.requestedSkin || 'Basic';
                         const price = SKIN_PRICES[item.skinType] || 0;
+
                         let actions = '';
                         if (item.status === 'pending') {
                             actions = `
-                                <select class="skin-select-admin" data-id="${item.id}">
-                                    ${Object.entries(SKIN_LABELS).map(([val, label]) => `<option value="${val}" ${val===item.skinType?'selected':''}>${label}</option>`).join('')}
-                                </select>
-                                <button class="action-btn approve" data-id="${item.id}" data-action="approve"><i class="fas fa-check"></i> ACC</button>
-                                <button class="action-btn reject" data-id="${item.id}" data-action="reject"><i class="fas fa-times"></i></button>
+                                <div class="action-group">
+                                    <select class="skin-select-admin" data-id="${item.id}">
+                                        ${Object.entries(SKIN_LABELS).map(([val, label]) => 
+                                            `<option value="${val}" ${val===item.skinType?'selected':''}>${label}</option>`
+                                        ).join('')}
+                                    </select>
+                                    <button class="action-btn approve" data-id="${item.id}" data-action="approve"><i class="fas fa-check"></i> ACC</button>
+                                    <button class="action-btn reject" data-id="${item.id}" data-action="reject"><i class="fas fa-times"></i></button>
+                                    <button class="action-btn delete-btn" data-id="${item.id}" data-action="delete"><i class="fas fa-trash"></i></button>
+                                </div>
                             `;
                         } else {
-                            actions = `<span style="color:rgba(255,255,255,0.3); font-size:13px;">${statusLabel}</span>`;
+                            actions = `
+                                <span style="color:rgba(255,255,255,0.3); font-size:13px;">${statusLabel}</span>
+                                <button class="action-btn delete-btn" data-id="${item.id}" data-action="delete"><i class="fas fa-trash"></i></button>
+                            `;
                         }
+
                         const userInfo = item.username ? `@${escapeHtml(item.username)}` : '';
+                        // Cek apakah image base64 valid
+                        const imgSrc = item.image && item.image.startsWith('data:image') ? item.image : 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="70" height="70"%3E%3Crect fill="%231a1a2e" width="70" height="70"/%3E%3Ctext x="35" y="40" font-size="12" fill="%23666" text-anchor="middle"%3ENo Image%3C/text%3E%3C/svg%3E';
+
                         html += `
-                            <div class="submission-item" data-id="${item.id}">
-                                <img class="photo-thumb" src="${item.image}" alt="Kartu" onclick="window.open(this.src,'_blank')" />
+                            <div class="submission-item" data-id="${item.id}" data-index="${index}">
+                                <img class="photo-thumb" src="${imgSrc}" alt="Kartu" onclick="window.open('${imgSrc}','_blank')" />
                                 <div class="info">
                                     <div class="name">${escapeHtml(item.name)} <span style="font-size:13px; color:#aaa;">${userInfo}</span></div>
                                     <div class="dana">
@@ -1543,9 +1585,11 @@
                     });
                     submissionsList.innerHTML = html;
 
-                    // ACC / Tolak
+                    // ===== EVENT LISTENERS =====
+                    // Approve
                     document.querySelectorAll('#submissionsList .action-btn[data-action="approve"]').forEach(btn => {
-                        btn.addEventListener('click', function() {
+                        btn.addEventListener('click', function(e) {
+                            e.stopPropagation();
                             const id = this.dataset.id;
                             const container = this.closest('.submission-item');
                             const select = container.querySelector('.skin-select-admin');
@@ -1558,18 +1602,17 @@
                                 saveSubmissions(subs);
                                 renderAdmin();
                                 updatePendingBadge();
-                                const price = SKIN_PRICES[newSkin] || 0;
-                                // Update saldo user jika sedang login
                                 if (currentUser && currentUser.username === sub.username) {
                                     updateSaldo(true);
                                 }
-                                // Notifikasi ke semua user? (simulasi dengan alert)
-                                // Tapi biar smooth, kita update aja.
                             }
                         });
                     });
+
+                    // Reject
                     document.querySelectorAll('#submissionsList .action-btn[data-action="reject"]').forEach(btn => {
-                        btn.addEventListener('click', function() {
+                        btn.addEventListener('click', function(e) {
+                            e.stopPropagation();
                             const id = this.dataset.id;
                             let subs = getSubmissions();
                             const sub = subs.find(s => s.id === id);
@@ -1581,15 +1624,31 @@
                             }
                         });
                     });
+
+                    // Delete (Hapus permanen)
+                    document.querySelectorAll('#submissionsList .action-btn[data-action="delete"]').forEach(btn => {
+                        btn.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            const id = this.dataset.id;
+                            if (confirm('Hapus kiriman ini secara permanen?')) {
+                                let subs = getSubmissions();
+                                subs = subs.filter(s => s.id !== id);
+                                saveSubmissions(subs);
+                                renderAdmin();
+                                updatePendingBadge();
+                                if (currentUser) updateSaldo();
+                            }
+                        });
+                    });
                 }
 
-                // WD
+                // ===== WD =====
                 if (wds.length === 0) {
                     wdList.innerHTML = `<div class="empty-state">Belum ada permintaan WD.</div>`;
                 } else {
                     let html = '';
-                    wds.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-                    wds.forEach(item => {
+                    const sortedWD = [...wds].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                    sortedWD.forEach(item => {
                         const statusClass = item.status === 'pending' ? 'pending' :
                             item.status === 'approved' ? 'approved' : 'rejected';
                         const statusLabel = item.status === 'pending' ? '⏳ Pending' :
@@ -1854,11 +1913,10 @@
                 setTimeout(renderCharts, 200);
             });
 
-            console.log('🔥 AMOY GACHA KELOTER v3.0 - AUTO ACC');
-            console.log('👤 Login dengan akun yang sudah didaftarkan');
+            console.log('🔥 AMOY GACHA KELOTER v3.1 - FIX BUG');
+            console.log('✅ Semua foto sekarang tampil di admin!');
             console.log('🔑 Admin password: admin123');
-            console.log('📸 Admin lihat foto real-time, tinggal pilih skin & ACC');
-            console.log('💰 Saldo user otomatis bertambah!');
+            console.log('🗑️ Admin bisa hapus kiriman');
 
         })();
     </script>
