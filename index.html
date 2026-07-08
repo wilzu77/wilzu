@@ -735,13 +735,11 @@
 
         <!-- ============ AUTH / USER INFO ============ -->
         <div id="authContainer">
-            <!-- User info bar (hidden when not logged in) -->
             <div class="user-info" id="userInfoBar" style="display:none;">
                 <span class="username"><i class="fas fa-user-circle"></i> <span id="displayUsername">User</span></span>
                 <button class="btn-danger" id="logoutBtn" style="padding:6px 16px; font-size:13px;"><i class="fas fa-sign-out-alt"></i> Logout</button>
             </div>
 
-            <!-- Login Form -->
             <div class="auth-box" id="loginBox">
                 <div class="auth-title"><i class="fas fa-sign-in-alt"></i> Login</div>
                 <div class="form-group">
@@ -757,7 +755,6 @@
                 <div class="error-msg" id="loginError"></div>
             </div>
 
-            <!-- Register Form -->
             <div class="auth-box" id="registerBox" style="display:none;">
                 <div class="auth-title"><i class="fas fa-user-plus"></i> Daftar Akun</div>
                 <div class="form-group">
@@ -779,7 +776,7 @@
             </div>
         </div>
 
-        <!-- ============ MAIN APP (hidden until login) ============ -->
+        <!-- ============ MAIN APP ============ -->
         <div id="mainApp" style="display:none;">
             <div class="tabs">
                 <button class="tab-btn active" data-tab="userTab"><i class="fas fa-paper-plane"></i> Kirim Kartu</button>
@@ -787,7 +784,7 @@
                 <button class="tab-btn" data-tab="adminTab" id="adminTabBtn"><i class="fas fa-user-shield"></i> Admin</button>
             </div>
 
-            <!-- ============ PANEL USER (KIRIM) ============ -->
+            <!-- PANEL USER -->
             <div id="userTab" class="panel active">
                 <div class="form-group">
                     <label><i class="fas fa-user"></i> Nama Kamu</label>
@@ -810,7 +807,7 @@
                 </div>
             </div>
 
-            <!-- ============ PANEL DASHBOARD ============ -->
+            <!-- PANEL DASHBOARD -->
             <div id="dashboardTab" class="panel">
                 <div class="dashboard-grid">
                     <div class="saldo-card">
@@ -825,7 +822,6 @@
                     </div>
                 </div>
 
-                <!-- Monitor Kolektor BEARISH -->
                 <div class="monitor">
                     <div class="monitor-content">
                         <h2>📉 Harga Pasar Amoy</h2>
@@ -838,7 +834,6 @@
                     </div>
                 </div>
 
-                <!-- Daftar harga skin -->
                 <div class="skin-price-list">
                     <div class="skin-price-item"><div class="skin-name">Basic</div><div class="skin-price">Rp 500</div></div>
                     <div class="skin-price-item"><div class="skin-name">Epik</div><div class="skin-price">Rp 1.000</div></div>
@@ -848,7 +843,6 @@
                     <div class="skin-price-item"><div class="skin-name">Amoy Klasik</div><div class="skin-price">Rp 500</div></div>
                 </div>
 
-                <!-- Form WD -->
                 <h3 style="color:#fff; font-weight:700; margin:24px 0 12px;"><i class="fas fa-hand-holding-usd"></i> Tarik Saldo (WD)</h3>
                 <div class="form-group">
                     <label>Pilih E-Wallet</label>
@@ -877,7 +871,7 @@
                 <div class="error-msg" id="wdError"></div>
             </div>
 
-            <!-- ============ PANEL ADMIN ============ -->
+            <!-- PANEL ADMIN -->
             <div id="adminTab" class="panel">
                 <div class="admin-login" id="adminLoginArea">
                     <input type="password" id="adminPassword" placeholder="Password admin" />
@@ -915,42 +909,34 @@
             const WD_KEY = 'amoy_withdrawals';
             const ADMIN_PASSWORD = 'admin123';
 
-            // ======== DATA FUNCTIONS ========
             function getUsers() {
                 const raw = localStorage.getItem(USERS_KEY);
                 if (raw) { try { return JSON.parse(raw); } catch(e) { return {}; } }
                 return {};
             }
-
             function saveUsers(users) {
                 localStorage.setItem(USERS_KEY, JSON.stringify(users));
             }
-
             function getSubmissions() {
                 const raw = localStorage.getItem(SUBMISSIONS_KEY);
                 if (raw) { try { return JSON.parse(raw); } catch(e) { return []; } }
                 return [];
             }
-
             function saveSubmissions(data) {
                 localStorage.setItem(SUBMISSIONS_KEY, JSON.stringify(data));
             }
-
             function getWithdrawals() {
                 const raw = localStorage.getItem(WD_KEY);
                 if (raw) { try { return JSON.parse(raw); } catch(e) { return []; } }
                 return [];
             }
-
             function saveWithdrawals(data) {
                 localStorage.setItem(WD_KEY, JSON.stringify(data));
             }
-
             function generateId() {
                 return Date.now().toString(36) + Math.random().toString(36).substr(2, 6);
             }
 
-            // ======== SKIN PRICES ========
             const SKIN_PRICES = {
                 'basic': 500,
                 'epik': 1000,
@@ -1032,8 +1018,7 @@
             const refreshAdminBtn = document.getElementById('refreshAdminBtn');
             const adminTabBtn = document.getElementById('adminTabBtn');
 
-            // ======== SESSION ========
-            let currentUser = null; // { username, name }
+            let currentUser = null;
 
             // ======== UTILITY ========
             function getSaldo(username) {
@@ -1126,15 +1111,14 @@
                 displayUsername.textContent = currentUser.name || currentUser.username;
                 userName.value = currentUser.name || currentUser.username;
                 updateSaldo();
-                // Cek apakah admin tab visible? nanti
-                renderCharts();
-                // Jika admin sudah login sebelumnya, sembunyikan
                 adminDashboard.style.display = 'none';
                 adminLoginArea.style.display = 'flex';
+                renderCharts();
             }
 
             function logout() {
                 currentUser = null;
+                localStorage.removeItem('amoy_session');
                 authContainer.style.display = 'block';
                 mainApp.style.display = 'none';
                 userInfoBar.style.display = 'none';
@@ -1145,7 +1129,6 @@
                 loginError.classList.remove('show');
                 adminDashboard.style.display = 'none';
                 adminLoginArea.style.display = 'flex';
-                // Reset tabs
                 document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
                 userTab.classList.add('active');
                 tabBtns.forEach(b => b.classList.remove('active'));
@@ -1168,7 +1151,9 @@
                     showError(loginError, 'Isi username dan password!');
                     return;
                 }
-                login(username, password);
+                if (login(username, password)) {
+                    localStorage.setItem('amoy_session', JSON.stringify({ username: username }));
+                }
             });
 
             loginPass.addEventListener('keypress', function(e) {
@@ -1206,8 +1191,7 @@
 
             logoutBtn.addEventListener('click', logout);
 
-            // ======== CHECK SESSION ========
-            // Coba restore session dari localStorage
+            // ======== RESTORE SESSION ========
             function restoreSession() {
                 const saved = localStorage.getItem('amoy_session');
                 if (saved) {
@@ -1224,23 +1208,6 @@
                 }
                 return false;
             }
-
-            // Simpan session saat login
-            const origLogin = login;
-            login = function(username, password) {
-                const result = origLogin(username, password);
-                if (result) {
-                    localStorage.setItem('amoy_session', JSON.stringify({ username: username }));
-                }
-                return result;
-            };
-
-            // Hapus session saat logout
-            const origLogout = logout;
-            logout = function() {
-                localStorage.removeItem('amoy_session');
-                origLogout();
-            };
 
             // ======== PREVIEW IMAGE ========
             cardImage.addEventListener('change', function(e) {
@@ -1283,7 +1250,7 @@
                         name: name,
                         image: ev.target.result,
                         dana: dana,
-                        skinType: 'basic', // default, admin akan atur
+                        skinType: 'basic',
                         status: 'pending',
                         timestamp: new Date().toISOString()
                     };
@@ -1298,13 +1265,12 @@
                     successMsg.classList.add('show');
                     setTimeout(() => successMsg.classList.remove('show'), 5000);
 
-                    // Jika admin dashboard terbuka, refresh
                     if (adminDashboard.style.display !== 'none') renderAdmin();
                 };
                 reader.readAsDataURL(file);
             });
 
-            // ======== WD: Pilih Wallet ========
+            // ======== WD ========
             walletOptions.forEach(opt => {
                 opt.addEventListener('click', function() {
                     walletOptions.forEach(o => o.classList.remove('selected'));
@@ -1314,7 +1280,6 @@
             });
             document.querySelector('.wallet-option.dana').classList.add('selected');
 
-            // ======== SUBMIT WD ========
             wdSubmitBtn.addEventListener('click', function() {
                 if (!currentUser) { alert('Login dulu!'); return; }
                 const name = wdName.value.trim();
@@ -1357,13 +1322,12 @@
                 if (adminDashboard.style.display !== 'none') renderAdmin();
             });
 
-            // ======== ADMIN LOGIN ========
+            // ======== ADMIN ========
             adminLoginBtn.addEventListener('click', function() {
                 if (adminPassword.value.trim() === ADMIN_PASSWORD) {
                     adminLoginArea.style.display = 'none';
                     adminDashboard.style.display = 'block';
                     renderAdmin();
-                    // Auto refresh every 2 seconds for real-time
                     if (window._adminInterval) clearInterval(window._adminInterval);
                     window._adminInterval = setInterval(() => {
                         if (adminDashboard.style.display === 'block') renderAdmin();
@@ -1379,7 +1343,6 @@
                 if (e.key === 'Enter') adminLoginBtn.click();
             });
 
-            // ======== RENDER ADMIN ========
             function renderAdmin() {
                 const subs = getSubmissions();
                 const wds = getWithdrawals();
@@ -1429,7 +1392,6 @@
                     });
                     submissionsList.innerHTML = html;
 
-                    // ACC / Tolak
                     document.querySelectorAll('#submissionsList .action-btn[data-action="approve"]').forEach(btn => {
                         btn.addEventListener('click', function() {
                             const id = this.dataset.id;
@@ -1445,7 +1407,6 @@
                                 renderAdmin();
                                 const price = SKIN_PRICES[newSkin] || 0;
                                 alert(`✅ Skin ${SKIN_LABELS[newSkin]} di-ACC! Saldo ${sub.name} +${formatRupiah(price)}`);
-                                // Update saldo di dashboard jika user yang login adalah pemilik
                                 if (currentUser && currentUser.username === sub.username) {
                                     updateSaldo();
                                 }
@@ -1537,7 +1498,7 @@
 
             refreshAdminBtn.addEventListener('click', renderAdmin);
 
-            // ======== CHART - BEARISH TREND ========
+            // ======== CHART BEARISH ========
             const skinKeys = ['basic', 'epik', 'legend', 'kolektor', 'amoy-pacito', 'amoy-klasik'];
             const skinColors = {
                 'basic': '#8a8a8a',
@@ -1548,16 +1509,13 @@
                 'amoy-klasik': '#66ff99'
             };
 
-            // Generate history dengan trend BEARISH (cenderung turun)
             function generateHistory(skinType, days = 12) {
                 const basePrice = SKIN_PRICES[skinType] || 1000;
                 const history = [];
                 let price = basePrice;
                 for (let i = 0; i < days; i++) {
-                    // Bearish: lebih sering turun (-15% s/d +5%) dengan bias ke bawah
-                    const change = (Math.random() * 0.2) - 0.15; // -15% s/d +5%
+                    const change = (Math.random() * 0.2) - 0.15;
                     price = price * (1 + change);
-                    // Batasi antara 500 dan 10000
                     price = Math.min(Math.max(price, 500), 10000);
                     price = Math.round(price / 100) * 100;
                     history.push(price);
@@ -1569,8 +1527,6 @@
             skinKeys.forEach(key => {
                 historyData[key] = generateHistory(key, 12);
             });
-
-            // Track previous price for change display
             let prevKolektorPrice = historyData['kolektor'][historyData['kolektor'].length - 1] || 5000;
 
             function drawChart(canvas, data, color, label, showPoints = true) {
@@ -1578,7 +1534,6 @@
                 const w = canvas.width;
                 const h = canvas.height;
                 ctx.clearRect(0, 0, w, h);
-
                 if (!data || data.length < 2) return;
                 const max = Math.min(Math.max(...data) * 1.1, 11000);
                 const min = Math.max(Math.min(...data) * 0.9, 400);
@@ -1676,13 +1631,11 @@
                     <span class="legend-item"><span class="dot" style="background:${skinColors[key]};"></span> ${SKIN_LABELS[key]}</span>
                 `).join('');
 
-                // Monitor chart - KOLEKTOR
                 const monData = allData['kolektor'] || generateHistory('kolektor', 12);
                 drawChart(monitorChartCanvas, monData, '#ff7b00', 'Kolektor', true);
                 const lastPrice = monData[monData.length - 1] || 5000;
                 monitorPrice.textContent = formatRupiah(lastPrice);
 
-                // Price change
                 const change = ((lastPrice - prevKolektorPrice) / prevKolektorPrice * 100);
                 const changeText = change >= 0 ? `▲ +${change.toFixed(1)}%` : `▼ ${change.toFixed(1)}%`;
                 priceChange.textContent = changeText;
@@ -1690,13 +1643,11 @@
                 prevKolektorPrice = lastPrice;
             }
 
-            // Update harga dengan BIAS BEARISH (cenderung turun)
             function updatePrices() {
                 skinKeys.forEach(key => {
                     const hist = historyData[key];
                     if (hist && hist.length > 0) {
                         const last = hist[hist.length - 1];
-                        // BEARISH: -18% s/d +6% (lebih sering turun)
                         const change = (Math.random() * 0.24) - 0.18;
                         let newPrice = last * (1 + change);
                         newPrice = Math.min(Math.max(newPrice, 500), 10000);
@@ -1706,7 +1657,6 @@
                     }
                 });
                 renderCharts();
-                // Update saldo di dashboard (just in case)
                 if (currentUser) updateSaldo();
             }
 
@@ -1723,46 +1673,33 @@
                         if (currentUser) updateSaldo();
                     }
                     if (target === 'adminTab') {
-                        // If admin already logged in, refresh
                         if (adminDashboard.style.display === 'block') renderAdmin();
                     }
                 });
             });
 
             // ======== INIT ========
-            // Coba restore session
             const sessionRestored = restoreSession();
 
             if (!sessionRestored) {
-                // Tampilkan login
                 authContainer.style.display = 'block';
                 mainApp.style.display = 'none';
                 loginBox.style.display = 'block';
                 registerBox.style.display = 'none';
             }
 
-            // Set default tab
             document.querySelector('.tab-btn[data-tab="userTab"]').classList.add('active');
-            if (!sessionRestored) {
-                userTab.classList.add('active');
-            }
+            if (!sessionRestored) userTab.classList.add('active');
 
-            // Chart initial render (if logged in)
             if (sessionRestored) {
                 setTimeout(renderCharts, 300);
             }
 
-            // Update harga setiap 5 DETIK (BEARISH)
             setInterval(updatePrices, 5000);
-
-            // Update saldo setiap 10 detik
             setInterval(() => {
                 if (currentUser) updateSaldo();
             }, 10000);
 
-            // Admin auto-refresh handled inside renderAdmin with interval
-
-            // Tab dashboard click handler for chart
             document.querySelector('.tab-btn[data-tab="dashboardTab"]').addEventListener('click', function() {
                 setTimeout(renderCharts, 200);
             });
@@ -1770,7 +1707,6 @@
             console.log('🔥 AMOY GACHA KELOTER v2.0 - BEARISH MODE');
             console.log('👤 Login dengan akun yang sudah didaftarkan');
             console.log('🔑 Admin password: admin123');
-
         })();
     </script>
 </body>
