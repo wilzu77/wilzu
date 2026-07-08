@@ -87,30 +87,6 @@
             background: rgba(255, 255, 255, 0.08);
             color: #fff;
         }
-        .tab-btn .notif-dot {
-            position: absolute;
-            top: -4px;
-            right: -4px;
-            width: 14px;
-            height: 14px;
-            background: #ff4444;
-            border-radius: 50%;
-            border: 2px solid #0a0a12;
-            display: none;
-        }
-        .tab-btn .notif-dot.show {
-            display: block;
-            animation: pulse 1s infinite;
-        }
-        @keyframes pulse {
-            0%,
-            100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.3);
-            }
-        }
         .panel {
             display: none;
             animation: fadeUp 0.4s ease;
@@ -119,14 +95,8 @@
             display: block;
         }
         @keyframes fadeUp {
-            0% {
-                opacity: 0;
-                transform: translateY(16px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            0% { opacity: 0; transform: translateY(16px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
         .form-group {
             margin-bottom: 20px;
@@ -144,7 +114,6 @@
             color: #ffd700;
         }
         .form-group input,
-        .form-group textarea,
         .form-group select {
             width: 100%;
             padding: 14px 18px;
@@ -289,9 +258,7 @@
             margin-bottom: 30px;
         }
         @media (max-width: 700px) {
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-            }
+            .dashboard-grid { grid-template-columns: 1fr; }
         }
         .saldo-card {
             background: linear-gradient(135deg, rgba(255, 215, 0, 0.08), rgba(247, 151, 30, 0.05));
@@ -322,16 +289,9 @@
             animation: saldoPulse 0.6s ease;
         }
         @keyframes saldoPulse {
-            0% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.15);
-                filter: brightness(1.5);
-            }
-            100% {
-                transform: scale(1);
-            }
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); filter: brightness(1.5); }
+            100% { transform: scale(1); }
         }
         .saldo-card .sub {
             color: rgba(255, 255, 255, 0.3);
@@ -371,9 +331,7 @@
             align-items: center;
             gap: 10px;
         }
-        .chart-container h3 i {
-            color: #ffd700;
-        }
+        .chart-container h3 i { color: #ffd700; }
         #priceChart {
             width: 100%;
             height: 200px;
@@ -431,15 +389,9 @@
             color: #fff;
             box-shadow: 0 0 30px rgba(255, 215, 0, 0.05);
         }
-        .wallet-option.dana i {
-            color: #007BFF;
-        }
-        .wallet-option.ovo i {
-            color: #4CAF50;
-        }
-        .wallet-option.gopay i {
-            color: #E53935;
-        }
+        .wallet-option.dana i { color: #007BFF; }
+        .wallet-option.ovo i { color: #4CAF50; }
+        .wallet-option.gopay i { color: #E53935; }
         .admin-login {
             background: rgba(255, 255, 255, 0.02);
             border-radius: 30px;
@@ -462,9 +414,7 @@
             font-family: 'Poppins', sans-serif;
             min-width: 160px;
         }
-        .admin-login input:focus {
-            border-color: #ffd700;
-        }
+        .admin-login input:focus { border-color: #ffd700; }
         .admin-stats {
             display: flex;
             gap: 16px;
@@ -509,9 +459,7 @@
             border-radius: 10px;
         }
         .submissions-list::-webkit-scrollbar-track,
-        .wd-list::-webkit-scrollbar-track {
-            background: transparent;
-        }
+        .wd-list::-webkit-scrollbar-track { background: transparent; }
         .submission-item,
         .wd-item {
             background: rgba(255, 255, 255, 0.03);
@@ -525,12 +473,8 @@
             transition: 0.2s;
         }
         .submission-item:hover,
-        .wd-item:hover {
-            background: rgba(255, 255, 255, 0.06);
-        }
-        .wd-item {
-            border-left-color: #4CAF50;
-        }
+        .wd-item:hover { background: rgba(255, 255, 255, 0.06); }
+        .wd-item { border-left-color: #4CAF50; }
         .submission-item .info,
         .wd-item .info {
             flex: 2;
@@ -585,13 +529,8 @@
             animation: pendingPulse 1.5s infinite;
         }
         @keyframes pendingPulse {
-            0%,
-            100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.6;
-            }
+            0%,100% { opacity: 1; }
+            50% { opacity: 0.6; }
         }
         .status-badge.approved {
             background: rgba(0, 255, 100, 0.1);
@@ -640,12 +579,8 @@
             background: rgba(255, 70, 70, 0.4);
             box-shadow: 0 6px 20px rgba(255, 70, 70, 0.2);
         }
-        .action-btn.approve:hover {
-            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.3);
-        }
-        .action-btn.reject:hover {
-            box-shadow: 0 6px 20px rgba(244, 67, 54, 0.3);
-        }
+        .action-btn.approve:hover { box-shadow: 0 6px 20px rgba(76, 175, 80, 0.3); }
+        .action-btn.reject:hover { box-shadow: 0 6px 20px rgba(244, 67, 54, 0.3); }
         .empty-state {
             color: rgba(255, 255, 255, 0.2);
             text-align: center;
@@ -662,9 +597,7 @@
             align-items: center;
             gap: 10px;
         }
-        .section-title i {
-            color: #ffd700;
-        }
+        .section-title i { color: #ffd700; }
         .monitor {
             background: #0a0a12;
             border-radius: 30px;
@@ -685,11 +618,7 @@
             background: conic-gradient(from 0deg, transparent, rgba(255, 215, 0, 0.03), transparent, rgba(255, 215, 0, 0.03), transparent);
             animation: rotateGlow 10s linear infinite;
         }
-        @keyframes rotateGlow {
-            100% {
-                transform: rotate(360deg);
-            }
-        }
+        @keyframes rotateGlow { 100% { transform: rotate(360deg); } }
         .monitor-content {
             position: relative;
             z-index: 1;
@@ -710,9 +639,7 @@
             background-clip: text;
             color: transparent;
         }
-        .monitor-content .chart-wrap {
-            margin: 16px 0;
-        }
+        .monitor-content .chart-wrap { margin: 16px 0; }
         .monitor-content .chart-wrap canvas {
             width: 100% !important;
             height: 120px !important;
@@ -733,9 +660,7 @@
             border: 1px solid rgba(255, 255, 255, 0.04);
             transition: 0.2s;
         }
-        .skin-price-item:hover {
-            background: rgba(255, 255, 255, 0.08);
-        }
+        .skin-price-item:hover { background: rgba(255, 255, 255, 0.08); }
         .skin-price-item .skin-name {
             font-weight: 700;
             color: #fff;
@@ -761,9 +686,7 @@
             text-align: center;
             margin-bottom: 16px;
         }
-        .auth-box .auth-title i {
-            color: #ffd700;
-        }
+        .auth-box .auth-title i { color: #ffd700; }
         .auth-switch {
             text-align: center;
             margin-top: 14px;
@@ -776,9 +699,7 @@
             font-weight: 700;
             cursor: pointer;
         }
-        .auth-switch a:hover {
-            text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
-        }
+        .auth-switch a:hover { text-shadow: 0 0 20px rgba(255, 215, 0, 0.3); }
         .user-info {
             display: flex;
             align-items: center;
@@ -804,36 +725,8 @@
             text-align: center;
             margin-top: 2px;
         }
-        .trending-down {
-            color: #ff4444;
-        }
-        .trending-up {
-            color: #66ff99;
-        }
-        @media (max-width: 600px) {
-            .app-wrapper {
-                padding: 20px 16px;
-            }
-            .header h1 {
-                font-size: 28px;
-            }
-            .tab-btn {
-                padding: 10px 16px;
-                font-size: 12px;
-            }
-            .saldo-card .amount {
-                font-size: 36px;
-            }
-            .monitor-content .price-big {
-                font-size: 40px;
-            }
-            .auth-box {
-                padding: 16px;
-            }
-            .submission-item .photo-thumb:hover {
-                transform: none;
-            }
-        }
+        .trending-down { color: #ff4444; }
+        .trending-up { color: #66ff99; }
         .live-badge {
             display: inline-block;
             background: #4CAF50;
@@ -846,9 +739,7 @@
             animation: pulse 1s infinite;
             text-transform: uppercase;
         }
-        .live-badge.pending-badge {
-            background: #ff4444;
-        }
+        .live-badge.pending-badge { background: #ff4444; }
         .skin-select-admin {
             padding: 4px 12px;
             border-radius: 30px;
@@ -860,13 +751,8 @@
             font-size: 13px;
             font-weight: 600;
         }
-        .skin-select-admin:focus {
-            border-color: #ffd700;
-        }
-        .skin-select-admin option {
-            background: #1a1a2e;
-            color: #fff;
-        }
+        .skin-select-admin:focus { border-color: #ffd700; }
+        .skin-select-admin option { background: #1a1a2e; color: #fff; }
         .total-count {
             font-size: 14px;
             color: rgba(255, 255, 255, 0.3);
@@ -878,24 +764,14 @@
             flex-wrap: wrap;
             align-items: center;
         }
-        .fb-config-info {
-            background: rgba(255, 215, 0, 0.05);
-            border: 1px solid rgba(255, 215, 0, 0.1);
-            border-radius: 16px;
-            padding: 16px 20px;
-            margin-bottom: 20px;
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 13px;
-        }
-        .fb-config-info strong {
-            color: #ffd700;
-        }
-        .fb-config-info code {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 2px 8px;
-            border-radius: 6px;
-            font-size: 12px;
-            color: #66ff99;
+        @media (max-width: 600px) {
+            .app-wrapper { padding: 20px 16px; }
+            .header h1 { font-size: 28px; }
+            .tab-btn { padding: 10px 16px; font-size: 12px; }
+            .saldo-card .amount { font-size: 36px; }
+            .monitor-content .price-big { font-size: 40px; }
+            .auth-box { padding: 16px; }
+            .submission-item .photo-thumb:hover { transform: none; }
         }
     </style>
 </head>
@@ -904,18 +780,6 @@
         <div class="header">
             <h1>✨ AMOY GACHA KELOTER ✨</h1>
             <p><i class="fas fa-crown"></i> Kirim Foto · Admin ACC · Semua User Terdeteksi</p>
-        </div>
-
-        <!-- ============ FIREBASE CONFIG INFO ============ -->
-        <div class="fb-config-info" id="fbConfigBox">
-            <i class="fas fa-database" style="color:#ffd700;"></i>
-            <strong>Firebase Realtime Database</strong> — Semua user terhubung!
-            <br />
-            <span style="font-size:12px;">
-                ⚡ Config sudah terpasang! Data tersimpan di cloud Firebase.
-                <br />
-                📦 Admin lihat semua kiriman dari semua user secara real-time.
-            </span>
         </div>
 
         <!-- ============ AUTH ============ -->
@@ -1100,7 +964,7 @@
 
     <script>
         // ============================================================
-        // 🔥 FIREBASE CONFIG — UDAH DIISI PAKE PUNYA KAMU!
+        // 🔥 FIREBASE CONFIG — SUDAH PAKAI PUNYA KAMU!
         // ============================================================
         const firebaseConfig = {
             apiKey: "AIzaSyBTArEmMUo4mJEnl8WJmeWR4uNd_cMSg5A",
@@ -1375,7 +1239,6 @@
             userTab.classList.add('active');
             tabBtns.forEach(b => b.classList.remove('active'));
             document.querySelector('.tab-btn[data-tab="userTab"]').classList.add('active');
-            // Detach listeners
             if (window._subListener) { window._subListener(); }
             if (window._wdListener) { window._wdListener(); }
         }
@@ -1389,7 +1252,6 @@
             window._subListener = submissionsRef.on('value', (snapshot) => {
                 const data = snapshot.val();
                 allSubmissions = data ? Object.values(data) : [];
-                // Update UI
                 if (currentUser) {
                     updateSaldo();
                     updatePendingBadge();
@@ -2043,8 +1905,7 @@
             });
 
             console.log('🔥 AMOY GACHA KELOTER v4.0 - FIREBASE');
-            console.log('✅ Config sudah terpasang!');
-            console.log('✅ Semua user terdeteksi admin real-time!');
+            console.log('✅ Config sudah dipasang!');
             console.log('🔑 Admin password: admin123');
         }
 
