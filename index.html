@@ -9,6 +9,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
     <style>
+        /* ====== STYLE (sama seperti sebelumnya, tidak diubah) ====== */
         * { margin:0; padding:0; box-sizing:border-box; }
         body {
             font-family: 'Poppins', sans-serif;
@@ -29,942 +30,405 @@
             border: 1px solid rgba(255,255,255,0.06);
             box-shadow: 0 30px 60px rgba(0,0,0,0.8);
         }
-        .header {
-            text-align: center;
-            margin-bottom: 28px;
-        }
+        .header { text-align:center; margin-bottom:28px; }
         .header h1 {
-            font-size: 42px;
-            font-weight: 900;
-            letter-spacing: 2px;
+            font-size:42px; font-weight:900; letter-spacing:2px;
             background: linear-gradient(135deg, #f7971e, #ffd700);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+            -webkit-background-clip: text; background-clip: text; color:transparent;
             text-shadow: 0 0 50px rgba(255,215,0,0.2);
         }
-        .header p {
-            color: rgba(255,255,255,0.4);
-            font-weight: 600;
-            letter-spacing: 3px;
-            margin-top: 2px;
-        }
+        .header p { color:rgba(255,255,255,0.4); font-weight:600; letter-spacing:3px; margin-top:2px; }
         .tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
-            justify-content: center;
-            flex-wrap: wrap;
+            display:flex; gap:10px; margin-bottom:30px; justify-content:center; flex-wrap:wrap;
         }
         .tab-btn {
-            padding: 12px 28px;
-            border-radius: 60px;
-            border: 1px solid rgba(255,255,255,0.08);
-            background: rgba(255,255,255,0.03);
-            color: rgba(255,255,255,0.5);
-            font-weight: 700;
-            font-size: 14px;
-            cursor: pointer;
-            transition: 0.25s;
-            font-family: 'Poppins', sans-serif;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            position: relative;
+            padding:12px 28px; border-radius:60px; border:1px solid rgba(255,255,255,0.08);
+            background:rgba(255,255,255,0.03); color:rgba(255,255,255,0.5);
+            font-weight:700; font-size:14px; cursor:pointer; transition:0.25s;
+            font-family:'Poppins',sans-serif; display:flex; align-items:center; gap:8px; position:relative;
         }
         .tab-btn.active {
-            background: linear-gradient(135deg, #f7971e, #ffd700);
-            color: #0f0f1a;
-            border-color: #ffd700;
-            box-shadow: 0 8px 30px rgba(255,215,0,0.25);
+            background:linear-gradient(135deg,#f7971e,#ffd700); color:#0f0f1a; border-color:#ffd700;
+            box-shadow:0 8px 30px rgba(255,215,0,0.25);
         }
-        .tab-btn:hover:not(.active) {
-            background: rgba(255,255,255,0.08);
-            color: #fff;
-        }
-        .panel {
-            display: none;
-            animation: fadeUp 0.4s ease;
-        }
-        .panel.active { display: block; }
-        @keyframes fadeUp {
-            0% { opacity:0; transform:translateY(16px); }
-            100% { opacity:1; transform:translateY(0); }
-        }
-        .form-group { margin-bottom: 20px; }
+        .tab-btn:hover:not(.active) { background:rgba(255,255,255,0.08); color:#fff; }
+        .panel { display:none; animation:fadeUp 0.4s ease; }
+        .panel.active { display:block; }
+        @keyframes fadeUp { 0%{opacity:0;transform:translateY(16px);} 100%{opacity:1;transform:translateY(0);} }
+        .form-group { margin-bottom:20px; }
         .form-group label {
-            display: block;
-            color: rgba(255,255,255,0.7);
-            font-weight: 700;
-            font-size: 14px;
-            margin-bottom: 6px;
-            letter-spacing: 0.5px;
+            display:block; color:rgba(255,255,255,0.7); font-weight:700; font-size:14px;
+            margin-bottom:6px; letter-spacing:0.5px;
         }
-        .form-group label i {
-            margin-right: 8px;
-            color: #ffd700;
-        }
+        .form-group label i { margin-right:8px; color:#ffd700; }
         .form-group input, .form-group select {
-            width: 100%;
-            padding: 14px 18px;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 30px;
-            color: #fff;
-            font-size: 15px;
-            font-weight: 500;
-            outline: none;
-            transition: 0.25s;
-            font-family: 'Poppins', sans-serif;
+            width:100%; padding:14px 18px; background:rgba(255,255,255,0.04);
+            border:1px solid rgba(255,255,255,0.08); border-radius:30px; color:#fff;
+            font-size:15px; font-weight:500; outline:none; transition:0.25s;
+            font-family:'Poppins',sans-serif;
         }
         .form-group input:focus, .form-group select:focus {
-            border-color: #ffd700;
-            box-shadow: 0 0 25px rgba(255,215,0,0.08);
-            background: rgba(255,255,255,0.06);
+            border-color:#ffd700; box-shadow:0 0 25px rgba(255,215,0,0.08);
+            background:rgba(255,255,255,0.06);
         }
         .file-upload-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            flex-wrap: wrap;
+            display:flex; align-items:center; gap:16px; flex-wrap:wrap;
         }
         .file-upload-wrapper input[type="file"] {
-            flex: 1;
-            padding: 12px;
-            background: rgba(255,255,255,0.04);
-            border: 1px dashed rgba(255,215,0,0.2);
-            border-radius: 30px;
-            color: #ccc;
-            font-weight: 500;
-            cursor: pointer;
+            flex:1; padding:12px; background:rgba(255,255,255,0.04);
+            border:1px dashed rgba(255,215,0,0.2); border-radius:30px; color:#ccc;
+            font-weight:500; cursor:pointer;
         }
         .file-upload-wrapper input[type="file"]::file-selector-button {
-            background: linear-gradient(135deg, #f7971e, #ffd700);
-            border: none;
-            padding: 8px 20px;
-            border-radius: 40px;
-            font-weight: 700;
-            color: #0f0f1a;
-            cursor: pointer;
-            margin-right: 14px;
-            font-family: 'Poppins', sans-serif;
+            background:linear-gradient(135deg,#f7971e,#ffd700); border:none; padding:8px 20px;
+            border-radius:40px; font-weight:700; color:#0f0f1a; cursor:pointer; margin-right:14px;
+            font-family:'Poppins',sans-serif;
         }
         .file-preview {
-            width: 80px;
-            height: 80px;
-            border-radius: 20px;
-            object-fit: cover;
-            border: 2px solid rgba(255,215,0,0.2);
-            background: #1a1a2e;
-            display: none;
+            width:80px; height:80px; border-radius:20px; object-fit:cover;
+            border:2px solid rgba(255,215,0,0.2); background:#1a1a2e; display:none;
         }
-        .file-preview.show { display: block; }
+        .file-preview.show { display:block; }
         .btn-primary {
-            width: 100%;
-            padding: 16px;
-            border: none;
-            border-radius: 40px;
-            font-weight: 800;
-            font-size: 18px;
-            letter-spacing: 1px;
-            cursor: pointer;
-            transition: 0.25s;
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #f7971e, #ffd700);
-            color: #0f0f1a;
-            box-shadow: 0 8px 30px rgba(255,215,0,0.2);
-            margin-top: 8px;
+            width:100%; padding:16px; border:none; border-radius:40px; font-weight:800;
+            font-size:18px; letter-spacing:1px; cursor:pointer; transition:0.25s;
+            font-family:'Poppins',sans-serif;
+            background:linear-gradient(135deg,#f7971e,#ffd700); color:#0f0f1a;
+            box-shadow:0 8px 30px rgba(255,215,0,0.2); margin-top:8px;
         }
-        .btn-primary:hover {
-            transform: scale(1.02);
-            box-shadow: 0 12px 40px rgba(255,215,0,0.35);
-        }
+        .btn-primary:hover { transform:scale(1.02); box-shadow:0 12px 40px rgba(255,215,0,0.35); }
         .btn-secondary {
-            padding: 12px 28px;
-            border: none;
-            border-radius: 40px;
-            background: rgba(255,255,255,0.06);
-            color: #ccc;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.25s;
-            font-family: 'Poppins', sans-serif;
-            border: 1px solid rgba(255,255,255,0.06);
+            padding:12px 28px; border:none; border-radius:40px; background:rgba(255,255,255,0.06);
+            color:#ccc; font-weight:700; cursor:pointer; transition:0.25s;
+            font-family:'Poppins',sans-serif; border:1px solid rgba(255,255,255,0.06);
         }
-        .btn-secondary:hover { background: rgba(255,255,255,0.12); }
+        .btn-secondary:hover { background:rgba(255,255,255,0.12); }
         .btn-danger {
-            background: rgba(255,70,70,0.15);
-            color: #ff6666;
-            border: 1px solid rgba(255,70,70,0.2);
-            padding: 8px 20px;
-            border-radius: 40px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.25s;
-            font-family: 'Poppins', sans-serif;
+            background:rgba(255,70,70,0.15); color:#ff6666; border:1px solid rgba(255,70,70,0.2);
+            padding:8px 20px; border-radius:40px; font-weight:700; cursor:pointer; transition:0.25s;
+            font-family:'Poppins',sans-serif;
         }
-        .btn-danger:hover { background: rgba(255,70,70,0.25); }
+        .btn-danger:hover { background:rgba(255,70,70,0.25); }
         .btn-broadcast {
-            background: #6c5ce7;
-            color: #fff;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 40px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.2s;
-            font-family: 'Poppins', sans-serif;
+            background:#6c5ce7; color:#fff; border:none; padding:12px 24px; border-radius:40px;
+            font-weight:700; cursor:pointer; transition:0.2s; font-family:'Poppins',sans-serif;
         }
-        .btn-broadcast:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 20px rgba(108,92,231,0.3);
-        }
-        .btn-pump {
-            background: #00b894;
-            color: #fff;
-        }
-        .btn-rungkad {
-            background: #e17055;
-            color: #fff;
-        }
+        .btn-broadcast:hover { transform:scale(1.05); box-shadow:0 6px 20px rgba(108,92,231,0.3); }
+        .btn-pump { background:#00b894; color:#fff; }
+        .btn-rungkad { background:#e17055; color:#fff; }
         .success-msg {
-            background: rgba(0,255,100,0.1);
-            border-left: 4px solid #00ff66;
-            padding: 14px 18px;
-            border-radius: 16px;
-            color: #66ff99;
-            font-weight: 600;
-            margin-top: 16px;
-            display: none;
+            background:rgba(0,255,100,0.1); border-left:4px solid #00ff66; padding:14px 18px;
+            border-radius:16px; color:#66ff99; font-weight:600; margin-top:16px; display:none;
         }
-        .success-msg.show { display: block; }
+        .success-msg.show { display:block; }
         .error-msg {
-            background: rgba(255,70,70,0.1);
-            border-left: 4px solid #ff4444;
-            padding: 14px 18px;
-            border-radius: 16px;
-            color: #ff6666;
-            font-weight: 600;
-            margin-top: 16px;
-            display: none;
+            background:rgba(255,70,70,0.1); border-left:4px solid #ff4444; padding:14px 18px;
+            border-radius:16px; color:#ff6666; font-weight:600; margin-top:16px; display:none;
         }
-        .error-msg.show { display: block; }
+        .error-msg.show { display:block; }
         .dashboard-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
-            margin-bottom: 30px;
+            display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-bottom:30px;
         }
-        @media (max-width: 700px) { .dashboard-grid { grid-template-columns: 1fr; } }
+        @media (max-width:700px){ .dashboard-grid { grid-template-columns:1fr; } }
         .saldo-card {
-            background: linear-gradient(135deg, rgba(255,215,0,0.08), rgba(247,151,30,0.05));
-            border-radius: 30px;
-            padding: 24px;
-            border: 1px solid rgba(255,215,0,0.15);
-            text-align: center;
-            position: relative;
-            overflow: hidden;
+            background:linear-gradient(135deg,rgba(255,215,0,0.08),rgba(247,151,30,0.05));
+            border-radius:30px; padding:24px; border:1px solid rgba(255,215,0,0.15);
+            text-align:center; position:relative; overflow:hidden;
         }
-        .saldo-card .label {
-            color: rgba(255,255,255,0.4);
-            font-weight: 600;
-            font-size: 14px;
-            letter-spacing: 2px;
-        }
+        .saldo-card .label { color:rgba(255,255,255,0.4); font-weight:600; font-size:14px; letter-spacing:2px; }
         .saldo-card .amount {
-            font-size: 48px;
-            font-weight: 900;
-            background: linear-gradient(to right, #ffe259, #ffa751);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            margin: 6px 0;
-            transition: 0.3s;
+            font-size:48px; font-weight:900;
+            background:linear-gradient(to right,#ffe259,#ffa751); -webkit-background-clip:text;
+            background-clip:text; color:transparent; margin:6px 0; transition:0.3s;
         }
-        .saldo-card .amount.pulse {
-            animation: saldoPulse 0.6s ease;
-        }
-        @keyframes saldoPulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.15); filter: brightness(1.5); }
-            100% { transform: scale(1); }
-        }
-        .saldo-card .sub { color: rgba(255,255,255,0.3); font-size: 13px; }
+        .saldo-card .amount.pulse { animation:saldoPulse 0.6s ease; }
+        @keyframes saldoPulse { 0%{transform:scale(1);} 50%{transform:scale(1.15);filter:brightness(1.5);} 100%{transform:scale(1);} }
+        .saldo-card .sub { color:rgba(255,255,255,0.3); font-size:13px; }
         .saldo-card .notif-toast {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(0,255,100,0.15);
-            border: 1px solid #00ff66;
-            border-radius: 20px;
-            padding: 6px 16px;
-            font-size: 12px;
-            font-weight: 700;
-            color: #66ff99;
-            opacity: 0;
-            transform: translateY(-20px);
-            transition: all 0.5s ease;
+            position:absolute; top:10px; right:10px; background:rgba(0,255,100,0.15);
+            border:1px solid #00ff66; border-radius:20px; padding:6px 16px; font-size:12px;
+            font-weight:700; color:#66ff99; opacity:0; transform:translateY(-20px); transition:all 0.5s ease;
         }
-        .saldo-card .notif-toast.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        .saldo-card .notif-toast.show { opacity:1; transform:translateY(0); }
         .chart-container {
-            background: rgba(255,255,255,0.02);
-            border-radius: 30px;
-            padding: 20px;
-            border: 1px solid rgba(255,255,255,0.04);
+            background:rgba(255,255,255,0.02); border-radius:30px; padding:20px;
+            border:1px solid rgba(255,255,255,0.04);
         }
-        .chart-container h3 {
-            color: #fff;
-            font-weight: 700;
-            font-size: 18px;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .chart-container h3 i { color: #ffd700; }
-        #priceChart {
-            width: 100%;
-            height: 200px;
-            background: rgba(0,0,0,0.2);
-            border-radius: 20px;
-        }
+        .chart-container h3 { color:#fff; font-weight:700; font-size:18px; margin-bottom:12px; display:flex; align-items:center; gap:10px; }
+        .chart-container h3 i { color:#ffd700; }
+        #priceChart { width:100%; height:200px; background:rgba(0,0,0,0.2); border-radius:20px; }
         .chart-legend {
-            display: flex;
-            gap: 16px;
-            flex-wrap: wrap;
-            margin-top: 12px;
-            justify-content: center;
+            display:flex; gap:16px; flex-wrap:wrap; margin-top:12px; justify-content:center;
         }
-        .legend-item {
-            font-size: 12px;
-            font-weight: 600;
-            color: rgba(255,255,255,0.6);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .legend-item .dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            display: inline-block;
-        }
+        .legend-item { font-size:12px; font-weight:600; color:rgba(255,255,255,0.6); display:flex; align-items:center; gap:6px; }
+        .legend-item .dot { width:10px; height:10px; border-radius:50%; display:inline-block; }
         .wallet-options {
-            display: flex;
-            gap: 12px;
-            margin: 12px 0 16px;
-            flex-wrap: wrap;
+            display:flex; gap:12px; margin:12px 0 16px; flex-wrap:wrap;
         }
         .wallet-option {
-            flex: 1;
-            min-width: 100px;
-            padding: 14px 10px;
-            border-radius: 30px;
-            border: 2px solid rgba(255,255,255,0.06);
-            background: rgba(255,255,255,0.02);
-            text-align: center;
-            cursor: pointer;
-            transition: 0.25s;
-            font-weight: 700;
-            color: rgba(255,255,255,0.4);
+            flex:1; min-width:100px; padding:14px 10px; border-radius:30px;
+            border:2px solid rgba(255,255,255,0.06); background:rgba(255,255,255,0.02);
+            text-align:center; cursor:pointer; transition:0.25s; font-weight:700;
+            color:rgba(255,255,255,0.4);
         }
-        .wallet-option i {
-            font-size: 28px;
-            display: block;
-            margin-bottom: 4px;
-        }
-        .wallet-option.selected {
-            border-color: #ffd700;
-            background: rgba(255,215,0,0.08);
-            color: #fff;
-            box-shadow: 0 0 30px rgba(255,215,0,0.05);
-        }
-        .wallet-option.dana i { color: #007BFF; }
-        .wallet-option.ovo i { color: #4CAF50; }
-        .wallet-option.gopay i { color: #E53935; }
+        .wallet-option i { font-size:28px; display:block; margin-bottom:4px; }
+        .wallet-option.selected { border-color:#ffd700; background:rgba(255,215,0,0.08); color:#fff; box-shadow:0 0 30px rgba(255,215,0,0.05); }
+        .wallet-option.dana i { color:#007BFF; }
+        .wallet-option.ovo i { color:#4CAF50; }
+        .wallet-option.gopay i { color:#E53935; }
         .admin-login {
-            background: rgba(255,255,255,0.02);
-            border-radius: 30px;
-            padding: 20px;
-            margin-bottom: 20px;
-            display: flex;
-            gap: 12px;
-            align-items: center;
-            flex-wrap: wrap;
+            background:rgba(255,255,255,0.02); border-radius:30px; padding:20px; margin-bottom:20px;
+            display:flex; gap:12px; align-items:center; flex-wrap:wrap;
         }
         .admin-login input {
-            flex: 1;
-            padding: 12px 18px;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 40px;
-            color: #fff;
-            font-weight: 500;
-            outline: none;
-            font-family: 'Poppins', sans-serif;
-            min-width: 160px;
+            flex:1; padding:12px 18px; background:rgba(255,255,255,0.04);
+            border:1px solid rgba(255,255,255,0.08); border-radius:40px; color:#fff;
+            font-weight:500; outline:none; font-family:'Poppins',sans-serif; min-width:160px;
         }
-        .admin-login input:focus { border-color: #ffd700; }
+        .admin-login input:focus { border-color:#ffd700; }
         .admin-stats {
-            display: flex;
-            gap: 16px;
-            flex-wrap: wrap;
-            margin-bottom: 24px;
+            display:flex; gap:16px; flex-wrap:wrap; margin-bottom:24px;
         }
         .stat-card {
-            flex: 1;
-            min-width: 100px;
-            background: rgba(255,255,255,0.03);
-            border-radius: 24px;
-            padding: 16px 20px;
-            border: 1px solid rgba(255,255,255,0.04);
-            text-align: center;
+            flex:1; min-width:100px; background:rgba(255,255,255,0.03); border-radius:24px;
+            padding:16px 20px; border:1px solid rgba(255,255,255,0.04); text-align:center;
         }
-        .stat-card .number {
-            font-size: 32px;
-            font-weight: 900;
-            color: #ffd700;
-        }
-        .stat-card .label {
-            font-size: 13px;
-            color: rgba(255,255,255,0.4);
-            font-weight: 600;
-        }
+        .stat-card .number { font-size:32px; font-weight:900; color:#ffd700; }
+        .stat-card .label { font-size:13px; color:rgba(255,255,255,0.4); font-weight:600; }
         .submissions-list, .wd-list, .deposit-list {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-            max-height: 500px;
-            overflow-y: auto;
-            padding-right: 6px;
+            display:flex; flex-direction:column; gap:14px; max-height:500px; overflow-y:auto; padding-right:6px;
         }
         .submissions-list::-webkit-scrollbar, .wd-list::-webkit-scrollbar, .deposit-list::-webkit-scrollbar {
-            width: 5px;
+            width:5px;
         }
         .submissions-list::-webkit-scrollbar-thumb, .wd-list::-webkit-scrollbar-thumb, .deposit-list::-webkit-scrollbar-thumb {
-            background: #ffd700;
-            border-radius: 10px;
+            background:#ffd700; border-radius:10px;
         }
-        .submissions-list::-webkit-scrollbar-track, .wd-list::-webkit-scrollbar-track, .deposit-list::-webkit-scrollbar-track { background: transparent; }
+        .submissions-list::-webkit-scrollbar-track, .wd-list::-webkit-scrollbar-track, .deposit-list::-webkit-scrollbar-track {
+            background:transparent;
+        }
         .submission-item, .wd-item, .deposit-item {
-            background: rgba(255,255,255,0.03);
-            border-radius: 24px;
-            padding: 16px 20px;
-            border-left: 4px solid #ffd700;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 16px;
-            transition: 0.2s;
+            background:rgba(255,255,255,0.03); border-radius:24px; padding:16px 20px;
+            border-left:4px solid #ffd700; display:flex; flex-wrap:wrap; align-items:center;
+            gap:16px; transition:0.2s;
         }
-        .submission-item:hover, .wd-item:hover, .deposit-item:hover { background: rgba(255,255,255,0.06); }
-        .wd-item { border-left-color: #4CAF50; }
-        .deposit-item { border-left-color: #00b894; }
-        .submission-item .info, .wd-item .info, .deposit-item .info {
-            flex: 2;
-            min-width: 160px;
-        }
+        .submission-item:hover, .wd-item:hover, .deposit-item:hover { background:rgba(255,255,255,0.06); }
+        .wd-item { border-left-color:#4CAF50; }
+        .deposit-item { border-left-color:#00b894; }
+        .submission-item .info, .wd-item .info, .deposit-item .info { flex:2; min-width:160px; }
         .submission-item .info .name, .wd-item .info .name, .deposit-item .info .name {
-            font-weight: 800;
-            font-size: 18px;
-            color: #fff;
+            font-weight:800; font-size:18px; color:#fff;
         }
         .submission-item .info .dana, .wd-item .info .detail, .deposit-item .info .detail {
-            font-weight: 600;
-            color: #aaa;
-            font-size: 14px;
+            font-weight:600; color:#aaa; font-size:14px;
         }
         .submission-item .info .time, .wd-item .info .time, .deposit-item .info .time {
-            font-size: 12px;
-            color: rgba(255,255,255,0.3);
+            font-size:12px; color:rgba(255,255,255,0.3);
         }
         .submission-item .photo-thumb, .deposit-item .photo-thumb {
-            width: 70px;
-            height: 70px;
-            border-radius: 16px;
-            object-fit: cover;
-            border: 2px solid rgba(255,215,0,0.15);
-            background: #1a1a2e;
-            flex-shrink: 0;
-            cursor: pointer;
-            transition: 0.2s;
+            width:70px; height:70px; border-radius:16px; object-fit:cover;
+            border:2px solid rgba(255,215,0,0.15); background:#1a1a2e; flex-shrink:0;
+            cursor:pointer; transition:0.2s;
         }
         .submission-item .photo-thumb:hover, .deposit-item .photo-thumb:hover {
-            transform: scale(1.8);
-            z-index: 99;
-            border-color: #ffd700;
-            box-shadow: 0 0 40px rgba(255,215,0,0.3);
+            transform:scale(1.8); z-index:99; border-color:#ffd700; box-shadow:0 0 40px rgba(255,215,0,0.3);
         }
         .status-badge {
-            padding: 6px 16px;
-            border-radius: 40px;
-            font-size: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            padding:6px 16px; border-radius:40px; font-size:12px; font-weight:700;
+            text-transform:uppercase; letter-spacing:0.5px;
         }
         .status-badge.pending {
-            background: rgba(255,165,0,0.15);
-            color: #ffa500;
-            border: 1px solid rgba(255,165,0,0.2);
-            animation: pendingPulse 1.5s infinite;
+            background:rgba(255,165,0,0.15); color:#ffa500; border:1px solid rgba(255,165,0,0.2);
+            animation:pendingPulse 1.5s infinite;
         }
-        @keyframes pendingPulse {
-            0%,100% { opacity: 1; }
-            50% { opacity: 0.6; }
-        }
-        .status-badge.approved {
-            background: rgba(0,255,100,0.1);
-            color: #66ff99;
-            border: 1px solid rgba(0,255,100,0.15);
-        }
-        .status-badge.rejected {
-            background: rgba(255,70,70,0.1);
-            color: #ff6666;
-            border: 1px solid rgba(255,70,70,0.15);
-        }
+        @keyframes pendingPulse { 0%,100%{opacity:1;} 50%{opacity:0.6;} }
+        .status-badge.approved { background:rgba(0,255,100,0.1); color:#66ff99; border:1px solid rgba(0,255,100,0.15); }
+        .status-badge.rejected { background:rgba(255,70,70,0.1); color:#ff6666; border:1px solid rgba(255,70,70,0.15); }
         .action-btn {
-            padding: 6px 18px;
-            border: none;
-            border-radius: 40px;
-            font-weight: 700;
-            font-size: 13px;
-            cursor: pointer;
-            transition: 0.2s;
-            font-family: 'Poppins', sans-serif;
-            background: #ffd700;
-            color: #0f0f1a;
+            padding:6px 18px; border:none; border-radius:40px; font-weight:700; font-size:13px;
+            cursor:pointer; transition:0.2s; font-family:'Poppins',sans-serif;
+            background:#ffd700; color:#0f0f1a;
         }
-        .action-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 20px rgba(255,215,0,0.3);
-        }
-        .action-btn:disabled {
-            opacity: 0.3;
-            pointer-events: none;
-        }
-        .action-btn.approve {
-            background: #4CAF50;
-            color: #fff;
-        }
-        .action-btn.reject {
-            background: #f44336;
-            color: #fff;
-        }
+        .action-btn:hover { transform:scale(1.05); box-shadow:0 6px 20px rgba(255,215,0,0.3); }
+        .action-btn:disabled { opacity:0.3; pointer-events:none; }
+        .action-btn.approve { background:#4CAF50; color:#fff; }
+        .action-btn.reject { background:#f44336; color:#fff; }
         .action-btn.delete-btn {
-            background: rgba(255,70,70,0.2);
-            color: #ff6666;
-            border: 1px solid rgba(255,70,70,0.2);
+            background:rgba(255,70,70,0.2); color:#ff6666; border:1px solid rgba(255,70,70,0.2);
         }
-        .action-btn.delete-btn:hover {
-            background: rgba(255,70,70,0.4);
-            box-shadow: 0 6px 20px rgba(255,70,70,0.2);
-        }
-        .action-btn.approve:hover { box-shadow: 0 6px 20px rgba(76,175,80,0.3); }
-        .action-btn.reject:hover { box-shadow: 0 6px 20px rgba(244,67,54,0.3); }
-        .empty-state {
-            color: rgba(255,255,255,0.2);
-            text-align: center;
-            padding: 40px 0;
-            font-weight: 600;
-            font-size: 16px;
-        }
+        .action-btn.delete-btn:hover { background:rgba(255,70,70,0.4); box-shadow:0 6px 20px rgba(255,70,70,0.2); }
+        .action-btn.approve:hover { box-shadow:0 6px 20px rgba(76,175,80,0.3); }
+        .action-btn.reject:hover { box-shadow:0 6px 20px rgba(244,67,54,0.3); }
+        .empty-state { color:rgba(255,255,255,0.2); text-align:center; padding:40px 0; font-weight:600; font-size:16px; }
         .section-title {
-            color: #fff;
-            font-weight: 700;
-            font-size: 20px;
-            margin: 20px 0 14px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            color:#fff; font-weight:700; font-size:20px; margin:20px 0 14px;
+            display:flex; align-items:center; gap:10px;
         }
-        .section-title i { color: #ffd700; }
+        .section-title i { color:#ffd700; }
         .monitor {
-            background: #0a0a12;
-            border-radius: 30px;
-            padding: 20px;
-            border: 2px solid #ffd700;
-            box-shadow: 0 0 60px rgba(255,215,0,0.1);
-            margin: 20px 0;
-            position: relative;
-            overflow: hidden;
+            background:#0a0a12; border-radius:30px; padding:20px; border:2px solid #ffd700;
+            box-shadow:0 0 60px rgba(255,215,0,0.1); margin:20px 0; position:relative; overflow:hidden;
         }
         .monitor::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: conic-gradient(from 0deg, transparent, rgba(255,215,0,0.03), transparent, rgba(255,215,0,0.03), transparent);
-            animation: rotateGlow 10s linear infinite;
+            content:''; position:absolute; top:-50%; left:-50%; width:200%; height:200%;
+            background:conic-gradient(from 0deg,transparent,rgba(255,215,0,0.03),transparent,rgba(255,215,0,0.03),transparent);
+            animation:rotateGlow 10s linear infinite;
         }
-        @keyframes rotateGlow { 100% { transform: rotate(360deg); } }
-        .monitor-content { position: relative; z-index: 1; }
-        .monitor-content h2 {
-            color: #ffd700;
-            font-weight: 900;
-            font-size: 28px;
-            text-align: center;
-            text-shadow: 0 0 30px rgba(255,215,0,0.3);
-        }
+        @keyframes rotateGlow { 100%{transform:rotate(360deg);} }
+        .monitor-content { position:relative; z-index:1; }
+        .monitor-content h2 { color:#ffd700; font-weight:900; font-size:28px; text-align:center; text-shadow:0 0 30px rgba(255,215,0,0.3); }
         .monitor-content .price-big {
-            font-size: 64px;
-            font-weight: 900;
-            text-align: center;
-            background: linear-gradient(to right, #ffd700, #ff7b00);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+            font-size:64px; font-weight:900; text-align:center;
+            background:linear-gradient(to right,#ffd700,#ff7b00); -webkit-background-clip:text;
+            background-clip:text; color:transparent;
         }
-        .monitor-content .chart-wrap { margin: 16px 0; }
+        .monitor-content .chart-wrap { margin:16px 0; }
         .monitor-content .chart-wrap canvas {
-            width: 100% !important;
-            height: 120px !important;
-            background: rgba(0,0,0,0.3);
-            border-radius: 20px;
+            width:100% !important; height:120px !important;
+            background:rgba(0,0,0,0.3); border-radius:20px;
         }
         .skin-price-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 10px;
-            margin: 16px 0;
+            display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; margin:16px 0;
         }
         .skin-price-item {
-            background: rgba(255,255,255,0.04);
-            border-radius: 20px;
-            padding: 10px 14px;
-            text-align: center;
-            border: 1px solid rgba(255,255,255,0.04);
-            transition: 0.2s;
+            background:rgba(255,255,255,0.04); border-radius:20px; padding:10px 14px;
+            text-align:center; border:1px solid rgba(255,255,255,0.04); transition:0.2s;
         }
-        .skin-price-item:hover { background: rgba(255,255,255,0.08); }
-        .skin-price-item .skin-name {
-            font-weight: 700;
-            color: #fff;
-            font-size: 14px;
-        }
-        .skin-price-item .skin-price {
-            font-weight: 800;
-            color: #ffd700;
-            font-size: 16px;
-        }
+        .skin-price-item:hover { background:rgba(255,255,255,0.08); }
+        .skin-price-item .skin-name { font-weight:700; color:#fff; font-size:14px; }
+        .skin-price-item .skin-price { font-weight:800; color:#ffd700; font-size:16px; }
         .auth-box {
-            max-width: 420px;
-            margin: 0 auto 20px;
-            background: rgba(255,255,255,0.02);
-            border-radius: 30px;
-            padding: 24px;
-            border: 1px solid rgba(255,255,255,0.04);
+            max-width:420px; margin:0 auto 20px; background:rgba(255,255,255,0.02);
+            border-radius:30px; padding:24px; border:1px solid rgba(255,255,255,0.04);
         }
-        .auth-box .auth-title {
-            color: #fff;
-            font-weight: 700;
-            font-size: 22px;
-            text-align: center;
-            margin-bottom: 16px;
-        }
-        .auth-box .auth-title i { color: #ffd700; }
-        .auth-switch {
-            text-align: center;
-            margin-top: 14px;
-            color: rgba(255,255,255,0.4);
-            font-size: 14px;
-        }
-        .auth-switch a {
-            color: #ffd700;
-            text-decoration: none;
-            font-weight: 700;
-            cursor: pointer;
-        }
-        .auth-switch a:hover { text-shadow: 0 0 20px rgba(255,215,0,0.3); }
+        .auth-box .auth-title { color:#fff; font-weight:700; font-size:22px; text-align:center; margin-bottom:16px; }
+        .auth-box .auth-title i { color:#ffd700; }
+        .auth-switch { text-align:center; margin-top:14px; color:rgba(255,255,255,0.4); font-size:14px; }
+        .auth-switch a { color:#ffd700; text-decoration:none; font-weight:700; cursor:pointer; }
+        .auth-switch a:hover { text-shadow:0 0 20px rgba(255,215,0,0.3); }
         .user-info {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: rgba(255,255,255,0.03);
-            border-radius: 30px;
-            padding: 10px 20px;
-            margin-bottom: 20px;
-            border: 1px solid rgba(255,255,255,0.04);
+            display:flex; align-items:center; justify-content:space-between;
+            background:rgba(255,255,255,0.03); border-radius:30px; padding:10px 20px;
+            margin-bottom:20px; border:1px solid rgba(255,255,255,0.04);
         }
-        .user-info .username {
-            color: #fff;
-            font-weight: 700;
-            font-size: 16px;
-        }
-        .user-info .username i {
-            color: #ffd700;
-            margin-right: 8px;
-        }
-        .price-change {
-            font-size: 18px;
-            font-weight: 700;
-            text-align: center;
-            margin-top: 2px;
-        }
-        .trending-down { color: #ff4444; }
-        .trending-up { color: #66ff99; }
+        .user-info .username { color:#fff; font-weight:700; font-size:16px; }
+        .user-info .username i { color:#ffd700; margin-right:8px; }
+        .price-change { font-size:18px; font-weight:700; text-align:center; margin-top:2px; }
+        .trending-down { color:#ff4444; }
+        .trending-up { color:#66ff99; }
         .live-badge {
-            display: inline-block;
-            background: #4CAF50;
-            color: #fff;
-            font-size: 10px;
-            font-weight: 800;
-            padding: 2px 10px;
-            border-radius: 40px;
-            margin-left: 8px;
-            animation: pulse 1s infinite;
-            text-transform: uppercase;
+            display:inline-block; background:#4CAF50; color:#fff; font-size:10px; font-weight:800;
+            padding:2px 10px; border-radius:40px; margin-left:8px; animation:pulse 1s infinite;
+            text-transform:uppercase;
         }
-        .live-badge.pending-badge { background: #ff4444; }
+        .live-badge.pending-badge { background:#ff4444; }
         .skin-select-admin {
-            padding: 4px 12px;
-            border-radius: 30px;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.08);
-            color: #fff;
-            outline: none;
-            font-family: 'Poppins', sans-serif;
-            font-size: 13px;
-            font-weight: 600;
+            padding:4px 12px; border-radius:30px; background:rgba(255,255,255,0.04);
+            border:1px solid rgba(255,255,255,0.08); color:#fff; outline:none;
+            font-family:'Poppins',sans-serif; font-size:13px; font-weight:600;
         }
-        .skin-select-admin:focus { border-color: #ffd700; }
-        .skin-select-admin option { background: #1a1a2e; color: #fff; }
-        .total-count {
-            font-size: 14px;
-            color: rgba(255,255,255,0.3);
-            margin-left: 8px;
-        }
-        .action-group {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
+        .skin-select-admin:focus { border-color:#ffd700; }
+        .skin-select-admin option { background:#1a1a2e; color:#fff; }
+        .total-count { font-size:14px; color:rgba(255,255,255,0.3); margin-left:8px; }
+        .action-group { display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
         .trading-panel {
-            background: rgba(255,255,255,0.02);
-            border-radius: 30px;
-            padding: 20px;
-            margin-top: 20px;
-            border: 1px solid rgba(255,215,0,0.1);
+            background:rgba(255,255,255,0.02); border-radius:30px; padding:20px; margin-top:20px;
+            border:1px solid rgba(255,215,0,0.1);
         }
         .trading-panel .price-display {
-            font-size: 38px;
-            font-weight: 900;
-            color: #ffd700;
-            text-align: center;
-            transition: all 0.2s ease;
+            font-size:38px; font-weight:900; color:#ffd700; text-align:center; transition:all 0.2s ease;
         }
-        .trading-panel .change {
-            font-size: 18px;
-            font-weight: 700;
-            text-align: center;
-        }
+        .trading-panel .change { font-size:18px; font-weight:700; text-align:center; }
         .trading-panel .trade-form {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin: 16px 0;
+            display:flex; gap:10px; flex-wrap:wrap; margin:16px 0;
         }
         .trading-panel .trade-form input {
-            flex: 1;
-            padding: 12px 16px;
-            border-radius: 40px;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.08);
-            color: #fff;
-            font-size: 16px;
-            font-weight: 600;
-            outline: none;
-            min-width: 120px;
+            flex:1; padding:12px 16px; border-radius:40px; background:rgba(255,255,255,0.04);
+            border:1px solid rgba(255,255,255,0.08); color:#fff; font-size:16px; font-weight:600;
+            outline:none; min-width:120px;
         }
-        .trading-panel .trade-form input:focus {
-            border-color: #ffd700;
-        }
+        .trading-panel .trade-form input:focus { border-color:#ffd700; }
         .trading-panel .trade-form button {
-            padding: 12px 28px;
-            border: none;
-            border-radius: 40px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.2s;
-            font-family: 'Poppins', sans-serif;
+            padding:12px 28px; border:none; border-radius:40px; font-weight:700; cursor:pointer;
+            transition:0.2s; font-family:'Poppins',sans-serif;
         }
-        .btn-buy { background: #4CAF50; color: #fff; }
-        .btn-sell { background: #f44336; color: #fff; }
-        .btn-buy:hover { transform: scale(1.05); box-shadow: 0 6px 20px rgba(76,175,80,0.3); }
-        .btn-sell:hover { transform: scale(1.05); box-shadow: 0 6px 20px rgba(244,67,54,0.3); }
+        .btn-buy { background:#4CAF50; color:#fff; }
+        .btn-sell { background:#f44336; color:#fff; }
+        .btn-buy:hover { transform:scale(1.05); box-shadow:0 6px 20px rgba(76,175,80,0.3); }
+        .btn-sell:hover { transform:scale(1.05); box-shadow:0 6px 20px rgba(244,67,54,0.3); }
         .portofolio-box {
-            background: rgba(255,255,255,0.03);
-            border-radius: 20px;
-            padding: 16px;
-            margin: 12px 0;
-            border: 1px solid rgba(255,255,255,0.04);
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
+            background:rgba(255,255,255,0.03); border-radius:20px; padding:16px; margin:12px 0;
+            border:1px solid rgba(255,255,255,0.04); display:flex; justify-content:space-around; flex-wrap:wrap;
         }
-        .portofolio-box .item { text-align: center; }
-        .portofolio-box .item .label {
-            color: rgba(255,255,255,0.4);
-            font-size: 13px;
-        }
-        .portofolio-box .item .value {
-            font-weight: 800;
-            font-size: 20px;
-            color: #fff;
-        }
+        .portofolio-box .item { text-align:center; }
+        .portofolio-box .item .label { color:rgba(255,255,255,0.4); font-size:13px; }
+        .portofolio-box .item .value { font-weight:800; font-size:20px; color:#fff; }
         .deposit-section {
-            margin: 20px 0;
-            background: rgba(255,215,0,0.05);
-            border-radius: 30px;
-            padding: 20px;
-            border: 1px solid rgba(255,215,0,0.1);
+            margin:20px 0; background:rgba(255,215,0,0.05); border-radius:30px; padding:20px;
+            border:1px solid rgba(255,215,0,0.1);
         }
         .deposit-section .info-box {
-            background: rgba(0,0,0,0.3);
-            border-radius: 16px;
-            padding: 14px;
-            margin-bottom: 12px;
-            text-align: center;
-            border: 1px solid rgba(255,215,0,0.1);
+            background:rgba(0,0,0,0.3); border-radius:16px; padding:14px; margin-bottom:12px;
+            text-align:center; border:1px solid rgba(255,215,0,0.1);
         }
-        .deposit-section .info-box .dana-number {
-            font-size: 24px;
-            font-weight: 900;
-            color: #ffd700;
-        }
-        .deposit-section .info-box .label {
-            color: rgba(255,255,255,0.5);
-            font-size: 13px;
-        }
+        .deposit-section .info-box .dana-number { font-size:24px; font-weight:900; color:#ffd700; }
+        .deposit-section .info-box .label { color:rgba(255,255,255,0.5); font-size:13px; }
         .deposit-section .qris-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
+            display:flex; flex-direction:column; align-items:center; gap:12px;
         }
         .deposit-section .qris-container img {
-            max-width: 200px;
-            border-radius: 20px;
-            background: #fff;
-            padding: 10px;
+            max-width:200px; border-radius:20px; background:#fff; padding:10px;
         }
-        .deposit-section .qris-container .status-text {
-            font-weight: 700;
-            color: #ffd700;
-        }
+        .deposit-section .qris-container .status-text { font-weight:700; color:#ffd700; }
         .btn-deposit {
-            background: linear-gradient(135deg, #00b894, #00cec9);
-            color: #fff;
-            border: none;
-            padding: 14px 28px;
-            border-radius: 40px;
-            font-weight: 800;
-            font-size: 16px;
-            cursor: pointer;
-            transition: 0.2s;
-            font-family: 'Poppins', sans-serif;
+            background:linear-gradient(135deg,#00b894,#00cec9); color:#fff; border:none;
+            padding:14px 28px; border-radius:40px; font-weight:800; font-size:16px;
+            cursor:pointer; transition:0.2s; font-family:'Poppins',sans-serif;
         }
-        .btn-deposit:hover { transform: scale(1.02); box-shadow: 0 6px 20px rgba(0,206,201,0.3); }
+        .btn-deposit:hover { transform:scale(1.02); box-shadow:0 6px 20px rgba(0,206,201,0.3); }
         .broadcast-box {
-            background: rgba(108,92,231,0.05);
-            border-radius: 30px;
-            padding: 20px;
-            margin-top: 20px;
-            border: 1px solid rgba(108,92,231,0.1);
+            background:rgba(108,92,231,0.05); border-radius:30px; padding:20px; margin-top:20px;
+            border:1px solid rgba(108,92,231,0.1);
         }
         .broadcast-box textarea {
-            width: 100%;
-            padding: 14px 18px;
-            border-radius: 30px;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.08);
-            color: #fff;
-            font-size: 15px;
-            outline: none;
-            resize: vertical;
-            min-height: 80px;
-            font-family: 'Poppins', sans-serif;
+            width:100%; padding:14px 18px; border-radius:30px; background:rgba(255,255,255,0.04);
+            border:1px solid rgba(255,255,255,0.08); color:#fff; font-size:15px; outline:none;
+            resize:vertical; min-height:80px; font-family:'Poppins',sans-serif;
         }
-        .broadcast-box textarea:focus { border-color: #6c5ce7; }
+        .broadcast-box textarea:focus { border-color:#6c5ce7; }
         .admin-control {
-            background: rgba(255,215,0,0.05);
-            border-radius: 20px;
-            padding: 16px;
-            margin: 12px 0;
-            border: 1px solid rgba(255,215,0,0.1);
+            background:rgba(255,215,0,0.05); border-radius:20px; padding:16px; margin:12px 0;
+            border:1px solid rgba(255,215,0,0.1);
         }
-        .admin-control input[type="range"] {
-            width: 100%;
-            accent-color: #ffd700;
-        }
-        .admin-control .range-value {
-            color: #ffd700;
-            font-weight: 800;
-            font-size: 20px;
-        }
+        .admin-control input[type="range"] { width:100%; accent-color:#ffd700; }
+        .admin-control .range-value { color:#ffd700; font-weight:800; font-size:20px; }
         .admin-control .btn-group {
-            display: flex;
-            gap: 10px;
-            margin-top: 8px;
+            display:flex; gap:10px; margin-top:8px;
         }
         .admin-control .btn-group button {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            border-radius: 40px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.2s;
-            font-family: 'Poppins', sans-serif;
+            flex:1; padding:10px; border:none; border-radius:40px; font-weight:700;
+            cursor:pointer; transition:0.2s; font-family:'Poppins',sans-serif;
         }
         .notif-container {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            max-width: 350px;
-            width: 100%;
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            pointer-events: none;
+            position:fixed; top:20px; right:20px; max-width:350px; width:100%;
+            z-index:9999; display:flex; flex-direction:column; gap:10px; pointer-events:none;
         }
         .notif-item {
-            background: rgba(0,0,0,0.85);
-            backdrop-filter: blur(10px);
-            border-left: 4px solid #ffd700;
-            padding: 14px 18px;
-            border-radius: 16px;
-            color: #fff;
-            font-weight: 600;
-            font-size: 14px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            animation: slideIn 0.4s ease;
-            pointer-events: auto;
+            background:rgba(0,0,0,0.85); backdrop-filter:blur(10px); border-left:4px solid #ffd700;
+            padding:14px 18px; border-radius:16px; color:#fff; font-weight:600; font-size:14px;
+            box-shadow:0 10px 30px rgba(0,0,0,0.5); animation:slideIn 0.4s ease;
+            pointer-events:auto;
         }
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        .notif-item .notif-time {
-            font-size: 11px;
-            color: rgba(255,255,255,0.4);
-            margin-top: 4px;
-        }
-        @media (max-width: 600px) {
-            .app-wrapper { padding: 20px 16px; }
-            .header h1 { font-size: 28px; }
-            .tab-btn { padding: 10px 16px; font-size: 12px; }
-            .saldo-card .amount { font-size: 36px; }
-            .monitor-content .price-big { font-size: 40px; }
-            .auth-box { padding: 16px; }
-            .submission-item .photo-thumb:hover, .deposit-item .photo-thumb:hover { transform: none; }
+        @keyframes slideIn { from{transform:translateX(100%);opacity:0;} to{transform:translateX(0);opacity:1;} }
+        .notif-item .notif-time { font-size:11px; color:rgba(255,255,255,0.4); margin-top:4px; }
+        @media (max-width:600px){
+            .app-wrapper{ padding:20px 16px; }
+            .header h1{ font-size:28px; }
+            .tab-btn{ padding:10px 16px; font-size:12px; }
+            .saldo-card .amount{ font-size:36px; }
+            .monitor-content .price-big{ font-size:40px; }
+            .auth-box{ padding:16px; }
+            .submission-item .photo-thumb:hover, .deposit-item .photo-thumb:hover { transform:none; }
         }
     </style>
 </head>
@@ -977,6 +441,7 @@
 
     <div class="notif-container" id="notifContainer"></div>
 
+    <!-- ============ AUTH ============ -->
     <div id="authContainer">
         <div class="user-info" id="userInfoBar" style="display:none;">
             <span class="username"><i class="fas fa-user-circle"></i> <span id="displayUsername">User</span></span>
@@ -1002,6 +467,7 @@
         </div>
     </div>
 
+    <!-- ============ MAIN APP ============ -->
     <div id="mainApp" style="display:none;">
         <div class="tabs">
             <button class="tab-btn active" data-tab="userTab"><i class="fas fa-paper-plane"></i> Kirim Kartu</button>
@@ -1193,11 +659,17 @@
     };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
+
+    // ============================================================
+    // REFS
+    // ============================================================
     const usersRef = db.ref('users');
     const submissionsRef = db.ref('submissions');
     const withdrawalsRef = db.ref('withdrawals');
     const depositsRef = db.ref('deposits');
     const broadcastRef = db.ref('broadcasts');
+    const marketRef = db.ref('market');
+    const priceRef = marketRef.child('price');
 
     // ============================================================
     // SKIN PRICES
@@ -1277,7 +749,7 @@
     const sellBtn = document.getElementById('sellBtn');
     const depositImage = document.getElementById('depositImage');
     const depositPreview = document.getElementById('depositPreview');
-    const depositAmount = document.getElementById('depositAmount');
+    const depositAmountInput = document.getElementById('depositAmount');
     const depositBtn = document.getElementById('depositBtn');
     const depositSuccessMsg = document.getElementById('depositSuccessMsg');
     const broadcastMsg = document.getElementById('broadcastMsg');
@@ -1293,10 +765,12 @@
     let allSubmissions = [];
     let allWithdrawals = [];
     let allDeposits = [];
+    let userStocks = 0;
+
+    // MARKET PRICE STATE (akan di-sync dari Firebase)
     let stockPrice = 1000;
     let stockHistory = [];
-    let userStocks = 0;
-    let isAdminLoggedIn = false;
+    let isPriceListenerReady = false;
 
     // ============================================================
     // UTILITY
@@ -1308,7 +782,7 @@
     function generateId() { return Date.now().toString(36)+Math.random().toString(36).substr(2,6); }
 
     // ============================================================
-    // SALDO (skin approved - WD + earned trading - spent trading + deposit)
+    // SALDO
     // ============================================================
     async function getSaldo(username) {
         try {
@@ -1317,7 +791,6 @@
             const wdApproved = allWithdrawals.filter(w => w.username === username && w.status === 'approved');
             const totalWDed = wdApproved.reduce((sum, w) => sum + w.amount, 0);
             base = base - totalWDed;
-            // Tambah deposit approved
             const depositApproved = allDeposits.filter(d => d.username === username && d.status === 'approved');
             const totalDeposit = depositApproved.reduce((sum, d) => sum + d.amount, 0);
             base = base + totalDeposit;
@@ -1326,9 +799,7 @@
             const earned = porto.earned || 0;
             const spent = porto.spent || 0;
             return base + earned - spent;
-        } catch(e) {
-            return 0;
-        }
+        } catch(e) { return 0; }
     }
 
     function getApprovedCount(username) {
@@ -1390,9 +861,9 @@
         adminDashboard.style.display = 'none';
         adminLoginArea.style.display = 'flex';
         updatePendingBadge();
-        if (window._stockInterval) clearInterval(window._stockInterval);
-        window._stockInterval = setInterval(updateStockPrice, 2000);
-        setupBroadcastListener();
+        // Subscribe ke market price
+        setupMarketListener();
+        // Slider
         priceSlider.addEventListener('input', function() {
             sliderValue.textContent = formatRupiah(parseInt(this.value));
         });
@@ -1415,8 +886,9 @@
         if (window._subListener) window._subListener();
         if (window._wdListener) window._wdListener();
         if (window._depositListener) window._depositListener();
-        if (window._stockInterval) clearInterval(window._stockInterval);
+        if (window._priceListener) window._priceListener();
         if (window._broadcastListener) window._broadcastListener();
+        if (window._stockInterval) clearInterval(window._stockInterval);
     }
 
     // ============================================================
@@ -1444,12 +916,6 @@
             if (currentUser) { updateSaldo(); updateTradingUI(); }
             if (adminDashboard.style.display === 'block') renderAdmin();
         });
-    }
-
-    // ============================================================
-    // BROADCAST
-    // ============================================================
-    function setupBroadcastListener() {
         if (window._broadcastListener) window._broadcastListener();
         window._broadcastListener = broadcastRef.on('child_added', (snapshot) => {
             const data = snapshot.val();
@@ -1457,6 +923,66 @@
         });
     }
 
+    // ============================================================
+    // MARKET PRICE LISTENER (SINKRON)
+    // ============================================================
+    function setupMarketListener() {
+        if (window._priceListener) window._priceListener();
+        window._priceListener = priceRef.on('value', (snapshot) => {
+            const price = snapshot.val();
+            if (price !== null && typeof price === 'number') {
+                stockPrice = price;
+                // Tambahkan ke history
+                stockHistory.push(stockPrice);
+                if (stockHistory.length > 30) stockHistory.shift();
+                // Update UI
+                updateTradingUI();
+                drawTradingChart();
+                // Update tampilan harga di trading dan monitor
+                tradingPrice.textContent = formatRupiah(stockPrice);
+                // Update change (dihitung berdasarkan history)
+                const prev = stockHistory.length > 1 ? stockHistory[stockHistory.length-2] : stockPrice;
+                const diff = ((stockPrice - prev) / prev * 100);
+                const changeEl = tradingChange;
+                changeEl.textContent = (diff >= 0 ? '▲' : '▼') + ' ' + Math.abs(diff).toFixed(1) + '%';
+                changeEl.className = 'change ' + (diff >= 0 ? 'trending-up' : 'trending-down');
+                // Update slider jika admin
+                priceSlider.value = stockPrice;
+                sliderValue.textContent = formatRupiah(stockPrice);
+            }
+        });
+    }
+
+    // ============================================================
+    // UPDATE HARGA OTOMATIS (RANDOM WALK) - dijalankan setiap 2 detik
+    // ============================================================
+    function startStockUpdater() {
+        if (window._stockInterval) clearInterval(window._stockInterval);
+        window._stockInterval = setInterval(async () => {
+            if (!currentUser) return;
+            // Ambil harga terakhir dari Firebase, lalu fluktuasi
+            try {
+                const snap = await priceRef.once('value');
+                let currentPrice = snap.val();
+                if (currentPrice === null || typeof currentPrice !== 'number') {
+                    currentPrice = 1000;
+                }
+                // Random walk: -300 s/d +300, batas 500-6000
+                const change = (Math.random() * 600) - 300;
+                let newPrice = currentPrice + change;
+                newPrice = Math.min(Math.max(newPrice, 500), 6000);
+                newPrice = Math.round(newPrice / 50) * 50;
+                // Simpan ke Firebase
+                await priceRef.set(newPrice);
+            } catch(e) {
+                console.log('Error update price:', e);
+            }
+        }, 2000);
+    }
+
+    // ============================================================
+    // NOTIF
+    // ============================================================
     function showNotif(message, timestamp) {
         const container = document.getElementById('notifContainer');
         const div = document.createElement('div');
@@ -1612,7 +1138,7 @@
     depositBtn.addEventListener('click', async function() {
         if (!currentUser) { alert('Login dulu!'); return; }
         const file = depositImage.files[0];
-        const amount = parseInt(depositAmount.value);
+        const amount = parseInt(depositAmountInput.value);
         if (!file) { alert('Upload bukti transfer!'); return; }
         if (isNaN(amount) || amount < 500) { alert('Minimal deposit Rp 500'); return; }
         const reader = new FileReader();
@@ -1628,7 +1154,7 @@
             };
             try {
                 await depositsRef.push(deposit);
-                depositImage.value = ''; depositPreview.classList.remove('show'); depositAmount.value = '';
+                depositImage.value = ''; depositPreview.classList.remove('show'); depositAmountInput.value = '';
                 depositSuccessMsg.classList.add('show');
                 setTimeout(()=>depositSuccessMsg.classList.remove('show'),5000);
                 if (adminDashboard.style.display === 'block') renderAdmin();
@@ -1684,16 +1210,17 @@
     });
 
     // ============================================================
-    // ADMIN — FIX PASSWORD: wilzu2233
+    // ADMIN — PASSWORD wilzu2233
     // ============================================================
     adminLoginBtn.addEventListener('click', function() {
         const inputPass = adminPassword.value.trim();
         if (inputPass === 'wilzu2233') {
             adminLoginArea.style.display = 'none';
             adminDashboard.style.display = 'block';
-            isAdminLoggedIn = true;
             renderAdmin();
             adminPassword.value = '';
+            // Start market updater (jika belum jalan)
+            startStockUpdater();
         } else {
             alert('Password admin salah! Harus: wilzu2233');
             adminPassword.value = '';
@@ -1709,14 +1236,13 @@
         const subs = allSubmissions;
         const wds = allWithdrawals;
         const dps = allDeposits;
-
         totalSubs.textContent = subs.length;
         pendingSubs.textContent = subs.filter(s => s.status === 'pending').length;
         totalWD.textContent = wds.length;
         totalDeposit.textContent = dps.length;
         if (subCount) subCount.textContent = `(${subs.length})`;
 
-        // SUBMISSIONS
+        // SUBMISSIONS (sama seperti sebelumnya, tidak diubah)
         if (subs.length === 0) {
             submissionsList.innerHTML = `<div class="empty-state">Belum ada kiriman.</div>`;
         } else {
@@ -1809,7 +1335,7 @@
             });
         }
 
-        // WD
+        // WD (sama seperti sebelumnya)
         if (wds.length === 0) {
             wdList.innerHTML = `<div class="empty-state">Belum ada permintaan WD.</div>`;
         } else {
@@ -1909,7 +1435,6 @@
                             const dp = data[key];
                             if (dp.status === 'pending') {
                                 await depositsRef.child(key).update({ status: 'approved' });
-                                // Saldo otomatis bertambah
                                 if (currentUser && currentUser.username === dp.username) {
                                     updateSaldo(true);
                                 }
@@ -1938,7 +1463,7 @@
     }
 
     // ============================================================
-    // BROADCAST ADMIN
+    // BROADCAST
     // ============================================================
     broadcastBtn.addEventListener('click', async function() {
         const msg = broadcastMsg.value.trim();
@@ -1951,24 +1476,20 @@
     });
 
     // ============================================================
-    // ATUR HARGA SAHAM (ADMIN)
+    // ADMIN CONTROL HARGA (UPDATE KE FIREBASE)
     // ============================================================
-    function setStockPrice(newPrice) {
+    async function setStockPrice(newPrice) {
         newPrice = Math.min(Math.max(newPrice, 500), 6000);
         newPrice = Math.round(newPrice / 50) * 50;
-        stockPrice = newPrice;
-        stockHistory.push(stockPrice);
-        if (stockHistory.length > 30) stockHistory.shift();
-        tradingPrice.textContent = formatRupiah(stockPrice);
-        drawTradingChart();
-        updateTradingUI();
-        priceSlider.value = stockPrice;
-        sliderValue.textContent = formatRupiah(stockPrice);
-        broadcastRef.push({
-            message: `📊 Harga saham diupdate menjadi ${formatRupiah(stockPrice)}`,
-            timestamp: new Date().toISOString(),
-            from: 'system'
-        });
+        try {
+            await priceRef.set(newPrice);
+            // Broadcast perubahan
+            await broadcastRef.push({
+                message: `📊 Harga saham diupdate menjadi ${formatRupiah(newPrice)}`,
+                timestamp: new Date().toISOString(),
+                from: 'system'
+            });
+        } catch(e) { alert('Gagal update harga: '+e.message); }
     }
 
     setPriceBtn.addEventListener('click', function() {
@@ -1978,21 +1499,23 @@
             return;
         }
         setStockPrice(newPrice);
-        alert(`✅ Harga saham diubah menjadi ${formatRupiah(stockPrice)}`);
+        alert(`✅ Harga saham diubah menjadi ${formatRupiah(newPrice)}`);
     });
 
     pumpBtn.addEventListener('click', function() {
-        setStockPrice(stockPrice + 500);
-        alert(`🚀 Pump! Harga naik menjadi ${formatRupiah(stockPrice)}`);
+        const newPrice = Math.min(stockPrice + 500, 6000);
+        setStockPrice(newPrice);
+        alert(`🚀 Pump! Harga naik menjadi ${formatRupiah(newPrice)}`);
     });
 
     dumpBtn.addEventListener('click', function() {
-        setStockPrice(stockPrice - 500);
-        alert(`📉 Rungkad! Harga turun menjadi ${formatRupiah(stockPrice)}`);
+        const newPrice = Math.max(stockPrice - 500, 500);
+        setStockPrice(newPrice);
+        alert(`📉 Rungkad! Harga turun menjadi ${formatRupiah(newPrice)}`);
     });
 
     // ============================================================
-    // TRADING FUNCTIONS + ANIMASI (FIX!)
+    // TRADING UI
     // ============================================================
     function updateTradingUI() {
         if (!currentUser) return;
@@ -2002,26 +1525,9 @@
         updateSaldo();
     }
 
-    function updateStockPrice() {
-        const change = (Math.random() * 600) - 300;
-        let newPrice = stockPrice + change;
-        newPrice = Math.min(Math.max(newPrice, 500), 6000);
-        newPrice = Math.round(newPrice / 50) * 50;
-        stockPrice = newPrice;
-        stockHistory.push(stockPrice);
-        if (stockHistory.length > 30) stockHistory.shift();
-        tradingPrice.textContent = formatRupiah(stockPrice);
-        const prev = stockHistory.length > 1 ? stockHistory[stockHistory.length-2] : stockPrice;
-        const diff = ((stockPrice - prev) / prev * 100);
-        const changeEl = tradingChange;
-        changeEl.textContent = (diff >= 0 ? '▲' : '▼') + ' ' + Math.abs(diff).toFixed(1) + '%';
-        changeEl.className = 'change ' + (diff >= 0 ? 'trending-up' : 'trending-down');
-        drawTradingChart();
-        updateTradingUI();
-        priceSlider.value = stockPrice;
-        sliderValue.textContent = formatRupiah(stockPrice);
-    }
-
+    // ============================================================
+    // DRAW TRADING CHART (candlestick + garis trend)
+    // ============================================================
     function drawTradingChart() {
         const canvas = tradingChart;
         const ctx = canvas.getContext('2d');
@@ -2035,7 +1541,7 @@
         const padding = 10;
         const stepX = (w - padding * 2) / (stockHistory.length - 1);
 
-        // CANDLESTICK
+        // Gambar candlestick
         for (let i = 1; i < stockHistory.length; i++) {
             const prevPrice = stockHistory[i-1];
             const currPrice = stockHistory[i];
@@ -2060,7 +1566,7 @@
             ctx.stroke();
         }
 
-        // GARIS TREND + GLOW
+        // Garis trend emas dengan glow
         ctx.shadowBlur = 0;
         ctx.beginPath();
         ctx.strokeStyle = '#ffd700';
@@ -2076,7 +1582,7 @@
         ctx.stroke();
         ctx.shadowBlur = 0;
 
-        // Harga terakhir
+        // Harga terakhir dengan background
         const last = stockHistory[stockHistory.length - 1];
         const lastX = padding + (stockHistory.length - 1) * stepX;
         const lastY = h - padding - ((last - min) / range) * (h - padding * 2);
@@ -2089,19 +1595,6 @@
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(formatRupiah(last), lastX, lastY + 2);
-
-        // Label sumbu X
-        ctx.fillStyle = 'rgba(255,255,255,0.3)';
-        ctx.font = '9px Poppins';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'top';
-        if (stockHistory.length > 5) {
-            const step = Math.floor(stockHistory.length / 5);
-            for (let i = 0; i < stockHistory.length; i += step) {
-                const x = padding + i * stepX;
-                ctx.fillText(i+1, x, h - padding + 4);
-            }
-        }
     }
 
     // ============================================================
@@ -2160,7 +1653,7 @@
     });
 
     // ============================================================
-    // CHART (Skin Harga)
+    // CHART (Skin Harga) - sama seperti sebelumnya
     // ============================================================
     const skinKeys = ['basic','epik','legend','kolektor','amoy-pacito','amoy-klasik'];
     const skinColors = { 'basic':'#8a8a8a','epik':'#3b9eff','legend':'#b44eff','kolektor':'#ff7b00','amoy-pacito':'#ffd700','amoy-klasik':'#66ff99' };
@@ -2303,10 +1796,11 @@
         document.querySelector('.tab-btn[data-tab="dashboardTab"]').addEventListener('click', function() {
             setTimeout(renderCharts, 200);
         });
-        console.log('🔥 AMOY GACHA KELOTER v8.0 - DEPOSIT MANUAL + GRAFIK TRADING FIX');
+        console.log('🔥 AMOY GACHA KELOTER v9.0 - MARKET SYNC + GRAFIK TRADING FIX');
         console.log('✅ Admin password: wilzu2233');
-        console.log('✅ Deposit via transfer ke 085863131467');
-        console.log('✅ Grafik trading JALAN kayak dashboard!');
+        console.log('✅ Harga saham SINKRON semua user via Firebase');
+        console.log('✅ Grafik trading berjalan terus dengan candlestick');
+        console.log('✅ Admin bisa pump/rungkad real-time');
     }
 
     init();
