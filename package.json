@@ -1,16 +1,6 @@
 {
-  "name": "ivas-vercel-proxy",
+  "name": "wilzu-proxy",
   "version": "1.0.0",
-  "description": "Vercel proxy for IVASMS to bypass Cloudflare",
-  "main": "api/[...path].js",
-  "scripts": {
-    "dev": "vercel dev",
-    "deploy": "vercel deploy --prod"
-  },
-  "engines": {
-    "node": ">=18.x"
-  },
-  "keywords": ["proxy", "ivasms", "vercel", "cloudflare-bypass"],
-  "author": "Wilzu By Xze",
-  "license": "MIT"
+  "description": "IVASMS proxy for Telegram bot",
+  "main": "api/[...path].js"
 }
