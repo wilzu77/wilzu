@@ -1,5 +1,5 @@
 export default async function handler(req, res) {
-  const target = "https://www.ivasms.com";
+  const target = "https://www.ivasms.com/";
   try {
     const url = new URL(req.url, `http://${req.headers.host}`);
     const targetUrl = new URL(url.pathname + url.search, target);
