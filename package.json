@@ -1,6 +1,0 @@
-{
-  "name": "wilzu-proxy",
-  "version": "1.0.0",
-  "description": "IVASMS proxy for Telegram bot",
-  "main": "api/[...path].js"
-}
