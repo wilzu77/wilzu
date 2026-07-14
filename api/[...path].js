@@ -1,12 +1,8 @@
 export default async function handler(req, res) {
   const target = "https://www.ivasms.com";
-
   try {
-    // 1. Bangun URL target
     const url = new URL(req.url, `http://${req.headers.host}`);
     const targetUrl = new URL(url.pathname + url.search, target);
-
-    // 2. Siapkan headers dengan filter
     const headers = { ...req.headers };
     const blockedHeaders = [
       'host', 'content-length', 'connection', 
@@ -15,11 +11,9 @@ export default async function handler(req, res) {
     ];
     blockedHeaders.forEach(h => delete headers[h]);
     headers.referer = target;
-
-    // 3. Siapkan body
     let body = undefined;
     if (req.method !== 'GET' && req.method !== 'HEAD') {
-      const contentType = req.headers['content-type'] || '';
+      const contentType = req.headers['content-type'] || '';  
       if (contentType.includes('application/json')) {
         body = req.body;
       } else if (contentType.includes('application/x-www-form-urlencoded')) {
@@ -33,19 +27,13 @@ export default async function handler(req, res) {
         body = req.body;
       }
     }
-
-    // 4. Logging (opsional, bisa dihapus kalo gak mau)
     console.log(`[PROXY] ${req.method} ${targetUrl.toString()}`);
-
-    // 5. Fetch ke IVASMS
     const response = await fetch(targetUrl, {
       method: req.method,
       headers: headers,
       body: body,
-      redirect: 'manual',
+      redirect: 'manual', 
     });
-
-    // 6. Handle redirect manual
     if (response.status === 301 || response.status === 302 || response.status === 303) {
       const location = response.headers.get('location');
       console.log(`[PROXY] Redirect to: ${location}`);
@@ -55,11 +43,7 @@ export default async function handler(req, res) {
       }
       return res.redirect(location);
     }
-
-    // 7. Baca response
     const data = await response.text();
-
-    // 8. Siapkan response headers
     const responseHeaders = {};
     response.headers.forEach((value, key) => {
       if (!['content-encoding', 'transfer-encoding', 'connection'].includes(key)) {
@@ -69,8 +53,8 @@ export default async function handler(req, res) {
     responseHeaders['Access-Control-Allow-Origin'] = '*';
     responseHeaders['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS';
     responseHeaders['Access-Control-Allow-Headers'] = 'Content-Type, Authorization, X-Requested-With, X-CSRF-TOKEN';
-
-    // 9. Kirim balik (INI YANG DI-FIX)
+    
+    // PERBAIKAN: ganti res.set() dengan res.setHeader()
     res.status(response.status);
     Object.keys(responseHeaders).forEach(key => res.setHeader(key, responseHeaders[key]));
     res.send(data);
@@ -85,7 +69,6 @@ export default async function handler(req, res) {
   }
 }
 
-// Handle CORS preflight
 export async function OPTIONS(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
